@@ -10,28 +10,31 @@ use std::io;//::{self, Write};
 use image::GenericImage;
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
-fn boundless_insert(x: i64, y: i64, value: bool, img: &mut Vec<Vec <bool>>) {
+fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
+	println!("{}, {}", x, y);
 	let mut tx = x;
 	let mut ty = y;
 	for i in 0..img.len(){
-		while img[i].len() <= tx as usize {
-			img[i].push(false);
-		}
 		while tx < 0 {
+			println!("{}", tx);
 			img[i].insert(0, false);
 			tx += 1;
+		}
+		while img[i].len() <= tx as usize {
+			img[i].push(false);
 		}
 	}
 	let mut row:Vec <bool> = Vec::new();
 	for i in 0..img[0].len() {
 		row.push(false);
 	}
-	while img.len() <= ty as usize {
-		img.push(row.clone())
-	}
 	while ty < 0 {
+		println!("{}", ty);
 		img.insert(0, row.clone());
 		ty += 1;
+	}
+	while img.len() <= ty as usize {
+		img.push(row.clone())
 	}
 	img[ty as usize][tx as usize] = value;
 }
@@ -103,9 +106,7 @@ struct Chapter {
 
 fn main() {
 	let mut claimed: Vec <Vec <bool>> = Vec::new();
-	let mut rthresh: Vec <Vec <bool>> = Vec::new();
-	let mut gthresh: Vec <Vec <bool>> = Vec::new();
-	let mut bthresh: Vec <Vec <bool>> = Vec::new();
+	let mut thresh: Vec <Vec <bool>> = Vec::new();
 	let mut rblobs: Vec <ImgBlob> = Vec::new();
 	let mut gblobs: Vec <ImgBlob> = Vec::new();
 	let mut bblobs: Vec <ImgBlob> = Vec::new();
@@ -116,34 +117,46 @@ fn main() {
 	}
 	for y in 0..img.height() {
 		claimed.push(row.clone());
-		rthresh.push(row.clone());
-		gthresh.push(row.clone());
-		bthresh.push(row.clone());
+		thresh.push(row.clone());
 	}
 	let rgbimg = img.to_rgb();
 	for (x, y, pixel) in rgbimg.enumerate_pixels() {
-		rthresh[y as usize][x as usize] = if (pixel[0] > 210) && (pixel[1] <= 210) && (pixel[2] <= 210) {true} else {false};
-		gthresh[y as usize][x as usize] = if (pixel[1] > 210) && (pixel[0] <= 210) && (pixel[2] <= 210) {true} else {false};
-		bthresh[y as usize][x as usize] = if (pixel[2] > 210) && (pixel[1] <= 210) && (pixel[0] <= 210) {true} else {false};
+		thresh[y as usize][x as usize] = if (pixel[0] > 210) && (pixel[1] <= 210) && (pixel[2] <= 210) {true} else {false};
 	}
-	for y in 0..rthresh.len() {
-		for x in 0..rthresh[0].len() {
-			if rthresh[y][x] && (rthresh[y+1][x] || rthresh[y][x+1]) {
-				match ImgBlob::from_top_right(x, y, &mut claimed, &rthresh){
+	for y in 0..thresh.len() {
+		for x in 0..thresh[0].len() {
+			if thresh[y][x] && (thresh[y+1][x] || thresh[y][x+1]) {
+				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
 					Some(o) => rblobs.push(o),
 					None => {},
 				}
-			}/* else if gthresh[y][x] && (gthresh[y+1][x] || gthresh[y][x+1]) {
-				match ImgBlob::from_top_right(x, y, &mut claimed, &gthresh){
+			}
+		}
+	}
+	for (x, y, pixel) in rgbimg.enumerate_pixels() {
+		thresh[y as usize][x as usize] = if (pixel[1] > 210) && (pixel[0] <= 210) && (pixel[2] <= 210) {true} else {false};
+	}
+	for y in 0..thresh.len() {
+		for x in 0..thresh[0].len() {
+			if thresh[y][x] && (thresh[y+1][x] || thresh[y][x+1]) {
+				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
 					Some(o) => gblobs.push(o),
 					None => {},
 				}
-			} else if bthresh[y][x]  && (bthresh[y+1][x] || bthresh[y][x+1]) {
-				match ImgBlob::from_top_right(x, y, &mut claimed, &bthresh){
+			}
+		}
+	}
+	for (x, y, pixel) in rgbimg.enumerate_pixels() {
+		thresh[y as usize][x as usize] = if (pixel[2] > 210) && (pixel[1] <= 210) && (pixel[0] <= 210) {true} else {false};
+	}
+	for y in 0..thresh.len() {
+		for x in 0..thresh[0].len() {
+			if thresh[y][x]  && (thresh[y+1][x] || thresh[y][x+1]) {
+				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
 					Some(o) => bblobs.push(o),
 					None => {},
 				}
-			}*/
+			}
 		}
 	}
 }
