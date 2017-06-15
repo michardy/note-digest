@@ -11,12 +11,10 @@ use image::GenericImage;
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
 fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
-	println!("{}, {}", x, y);
 	let mut tx = x;
 	let mut ty = y;
 	for i in 0..img.len(){
 		while tx < 0 {
-			println!("{}", tx);
 			img[i].insert(0, false);
 			tx += 1;
 		}
@@ -29,7 +27,6 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 		row.push(false);
 	}
 	while ty < 0 {
-		println!("{}", ty);
 		img.insert(0, row.clone());
 		ty += 1;
 	}
@@ -59,21 +56,15 @@ impl ImgBlob {
 			let tempx = queue[0][1];
 			let tempy = queue[0][0];
 			if (tempy < img.len()) && (tempx < img[0].len()) && (tempy > 0) && (tempx > 0) {
-				println!("passed initial tests");
 				if img[tempy][tempx] && !(claim[tempy][tempx]){
-					println!("insert initiated");
-					println!("Insert: [{}, {}], [{}, {}]", x, tempx, y, tempy);
 					boundless_insert(((tempy as i64)-(y as i64)), ((tempx as i64)-(x as i64)), true, &mut bitmap);
-					println!("inserted");
 					claim[tempy][tempx] = true;
-					println!("Queue pushes started");
 					if queue[0][1] > y {
 						queue.push([tempy-1, tempx]);
 					}
 					queue.push([tempy, tempx-1]);
 					queue.push([tempy+1, tempx]);
 					queue.push([tempy, tempx+1]);
-					println!("Queue pushes finished");
 				}
 			}
 			queue.remove(0);
@@ -133,6 +124,7 @@ fn main() {
 			}
 		}
 	}
+	println!("Finished R");
 	for (x, y, pixel) in rgbimg.enumerate_pixels() {
 		thresh[y as usize][x as usize] = if (pixel[1] > 210) && (pixel[0] <= 210) && (pixel[2] <= 210) {true} else {false};
 	}
@@ -146,6 +138,7 @@ fn main() {
 			}
 		}
 	}
+	println!("Finished G");
 	for (x, y, pixel) in rgbimg.enumerate_pixels() {
 		thresh[y as usize][x as usize] = if (pixel[2] > 210) && (pixel[1] <= 210) && (pixel[0] <= 210) {true} else {false};
 	}
@@ -159,4 +152,5 @@ fn main() {
 			}
 		}
 	}
+	println!("Finished B");
 }
