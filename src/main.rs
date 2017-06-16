@@ -11,17 +11,19 @@ use image::GenericImage;
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
 fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
+	let mut tx = x;
 	let mut ty = y;
 	for i in 0..img.len(){
-		let mut tx = x;
-		while tx < 0 {
+		let mut ttx = x;
+		while ttx < 0 {
 			img[i].insert(0, false);
-			tx += 1;
+			ttx += 1;
 		}
-		assert!(((x < 0) && (tx == 0)) || (x == tx), "Expected tx = zero or tx =x.  Found {}", tx);
-		while img[i].len() <= tx as usize {
+		assert!(((x < 0) && (ttx == 0)) || (x == ttx), "Expected ttx = zero or ttx = x.  Found {}", ttx);
+		while img[i].len() <= ttx as usize {
 			img[i].push(false);
 		}
+		tx = ttx
 	}
 	let mut row:Vec <bool> = Vec::new();
 	for i in 0..img[0].len() {
@@ -35,7 +37,7 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 	while img.len() <= ty as usize {
 		img.push(row.clone())
 	}
-	img[ty as usize][0usize] = value;
+	img[ty as usize][tx as usize] = value;
 }
 
 struct ImgBlob {
@@ -48,13 +50,13 @@ struct ImgBlob {
 
 impl ImgBlob {
 	fn from_top_right(x: usize, y: usize, claim: &mut Vec <Vec <bool>>, img: &Vec <Vec <bool>>) -> Option<ImgBlob>{
-		let mut imgbuf = image::ImageBuffer::new(2550u32, 3300u32);
+		//let mut imgbuf = image::ImageBuffer::new(2550u32, 3300u32);
 		let mut right = x;
 		let mut top = y; //pretty sure that this is not supposed to change and can be eliminated
 		let mut bitmap: Vec <Vec <bool>> = Vec::new();
 		let mut queue: Vec <[usize; 2]> = Vec::new();
 		claim[y][x] = true;
-		imgbuf.put_pixel(x as u32, y as u32, image::Rgb([0, 255, 0]));
+		//imgbuf.put_pixel(x as u32, y as u32, image::Rgb([0, 255, 0]));
 		queue.push([y+1, x]);
 		queue.push([y, x+1]);
 		bitmap.push(vec![true]);
@@ -70,7 +72,7 @@ impl ImgBlob {
 					if tempy < top {
 						top = tempy;
 					}
-					imgbuf.put_pixel(tempx as u32, tempy as u32, image::Rgb([0, 255, 0]));
+					//imgbuf.put_pixel(tempx as u32, tempy as u32, image::Rgb([0, 255, 0]));
 					claim[tempy][tempx] = true;
 					if queue[0][1] > top {
 						queue.push([tempy-1, tempx]);
@@ -78,23 +80,23 @@ impl ImgBlob {
 					queue.push([tempy, tempx-1]);
 					queue.push([tempy+1, tempx]);
 					queue.push([tempy, tempx+1]);
-				} else if !(claim[tempy][tempx]) {
+				}/* else if !(claim[tempy][tempx]) {
 					imgbuf.put_pixel(tempx as u32, tempy as u32, image::Rgb([255, 0, 0]));
-				}
-			} else {
+				}*/
+			}/* else {
 				imgbuf.put_pixel(tempx as u32, tempy as u32, image::Rgb([255, 0, 0]));
-			}
+			}*/
 			queue.remove(0);
 		}
 		if (bitmap[0].len() + bitmap.len() > 6) && (bitmap.len() > 3) && (bitmap[0].len() > 3) {
 			/*let mut imgbuf = image::ImageBuffer::new((bitmap[0].len()) as u32, (bitmap.len()) as u32);
 			for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
 				*pixel = image::Luma([if bitmap[y as usize][x as usize] {255} else {0}]);
-			}*/
+			}
 			let xdim = &*bitmap[0].len().to_string();
 			let ydim = &*bitmap.len().to_string();
 			let ref mut fout = File::create(&Path::new(&(String::from("outg")+xdim+"x"+ydim+".png"))).unwrap();
-			let _ = image::ImageRgb8(imgbuf).save(fout, image::PNG);
+			let _ = image::ImageRgb8(imgbuf).save(fout, image::PNG);*/
 			println!("Found: {} x {}", bitmap[0].len(), bitmap.len());
 			Some(ImgBlob {
 				blob_type: 0,
@@ -123,9 +125,9 @@ struct Chapter {
 fn main() {
 	let mut claimed: Vec <Vec <bool>> = Vec::new();
 	let mut thresh: Vec <Vec <bool>> = Vec::new();
-	let mut rblobs: Vec <ImgBlob> = Vec::new();
+	//let mut rblobs: Vec <ImgBlob> = Vec::new();
 	let mut gblobs: Vec <ImgBlob> = Vec::new();
-	let mut bblobs: Vec <ImgBlob> = Vec::new();
+	//let mut bblobs: Vec <ImgBlob> = Vec::new();
 	let img = image::open(&Path::new("target.jpg")).unwrap();
 	let mut row:Vec <bool> = Vec::new();
 	for x in 0..img.width() {
@@ -136,7 +138,7 @@ fn main() {
 		thresh.push(row.clone());
 	}
 	let rgbimg = img.to_rgb();
-	let mut imgbuf = image::ImageBuffer::new(img.width(), img.height());
+	//let mut imgbuf = image::ImageBuffer::new(img.width(), img.height());
 	/*for (x, y, pixel) in rgbimg.enumerate_pixels() {
 		thresh[y as usize][x as usize] = if (pixel[0] > 140) && (pixel[1] <= 170) && (pixel[2] <= 170) {true} else {false};
 		imgbuf.put_pixel(x, y, image::Luma([if (pixel[0] > 140) & (pixel[1] <= 170) & (pixel[2] <= 170) {255} else {0}]));
@@ -159,7 +161,7 @@ fn main() {
 	}
 	for y in 0..thresh.len() {
 		for x in 0..thresh[0].len() {
-			imgbuf.put_pixel(x as u32, y as u32, image::Luma([if thresh[y][x] {255} else {0}]));
+			//imgbuf.put_pixel(x as u32, y as u32, image::Luma([if thresh[y][x] {255} else {0}]));
 			if thresh[y][x] {
 				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
 					Some(o) => gblobs.push(o),
@@ -168,8 +170,8 @@ fn main() {
 			}
 		}
 	}
-	let ref mut fout = File::create(&Path::new("outg.png")).unwrap();
-	let _ = image::ImageLuma8(imgbuf).save(fout, image::PNG);
+	/*let ref mut fout = File::create(&Path::new("outg.png")).unwrap();
+	let _ = image::ImageLuma8(imgbuf).save(fout, image::PNG);*/
 	let mut imgbuf = image::ImageBuffer::new(img.width(), img.height());
 	for i in 0..gblobs.len() {
 		let xoff = gblobs[i].top_right[0];
