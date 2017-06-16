@@ -99,7 +99,7 @@ impl ImgBlob {
 			let _ = image::ImageRgb8(imgbuf).save(fout, image::PNG);*/
 			println!("Found: {} x {}", bitmap[0].len(), bitmap.len());
 			Some(ImgBlob {
-				blob_type: 0,
+				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
 				top_right: [right, top],
 				middle: [right+(bitmap[0].len()/2), top+(bitmap.len()/2)],
 				text: String::from(""),
@@ -178,12 +178,16 @@ fn main() {
 		let yoff = gblobs[i].top_right[1];
 		for y in 0..gblobs[i].bitmap.len() {
 			for x in 0..gblobs[i].bitmap[y].len() {
-				imgbuf.put_pixel((x+xoff) as u32, (y+yoff) as u32, image::Luma([if (gblobs[i].bitmap[y][x]) {255} else {0}]));
+				if gblobs[i].blob_type == 0 {
+					imgbuf.put_pixel((x+xoff) as u32, (y+yoff) as u32, image::Rgb(if (gblobs[i].bitmap[y][x]) {[0, 255, 0]} else {[0, 0, 0]}));
+				} else {
+					imgbuf.put_pixel((x+xoff) as u32, (y+yoff) as u32, image::Rgb(if (gblobs[i].bitmap[y][x]) {[255, 0, 0]} else {[0, 0, 0]}));
+				}
 			}
 		}
 	}
 	let ref mut fout = File::create(&Path::new("reconstructg.png")).unwrap();
-	let _ = image::ImageLuma8(imgbuf).save(fout, image::PNG);
+	let _ = image::ImageRgb8(imgbuf).save(fout, image::PNG);
 	println!("Finished G");
 	/*for (x, y, pixel) in rgbimg.enumerate_pixels() {
 		thresh[y as usize][x as usize] = if (pixel[2] > 140) && (pixel[1] <= 170) && (pixel[0] <= 170) {true} else {false};
