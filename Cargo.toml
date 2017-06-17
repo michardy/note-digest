@@ -5,5 +5,4 @@ authors = ["Michael Hardy <98.michael.hardy@gmail.com>"]
 
 [dependencies]
 image = "0.13.0"
-image-base64 = "0.1.0"
 cgi = { git = "https://github.com/michardy/RustCGI" }

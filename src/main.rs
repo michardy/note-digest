@@ -1,5 +1,4 @@
 extern crate image;
-extern crate image_base64;
 extern crate cgi;
 
 
