@@ -41,7 +41,6 @@ struct ImgBlob {
 	blob_type: u8, //0: object, 1: line
 	top_right: [usize; 2],
 	middle: [usize; 2],
-	text: String,
 	bitmap: Vec <Vec <bool>>
 }
 
@@ -84,7 +83,6 @@ impl ImgBlob {
 				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
 				top_right: [right, top],
 				middle: [right+(bitmap[0].len()/2), top+(bitmap.len()/2)],
-				text: String::from(""),
 				bitmap: bitmap
 			})
 		} else {
@@ -93,15 +91,10 @@ impl ImgBlob {
 	}
 }
 
-struct Section {
-	Heading: ImgBlob,
-	blobs: Vec <ImgBlob>
-}
-
 struct Chapter {
 	heading: ImgBlob,
 	blobs: Vec <ImgBlob>,
-	Sections: Vec <Section>
+	subchapters: Vec <Chapter>
 }
 
 fn main() {
