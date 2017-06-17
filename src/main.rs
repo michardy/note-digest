@@ -156,7 +156,6 @@ fn main() {
 	}
 	for y in 0..thresh.len() {
 		for x in 0..thresh[0].len() {
-			imgbuf.put_pixel(x as u32, y as u32, image::Luma([if thresh[y][x] {255} else {0}]));
 			if thresh[y][x] {
 				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
 					Some(o) => bblobs.push(o),
