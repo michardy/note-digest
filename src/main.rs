@@ -1,11 +1,9 @@
 extern crate image;
-extern crate cgi;
 
 
 use std::fs::File;
 use std::path::Path;
 use std::env;
-use std::io;//::{self, Write};
 use image::GenericImage;
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
