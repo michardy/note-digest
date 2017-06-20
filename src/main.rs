@@ -261,4 +261,12 @@ fn main() {
 	for img in selected {
 		pages.push(Page::from_path(img));
 	}
+	let mut chapter: Chapter;
+	let mut started = false;
+	let mut created_chapters = 0;
+	let mut destroyed: u64 = 0; //some very pessimistic memory allocation
+	for p in pages {
+		
+	}
+	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed)
 }
