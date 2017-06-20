@@ -136,9 +136,18 @@ fn get_images() -> Vec <String> {
 			if sel == "+" {
 				selected.append(new);
 			} else if sel.to_string().contains("-") {
-				
+				let numbers: Vec <String> = uin.split('-').map(|x| x.to_string()).collect();
+				let start = numbers[0].parse::<usize>().unwrap();
+				let end = numbers[1].parse::<usize>().unwrap();
+				for i in start..end {
+					selected.push(mpaths[i].clone());
+				}
+			} else {
+				let i = sel.to_string().parse::<usize>().unwrap();
+				selected.push(mpaths[i].clone());
 			}
 		}
+		println!("{:?}", selected);
 		selected
 	}
 	let paths = fs::read_dir("./").unwrap();
@@ -168,9 +177,10 @@ fn get_images() -> Vec <String> {
 	println!("Enter 5-6 to import images 5 through 6.  ");
 	println!("Enter + to import the images you have not imported.  (These images are indicated in the list by + signs)");
 	println!("Use spaces to seperate multiple selections.  ");
-	print!("select: ");
+	println!("select: ");
 	let mut uin = String::new();
 	io::stdin().read_line(&mut uin).ok().expect("Error reading line");
+	uin.pop();
 	parse_input(uin, mpaths, &mut new)
 }
 
