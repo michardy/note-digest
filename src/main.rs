@@ -100,10 +100,80 @@ impl ImgBlob {
 }
 
 struct Page {
-	blobs: Vec <ImgBlob>,
+	rblobs: Vec <ImgBlob>,
+	gblobs: Vec <ImgBlob>,
+	bblobs: Vec <ImgBlob>,
 	dimensions: [u32; 2]
 }
 
+impl Page {
+	fn from_path(path: String) -> Page {
+		let mut claimed: Vec <Vec <bool>> = Vec::new();
+		let mut thresh: Vec <Vec <bool>> = Vec::new();
+		let mut rblobs: Vec <ImgBlob> = Vec::new();
+		let mut gblobs: Vec <ImgBlob> = Vec::new();
+		let mut bblobs: Vec <ImgBlob> = Vec::new();
+		let img = image::open(&Path::new(&path)).unwrap();
+		let mut row:Vec <bool> = Vec::new();
+		for x in 0..img.width() {
+			row.push(false);
+		}
+		for y in 0..img.height() {
+			claimed.push(row.clone());
+			thresh.push(row.clone());
+		}
+		let rgbimg = img.to_rgb();
+		for (x, y, pixel) in rgbimg.enumerate_pixels() {
+			thresh[y as usize][x as usize] = if (pixel[0] > 140) && (pixel[1] <= 170) && (pixel[2] <= 170) {true} else {false};
+		}
+		for y in 0..thresh.len() {
+			for x in 0..thresh[0].len() {
+				if thresh[y][x] {
+					match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
+						Some(o) => rblobs.push(o),
+						None => {},
+					}
+				}
+			}
+		}
+		println!("Finished R");
+		for (x, y, pixel) in rgbimg.enumerate_pixels() {
+			thresh[y as usize][x as usize] = if (pixel[1] > 140) && (pixel[0] <= 170) && (pixel[2] <= 170) {true} else {false};
+		}
+		for y in 0..thresh.len() {
+			for x in 0..thresh[0].len() {
+				if thresh[y][x] {
+					match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
+						Some(o) => gblobs.push(o),
+						None => {},
+					}
+				}
+			}
+		}
+		println!("Finished G");
+		for (x, y, pixel) in rgbimg.enumerate_pixels() {
+			thresh[y as usize][x as usize] = if (pixel[2] > 140) && (pixel[1] <= 170) && (pixel[0] <= 170) {true} else {false};
+		}
+		for y in 0..thresh.len() {
+			for x in 0..thresh[0].len() {
+				if thresh[y][x] {
+					match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
+						Some(o) => bblobs.push(o),
+						None => {},
+					}
+				}
+			}
+		}
+		println!("Finished B");
+		Page {
+			rblobs: rblobs,
+			gblobs: gblobs,
+			bblobs: bblobs,
+			dimensions: [img.width(), img.height()]
+		}
+	}
+}
+	
 struct Chapter {
 	heading: ImgBlob,
 	blobs: Vec <ImgBlob>,
@@ -147,7 +217,6 @@ fn get_images() -> Vec <String> {
 				selected.push(mpaths[i].clone());
 			}
 		}
-		println!("{:?}", selected);
 		selected
 	}
 	let paths = fs::read_dir("./").unwrap();
@@ -188,62 +257,8 @@ fn main() {
 	//iterate through images pulling out blobs
 	//iterate through pages parsing blobs and creating chapters
 	let selected = get_images();
-	//need to run some kind of sort
-	/*let mut claimed: Vec <Vec <bool>> = Vec::new();
-	let mut thresh: Vec <Vec <bool>> = Vec::new();
-	let mut rblobs: Vec <ImgBlob> = Vec::new();
-	let mut gblobs: Vec <ImgBlob> = Vec::new();
-	let mut bblobs: Vec <ImgBlob> = Vec::new();
-	let img = image::open(&Path::new("target.jpg")).unwrap();
-	let mut row:Vec <bool> = Vec::new();
-	for x in 0..img.width() {
-		row.push(false);
+	let mut pages: Vec <Page> = Vec::new();
+	for img in selected {
+		pages.push(Page::from_path(img));
 	}
-	for y in 0..img.height() {
-		claimed.push(row.clone());
-		thresh.push(row.clone());
-	}
-	let rgbimg = img.to_rgb();
-	for (x, y, pixel) in rgbimg.enumerate_pixels() {
-		thresh[y as usize][x as usize] = if (pixel[0] > 140) && (pixel[1] <= 170) && (pixel[2] <= 170) {true} else {false};
-	}
-	for y in 0..thresh.len() {
-		for x in 0..thresh[0].len() {
-			if thresh[y][x] {
-				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
-					Some(o) => rblobs.push(o),
-					None => {},
-				}
-			}
-		}
-	}
-	println!("Finished R");
-	for (x, y, pixel) in rgbimg.enumerate_pixels() {
-		thresh[y as usize][x as usize] = if (pixel[1] > 140) && (pixel[0] <= 170) && (pixel[2] <= 170) {true} else {false};
-	}
-	for y in 0..thresh.len() {
-		for x in 0..thresh[0].len() {
-			if thresh[y][x] {
-				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
-					Some(o) => gblobs.push(o),
-					None => {},
-				}
-			}
-		}
-	}
-	println!("Finished G");
-	for (x, y, pixel) in rgbimg.enumerate_pixels() {
-		thresh[y as usize][x as usize] = if (pixel[2] > 140) && (pixel[1] <= 170) && (pixel[0] <= 170) {true} else {false};
-	}
-	for y in 0..thresh.len() {
-		for x in 0..thresh[0].len() {
-			if thresh[y][x] {
-				match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
-					Some(o) => bblobs.push(o),
-					None => {},
-				}
-			}
-		}
-	}
-	println!("Finished B");*/
 }
