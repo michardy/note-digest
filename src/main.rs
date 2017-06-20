@@ -1,10 +1,18 @@
 extern crate image;
 
 
-use std::fs::File;
-use std::path::Path;
+use std::fs;
 use std::env;
+use std::path::Path;
+use std::path::PathBuf;
+use std::io;
+use std::io::BufReader;
+use std::io::BufRead;
+use std::fs::File;
 use image::GenericImage;
+
+const IMPORTED: &'static str = "./.imported";
+const OUT_PATH: &'static str = "~/Documemts/Notebook";
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
 fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
@@ -91,14 +99,87 @@ impl ImgBlob {
 	}
 }
 
+struct Page {
+	blobs: Vec <ImgBlob>,
+	dimensions: [u32; 2]
+}
+
 struct Chapter {
 	heading: ImgBlob,
 	blobs: Vec <ImgBlob>,
 	subchapters: Vec <Chapter>
 }
 
+fn get_images() -> Vec <String> {
+	fn get_imported_images() -> Vec <String> {
+		println!("test");
+		if Path::new(IMPORTED).exists() {
+			println!("test");
+			let mut list: Vec <String> = Vec::new();
+			let f = (File::open(IMPORTED)).unwrap();
+			let mut file = BufReader::new(&f);
+			for line in file.lines() {
+				println!("test");
+				let templ = line.unwrap();
+				println!("{}", &templ);
+				list.push(templ);
+			}
+			list
+		} else {
+			Vec::new()
+		}
+	}
+	fn parse_input(uin: String, mpaths: Vec <String>, new: &mut Vec <String>) -> Vec <String> {
+		let mut selected: Vec <String> = Vec::new();
+		let stringified: Vec <String> = uin.split(' ').map(|x| x.to_string()).collect();
+		for sel in stringified {
+			if sel == "+" {
+				selected.append(new);
+			} else if sel.to_string().contains("-") {
+				
+			}
+		}
+		selected
+	}
+	let paths = fs::read_dir("./").unwrap();
+	let mut mpaths: Vec <String> = Vec::new();
+	let mut new: Vec <String> = Vec::new();
+	let mut imported: Vec <String> = get_imported_images();
+	for p in paths {
+		let path = p.unwrap().path();
+		if !(path.extension() == None) {
+			//The next line needs to be cleaned up.  It is written like this to appease the borrow checker
+			if path.extension().unwrap() == "png" || path.extension().unwrap() == "jpg" || path.extension().unwrap() == "bpm" || path.extension().unwrap() == "gif" {
+				mpaths.push(path.into_os_string().into_string().unwrap());//ugly hack but as_path().to_string() does not work
+			}
+		}
+	}
+	mpaths.sort();
+	let mut fiter:usize = 0;
+	for p in &mpaths {
+		if !imported.contains(p) {
+			print!("+");
+			new.push(p.clone());//cannot pass borrowed var w/o cloning
+		}
+		println!("	{}:	{}", fiter, p);
+		fiter += 1;
+	}
+	println!("Enter an number to select an image to import.  ");
+	println!("Enter 5-6 to import images 5 through 6.  ");
+	println!("Enter + to import the images you have not imported.  (These images are indicated in the list by + signs)");
+	println!("Use spaces to seperate multiple selections.  ");
+	print!("select: ");
+	let mut uin = String::new();
+	io::stdin().read_line(&mut uin).ok().expect("Error reading line");
+	parse_input(uin, mpaths, &mut new)
+}
+
 fn main() {
-	let mut claimed: Vec <Vec <bool>> = Vec::new();
+	//iterate through images pulling out blobs
+	//iterate through pages parsing blobs and creating chapters
+	let selected = get_images();
+	//need to run some kind of sort
+	/*let mut claimed: Vec <Vec <bool>> = Vec::new();
 	let mut thresh: Vec <Vec <bool>> = Vec::new();
 	let mut rblobs: Vec <ImgBlob> = Vec::new();
 	let mut gblobs: Vec <ImgBlob> = Vec::new();
@@ -154,5 +235,5 @@ fn main() {
 			}
 		}
 	}
-	println!("Finished B");
+	println!("Finished B");*/
 }
