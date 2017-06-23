@@ -45,6 +45,7 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 	img[ty as usize][tx as usize] = value;
 }
 
+#[derive(Debug, Clone)]
 struct ImgBlob {
 	blob_type: u8, //0: object, 1: line
 	top_right: [usize; 2],
@@ -176,11 +177,24 @@ impl Page {
 
 struct Heading {
 	number: u8,
+	top: f64,
+	right: f64,
+	middle: f64,
 	lines: Vec <ImgBlob>,
 	blobs: Vec <ImgBlob>,
 }
 
 impl Heading {
+	fn new() -> Heading {
+		Heading {
+			number: 0,
+			top: 0f64,
+			right: 0f64,
+			middle: 0f64,
+			lines: Vec::new(),
+			blobs: Vec::new()
+		}
+	}
 	fn heading_one(top: ImgBlob, bottom: ImgBlob) -> Heading {
 		let mut lines: Vec <ImgBlob> = Vec::new();
 		let mut blobs: Vec <ImgBlob> = Vec::new();
@@ -188,6 +202,9 @@ impl Heading {
 		lines.push(bottom);
 		Heading {
 			number: 0,
+			top: 0f64,
+			right: 0f64,
+			middle: 0f64,
 			lines: lines,
 			blobs: blobs
 		}
@@ -198,6 +215,9 @@ impl Heading {
 		lines.push(top);
 		Heading {
 			number: 1,
+			top: 0f64,
+			right: 0f64,
+			middle: 0f64,
 			lines: lines,
 			blobs: blobs
 		}
@@ -208,6 +228,16 @@ struct Chapter {
 	heading: Heading,
 	blobs: Vec <ImgBlob>,
 	subchapters: Vec <Chapter>
+}
+
+impl Chapter {
+	fn new() -> Chapter {
+		Chapter {
+			heading: Heading::new(),
+			blobs: Vec::new(),
+			subchapters: Vec::new()
+		}
+	}
 }
 
 fn get_images() -> Vec <String> {
@@ -290,6 +320,13 @@ fn get_blob_type(blobs: &Vec <ImgBlob>, index: usize) -> u8 {
 	}
 }
 
+fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
+	match heads.get(index) {
+		Some(h) => h.lines[0].middle[1],
+		None => 255
+	}
+}
+
 fn main() {
 	//iterate through images pulling out blobs
 	//iterate through pages parsing blobs and creating chapters
@@ -298,35 +335,59 @@ fn main() {
 	for img in selected {
 		pages.push(Page::from_path(img));
 	}
-	let mut p: usize = 0;
-	let mut chapter: Chapter;
+	//let mut p: usize = 0;
+	let mut chapter: Chapter = Chapter::new();
 	let mut started = false;
 	let mut created_chapters = 0;
-	let mut destroyed: u64 = 0; //some very pessimistic memory allocation
-	while p < pages.len() {
+	let mut destroyed: usize = 0;
+	for mut p in pages {
 		let mut headings: Vec <Heading> = Vec::new();
-		assert!(p < pages.len(), "page counter exceeded max");
+		//assert!(p < pages.len(), "page counter exceeded max");
 		let mut i: usize = 0;
-		let mut height = 0;
-		while i < pages[p].rblobs.len() {
-			assert!(i < pages[p].rblobs.len(), "blob counter exceeded max");
+		//let mut height = 0;
+		while i < p.rblobs.len() {
+			assert!(i < p.rblobs.len(), "blob counter exceeded max");
 			//identify all line pairs
 			//put pairs in heading struct
 			//go back an divide everything else later
-			if pages[p].rblobs[i].blob_type == 1u8 && get_blob_type(&pages[p].rblobs, i+1) == 1u8 {
-				assert!(i+1 < pages[p].rblobs.len(), "h1 read exceeded max and was not restrained");
-				headings.push(Heading::heading_one(pages[p].rblobs.remove(i), pages[p].rblobs.remove(i)));
-				i += 1;
-				if i >= pages[p].rblobs.len() {
+			if p.rblobs[i].blob_type == 1u8 && get_blob_type(&p.rblobs, i+1) == 1u8 {
+				assert!(i+1 < p.rblobs.len(), "h1 read exceeded max and was not restrained");
+				headings.push(Heading::heading_one(p.rblobs.remove(i), p.rblobs.remove(i)));
+				i -= 1;
+				if i >= p.rblobs.len() {
 					break;
 				}
-				assert!(i < pages[p].rblobs.len(), "h1 iteration exceeded max and was not restrained");
-			} else if pages[p].rblobs[i].blob_type == 1 {
-				headings.push(Heading::heading_two(pages[p].rblobs.remove(i)));
+				assert!(i < p.rblobs.len(), "h1 iteration exceeded max and was not restrained");
+			} else if p.rblobs[i].blob_type == 1 {
+				headings.push(Heading::heading_two(p.rblobs.remove(i)));
+				i -= 1;
 			}
 			i += 1;
 		}
-		p += 1;
+		let mut h: usize = 0;
+		while h < headings.len() {
+			if headings[h].number != 0 {
+				h += 1;
+			}
+			let mut b: usize = 0;
+			let mut previous: Vec <ImgBlob> = Vec::new();
+			let mut current: Vec <ImgBlob> = Vec::new();
+			while b < p.rblobs.len() {
+				if p.rblobs[b].middle[1] < ((headings[h].lines[0].middle[1]) - (1/22*p.dimensions[1]) as usize) {
+					headings[h].blobs.push(p.rblobs[b].clone());
+				} else if (p.rblobs[b].middle[1] > headings[h].lines[0].middle[1]) && (p.rblobs[b].middle[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
+					current.push(p.rblobs[b].clone());
+				} else {
+					previous.push(p.rblobs[b].clone());
+				}
+			}
+			if started {
+				chapter.blobs.append(&mut previous);
+			} else {
+				destroyed += previous.len();
+			}
+		}
+		//p += 1;
 	}
 	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed)
 }
