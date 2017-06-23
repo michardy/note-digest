@@ -2,6 +2,12 @@
 A system for taking hand written color coded notes and converting them into an organized digital notebook.  The system can automaticaly split notes into chapters, identify headings and identify important definitions and ideas.  The headings and definitions are added to a table of contents.  
 
 # Completion
+- [ ] File selection
+  - [x] Displays only supported files
+  - [x] Allows for the selection of a of multiple images
+  - [ ] New image identification
+    - [x] Allows you to select all new images
+    - [ ] Records images after use
 - [x] Image processing
   - [x] Seperating headings notes and definitions
   - [x] Thresholding
