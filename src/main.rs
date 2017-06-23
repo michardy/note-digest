@@ -173,9 +173,39 @@ impl Page {
 		}
 	}
 }
+
+struct Heading {
+	number: u8,
+	lines: Vec <ImgBlob>,
+	blobs: Vec <ImgBlob>,
+}
+
+impl Heading {
+	fn heading_one(top: ImgBlob, bottom: ImgBlob) -> Heading {
+		let mut lines: Vec <ImgBlob> = Vec::new();
+		let mut blobs: Vec <ImgBlob> = Vec::new();
+		lines.push(top);
+		lines.push(bottom);
+		Heading {
+			number: 0,
+			lines: lines,
+			blobs: blobs
+		}
+	}
+	fn heading_two(top: ImgBlob, ) -> Heading {
+		let mut lines: Vec <ImgBlob> = Vec::new();
+		let mut blobs: Vec <ImgBlob> = Vec::new();
+		lines.push(top);
+		Heading {
+			number: 1,
+			lines: lines,
+			blobs: blobs
+		}
+	}
+}
 	
 struct Chapter {
-	heading: ImgBlob,
+	heading: Heading,
 	blobs: Vec <ImgBlob>,
 	subchapters: Vec <Chapter>
 }
@@ -253,6 +283,13 @@ fn get_images() -> Vec <String> {
 	parse_input(uin, mpaths, &mut new)
 }
 
+fn get_blob_type(blobs: &Vec <ImgBlob>, index: usize) -> u8 {
+	match blobs.get(index) {
+		Some(b) => b.blob_type,
+		None => 255
+	}
+}
+
 fn main() {
 	//iterate through images pulling out blobs
 	//iterate through pages parsing blobs and creating chapters
@@ -261,12 +298,35 @@ fn main() {
 	for img in selected {
 		pages.push(Page::from_path(img));
 	}
+	let mut p: usize = 0;
 	let mut chapter: Chapter;
 	let mut started = false;
 	let mut created_chapters = 0;
 	let mut destroyed: u64 = 0; //some very pessimistic memory allocation
-	for p in pages {
-		
+	while p < pages.len() {
+		let mut headings: Vec <Heading> = Vec::new();
+		assert!(p < pages.len(), "page counter exceeded max");
+		let mut i: usize = 0;
+		let mut height = 0;
+		while i < pages[p].rblobs.len() {
+			assert!(i < pages[p].rblobs.len(), "blob counter exceeded max");
+			//identify all line pairs
+			//put pairs in heading struct
+			//go back an divide everything else later
+			if pages[p].rblobs[i].blob_type == 1u8 && get_blob_type(&pages[p].rblobs, i+1) == 1u8 {
+				assert!(i+1 < pages[p].rblobs.len(), "h1 read exceeded max and was not restrained");
+				headings.push(Heading::heading_one(pages[p].rblobs.remove(i), pages[p].rblobs.remove(i)));
+				i += 1;
+				if i >= pages[p].rblobs.len() {
+					break;
+				}
+				assert!(i < pages[p].rblobs.len(), "h1 iteration exceeded max and was not restrained");
+			} else if pages[p].rblobs[i].blob_type == 1 {
+				headings.push(Heading::heading_two(pages[p].rblobs.remove(i)));
+			}
+			i += 1;
+		}
+		p += 1;
 	}
 	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed)
 }
