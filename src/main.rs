@@ -24,7 +24,6 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 			img[i].insert(0, false);
 			ttx += 1;
 		}
-		assert!(((x < 0) && (ttx == 0)) || (x == ttx), "Expected ttx = zero or ttx = x.  Found {}", ttx);
 		while img[i].len() <= ttx as usize {
 			img[i].push(false);
 		}
@@ -38,7 +37,6 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 		img.insert(0, row.clone());
 		ty += 1;
 	}
-	assert!(((y < 0) && (ty == 0)) || (y == ty), "Expected ty = zero or ty = y.  Found {}", ty);
 	while img.len() <= ty as usize {
 		img.push(row.clone())
 	}
@@ -242,16 +240,12 @@ impl Chapter {
 
 fn get_images() -> Vec <String> {
 	fn get_imported_images() -> Vec <String> {
-		println!("test");
 		if Path::new(IMPORTED).exists() {
-			println!("test");
 			let mut list: Vec <String> = Vec::new();
 			let f = (File::open(IMPORTED)).unwrap();
 			let mut file = BufReader::new(&f);
 			for line in file.lines() {
-				println!("test");
 				let templ = line.unwrap();
-				println!("{}", &templ);
 				list.push(templ);
 			}
 			list
@@ -335,29 +329,20 @@ fn main() {
 	for img in selected {
 		pages.push(Page::from_path(img));
 	}
-	//let mut p: usize = 0;
 	let mut chapter: Chapter = Chapter::new();
 	let mut started = false;
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
 	for mut p in pages {
 		let mut headings: Vec <Heading> = Vec::new();
-		//assert!(p < pages.len(), "page counter exceeded max");
 		let mut i: usize = 0;
-		//let mut height = 0;
 		while i < p.rblobs.len() {
-			assert!(i < p.rblobs.len(), "blob counter exceeded max");
-			//identify all line pairs
-			//put pairs in heading struct
-			//go back an divide everything else later
 			if p.rblobs[i].blob_type == 1u8 && get_blob_type(&p.rblobs, i+1) == 1u8 {
-				assert!(i+1 < p.rblobs.len(), "h1 read exceeded max and was not restrained");
 				headings.push(Heading::heading_one(p.rblobs.remove(i), p.rblobs.remove(i)));
 				i -= 1;
 				if i >= p.rblobs.len() {
 					break;
 				}
-				assert!(i < p.rblobs.len(), "h1 iteration exceeded max and was not restrained");
 			} else if p.rblobs[i].blob_type == 1 {
 				headings.push(Heading::heading_two(p.rblobs.remove(i)));
 				i -= 1;
@@ -387,7 +372,6 @@ fn main() {
 				destroyed += previous.len();
 			}
 		}
-		//p += 1;
 	}
 	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed)
 }
