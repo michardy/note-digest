@@ -15,9 +15,9 @@ A system for taking hand written color coded notes and converting them into an o
   - [x] Line detection
 - [ ] Parsing objects
   - [ ] Heading identification
-    - [ ] Heading 1
+    - [x] Heading 1
       - [x] Double line detection
-      - [ ] Title text identification
+      - [x] Title text identification
     - [ ] Heading 2
       - [x] Single line detection
       - [ ] Title text identification
