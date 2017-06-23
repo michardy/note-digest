@@ -1,4 +1,5 @@
 extern crate image;
+extern crate uuid;
 
 
 use std::fs;
@@ -10,6 +11,7 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::fs::File;
 use image::GenericImage;
+use uuid::Uuid;
 
 const IMPORTED: &'static str = "./.imported";
 const OUT_PATH: &'static str = "~/Documemts/Notebook";
@@ -318,6 +320,22 @@ fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
 	match heads.get(index) {
 		Some(h) => h.lines[0].middle[1],
 		None => 255
+	}
+}
+
+fn add_chapter() {
+	fn setup_dirs() {
+		fs::create_dir_all(OUT_PATH);
+	}
+	fn update_toc() {
+		
+	}
+	fn make_chapter() {
+		
+	}
+	let cuid = Uuid::new_v4();
+	if !Path::new(OUT_PATH).exists() {
+		setup_dirs();
 	}
 }
 

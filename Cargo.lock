@@ -3,6 +3,7 @@ name = "notedigest"
 version = "0.1.0"
 dependencies = [
  "image 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "uuid 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -198,6 +199,14 @@ name = "scopeguard"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
+[[package]]
+name = "uuid"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
 [metadata]
 "checksum adler32 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3ff33fe13a08dbce05bcefa2c68eea4844941437e33d6f808240b54d7157b9cd"
 "checksum bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aad18937a628ec6abcd26d1489012cc0e18c21798210f491af69ded9b881106d"
@@ -225,3 +234,4 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum rayon-core 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7cbe5c82dbe8c17fb8cb9a41bbe72b905ec0ce4d62a1cb570e84c1770ea9dc51"
 "checksum scoped_threadpool 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "3ef399c8893e8cb7aa9696e895427fab3a6bf265977bb96e126f24ddd2cda85a"
 "checksum scopeguard 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "c79eb2c3ac4bc2507cda80e7f3ac5b88bd8eae4c0914d5663e6a8933994be918"
+"checksum uuid 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7cfec50b0842181ba6e713151b72f4ec84a6a7e2c9c8a8a3ffc37bb1cd16b231"

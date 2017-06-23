@@ -5,3 +5,4 @@ authors = ["Michael Hardy <98.michael.hardy@gmail.com>"]
 
 [dependencies]
 image = "0.13.0"
+uuid = { version = "0.4", features = ["v4"] }
