@@ -223,6 +223,45 @@ impl Heading {
 		}
 	}
 }
+
+struct Definition {
+	id: Uuid,
+	top_pix: u32,
+	top_precent: f64,
+	right_pix: u32,
+	right_precent: f64,
+	width_pix: u32,
+	width_precent: f64,
+	height_pix: u32,
+	height_precent: f64,
+	heading: Heading,
+	blobs: Vec <ImgBlob>
+}
+
+impl Definition {
+	//fn cluster() -> Vec <Definition> {
+	//	
+	//}
+}
+
+struct Content {
+	id: Uuid,
+	top_pix: u32,
+	top_precent: f64,
+	right_pix: u32,
+	right_precent: f64,
+	width_pix: u32,
+	width_precent: f64,
+	height_pix: u32,
+	height_precent: f64,
+	blobs: Vec <ImgBlob>
+}
+
+impl Content {
+	//fn cluster() -> Vec <Content> {
+	//	
+	//}
+}
 	
 struct Chapter {
 	heading: Heading,
@@ -323,10 +362,15 @@ fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
 	}
 }
 
-fn add_chapter() {
+fn add_chapter(chapter: Chapter) {
 	fn setup_dirs() {
 		fs::create_dir_all(OUT_PATH);
 	}
+	//Probably not the solution
+	//should probably do page leve clumping calculate pos from that and assemble later
+	/*fn blobs_to_image(blobs: Vec <ImgBlob>) -> image::ImageBuffer {
+		let mut imgbuf = image::ImageBuffer::new(imgx, imgy);
+	}*/
 	fn update_toc() {
 		
 	}
