@@ -177,9 +177,14 @@ impl Page {
 
 struct Heading {
 	number: u8,
-	top: f64,
-	right: f64,
-	middle: f64,
+	top_pix: u32,
+	top_precent: f64,
+	right_pix: u32,
+	right_precent: f64,
+	width_pix: u32,
+	width_precent: f64,
+	height_pix: u32,
+	height_precent: f64,
 	lines: Vec <ImgBlob>,
 	blobs: Vec <ImgBlob>,
 }
@@ -188,9 +193,14 @@ impl Heading {
 	fn new() -> Heading {
 		Heading {
 			number: 0,
-			top: 0f64,
-			right: 0f64,
-			middle: 0f64,
+			top_pix: 0u32,
+			top_precent: 0f64,
+			right_pix: 0u32,
+			right_precent: 0f64,
+			width_pix: 0u32,
+			width_precent: 0f64,
+			height_pix: 0u32,
+			height_precent: 0f64,
 			lines: Vec::new(),
 			blobs: Vec::new()
 		}
@@ -202,9 +212,14 @@ impl Heading {
 		lines.push(bottom);
 		Heading {
 			number: 0,
-			top: 0f64,
-			right: 0f64,
-			middle: 0f64,
+			top_pix: 0u32,
+			top_precent: 0f64,
+			right_pix: 0u32,
+			right_precent: 0f64,
+			width_pix: 0u32,
+			width_precent: 0f64,
+			height_pix: 0u32,
+			height_precent: 0f64,
 			lines: lines,
 			blobs: blobs
 		}
@@ -215,13 +230,24 @@ impl Heading {
 		lines.push(top);
 		Heading {
 			number: 1,
-			top: 0f64,
-			right: 0f64,
-			middle: 0f64,
+			top_pix: 0u32,
+			top_precent: 0f64,
+			right_pix: 0u32,
+			right_precent: 0f64,
+			width_pix: 0u32,
+			width_precent: 0f64,
+			height_pix: 0u32,
+			height_precent: 0f64,
 			lines: lines,
 			blobs: blobs
 		}
 	}
+	fn update_size_pos(mut self) {
+		
+	}
+	//fn cluster() -> Vec <Heading> {
+	//	
+	//} 
 }
 
 struct Definition {
