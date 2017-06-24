@@ -383,12 +383,14 @@ fn main() {
 				} else {
 					previous.push(p.rblobs[b].clone());
 				}
+				b += 1;
 			}
 			if started {
 				chapter.blobs.append(&mut previous);
 			} else {
 				destroyed += previous.len();
 			}
+			h += 1;
 		}
 	}
 	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed)
