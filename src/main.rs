@@ -250,7 +250,7 @@ impl Heading {
 	//} 
 }
 
-struct Definition {
+struct Idea {
 	id: Uuid,
 	top_pix: u32,
 	top_precent: f64,
@@ -264,8 +264,8 @@ struct Definition {
 	blobs: Vec <ImgBlob>
 }
 
-impl Definition {
-	//fn cluster() -> Vec <Definition> {
+impl Idea {
+	//fn cluster() -> Vec <Idea> {
 	//	
 	//}
 }
@@ -291,16 +291,18 @@ impl Content {
 	
 struct Chapter {
 	heading: Heading,
-	blobs: Vec <ImgBlob>,
-	subchapters: Vec <Chapter>
+	sub_headings: Vec <Heading>,
+	ideas: Vec <Idea>,
+	content: Vec <Content>
 }
 
 impl Chapter {
 	fn new() -> Chapter {
 		Chapter {
 			heading: Heading::new(),
-			blobs: Vec::new(),
-			subchapters: Vec::new()
+			sub_headings: Vec::new(),
+			ideas: Vec::new(),
+			content: Vec::new()
 		}
 	}
 }
@@ -456,7 +458,7 @@ fn main() {
 				b += 1;
 			}
 			if started {
-				chapter.blobs.append(&mut previous);
+				//chapter.blobs.append(&mut previous);
 			} else {
 				destroyed += previous.len();
 			}
