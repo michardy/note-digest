@@ -21,7 +21,7 @@ I am still learning rust. This code is probably a little questionable.
     - [x] Heading 1
       - [x] Double line detection
       - [x] Title text identification
-    - [ ] Heading 2
+    - [x] Heading 2
       - [x] Single line detection
       - [x] Title text identification
     - [ ] Heading 3
