@@ -1,7 +1,10 @@
 # note-digest
 A system for taking hand written color coded notes and converting them into an organized digital notebook.  The system can automaticaly split notes into chapters, identify headings and identify important definitions and ideas.  The headings and definitions are added to a table of contents.  
 
-# Completion
+# Warning:
+I am still learning rust. This code is probably a little questionable.  
+
+# Completion:
 - [ ] File selection
   - [x] Displays only supported files
   - [x] Allows for the selection of a of multiple images
@@ -20,11 +23,11 @@ A system for taking hand written color coded notes and converting them into an o
       - [x] Title text identification
     - [ ] Heading 2
       - [x] Single line detection
-      - [ ] Title text identification
+      - [x] Title text identification
     - [ ] Heading 3
       - [ ] Title text identification
-  - [ ] Definitnion identification
-    - [ ] Definitnion header identification
+  - [ ] Definition identification
+    - [ ] Definition header identification
   - [x] Splitting chapters by occurences of heading 1
  - [ ] Exporting chapters
   - [ ] Adding to table of contents
@@ -34,3 +37,4 @@ A system for taking hand written color coded notes and converting them into an o
       - [ ] Enable expanding defintions
   - [ ] Saving images
   - [ ] Positioning Images
+- [ ] Organized code
