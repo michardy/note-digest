@@ -245,9 +245,15 @@ impl Heading {
 	fn update_size_pos(mut self) {
 		
 	}
-	//fn cluster() -> Vec <Heading> {
-	//	
-	//} 
+	/*fn cluster(blobs: &mut Vec <ImgBlob>) -> Vec <Heading> {
+		let mut h: usize = 0;
+		let mut out: Vec <Heading> = Vec::new();
+		let mut curcluster: Vec <ImgBlob> = Vec::new();
+		while h < blobs.len() {
+			
+			h += 1;
+		}
+	}*/
 }
 
 struct Idea {
@@ -425,37 +431,55 @@ fn main() {
 	let mut destroyed: usize = 0;
 	for mut p in pages {
 		let mut headings: Vec <Heading> = Vec::new();
+		let mut headings1: Vec <Heading> = Vec::new();
+		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.rblobs.len() {
 			if p.rblobs[i].blob_type == 1u8 && get_blob_type(&p.rblobs, i+1) == 1u8 {
-				headings.push(Heading::heading_one(p.rblobs.remove(i), p.rblobs.remove(i)));
+				headings1.push(Heading::heading_one(p.rblobs.remove(i), p.rblobs.remove(i)));
 				i -= 1;
 				if i >= p.rblobs.len() {
 					break;
 				}
 			} else if p.rblobs[i].blob_type == 1 {
-				headings.push(Heading::heading_two(p.rblobs.remove(i)));
+				headings2.push(Heading::heading_two(p.rblobs.remove(i)));
 				i -= 1;
 			}
 			i += 1;
 		}
-		let mut h: usize = 0;
-		while h < headings.len() {
-			if headings[h].number != 0 {
-				h += 1;
-			}
+		let mut h2: usize = 0;
+		while h2 < headings2.len() {
 			let mut b: usize = 0;
 			let mut previous: Vec <ImgBlob> = Vec::new();
 			let mut current: Vec <ImgBlob> = Vec::new();
 			while b < p.rblobs.len() {
-				if p.rblobs[b].middle[1] < ((headings[h].lines[0].middle[1]) - (1/22*p.dimensions[1]) as usize) {
-					headings[h].blobs.push(p.rblobs[b].clone());
-				} else if (p.rblobs[b].middle[1] > headings[h].lines[0].middle[1]) && (p.rblobs[b].middle[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
+				if p.rblobs[b].middle[1] < ((headings2[h2].lines[0].middle[1]) - (1/22*p.dimensions[1]) as usize) {
+					headings2[h2].blobs.push(p.rblobs.remove(b));
+				}
+				b += 1;
+			}
+			h2 += 1;
+		}
+		let mut h: usize = 0;
+		while h < headings1.len() {
+			let mut b: usize = 0;
+			let mut previous: Vec <ImgBlob> = Vec::new();
+			let mut current: Vec <ImgBlob> = Vec::new();
+			while b < p.rblobs.len() {
+				if p.rblobs[b].middle[1] < ((headings1[h].lines[0].middle[1]) - (1/22*p.dimensions[1]) as usize) {
+					headings1[h].blobs.push(p.rblobs[b].clone());
+				} else if (p.rblobs[b].middle[1] > headings1[h].lines[0].middle[1]) && (p.rblobs[b].middle[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
 					current.push(p.rblobs[b].clone());
 				} else {
 					previous.push(p.rblobs[b].clone());
 				}
 				b += 1;
+			}
+			let mut h2: usize = 0;
+			while h2 < headings2.len() {
+				if (headings2[h2].top_pix > headings1[h].lines[0].middle[1]) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
+					
+				}
 			}
 			if started {
 				//chapter.blobs.append(&mut previous);
