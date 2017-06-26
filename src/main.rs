@@ -49,7 +49,7 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 struct ImgBlob {
 	blob_type: u8, //0: object, 1: line
 	top_left: [usize; 2],
-	middle: [usize; 2],
+	bottom_right: [usize; 2],
 	bitmap: Vec <Vec <bool>>
 }
 
@@ -91,7 +91,7 @@ impl ImgBlob {
 			Some(ImgBlob {
 				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
 				top_left: [left, top],
-				middle: [left+(bitmap[0].len()/2), top+(bitmap.len()/2)],
+				bottom_right: [left+bitmap[0].len(), top+bitmap.len()],
 				bitmap: bitmap
 			})
 		} else {
@@ -391,7 +391,7 @@ fn get_blob_type(blobs: &Vec <ImgBlob>, index: usize) -> u8 {
 
 fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
 	match heads.get(index) {
-		Some(h) => h.lines[0].middle[1],
+		Some(h) => h.lines[0].top_left[1],
 		None => 255
 	}
 }
@@ -453,7 +453,7 @@ fn main() {
 			let mut previous: Vec <ImgBlob> = Vec::new();
 			let mut current: Vec <ImgBlob> = Vec::new();
 			while b < p.rblobs.len() {
-				if p.rblobs[b].middle[1] < ((headings2[h2].lines[0].middle[1]) - (1/22*p.dimensions[1]) as usize) {
+				if p.rblobs[b].top_left[1] < ((headings2[h2].lines[0].top_left[1]) - (1/22*p.dimensions[1]) as usize) {
 					headings2[h2].blobs.push(p.rblobs.remove(b));
 				}
 				b += 1;
@@ -466,9 +466,9 @@ fn main() {
 			let mut previous: Vec <ImgBlob> = Vec::new();
 			let mut current: Vec <ImgBlob> = Vec::new();
 			while b < p.rblobs.len() {
-				if p.rblobs[b].middle[1] < ((headings1[h].lines[0].middle[1]) - (1/22*p.dimensions[1]) as usize) {
+				if p.rblobs[b].top_left[1] < ((headings1[h].lines[0].top_left[1]) - (1/22*p.dimensions[1]) as usize) {
 					headings1[h].blobs.push(p.rblobs[b].clone());
-				} else if (p.rblobs[b].middle[1] > headings1[h].lines[0].middle[1]) && (p.rblobs[b].middle[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
+				} else if (p.rblobs[b].top_left[1] > headings1[h].lines[0].top_left[1]) && (p.rblobs[b].top_left[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
 					current.push(p.rblobs[b].clone());
 				} else {
 					previous.push(p.rblobs[b].clone());
@@ -477,7 +477,7 @@ fn main() {
 			}
 			let mut h2: usize = 0;
 			while h2 < headings2.len() {
-				if (headings2[h2].top_pix > headings1[h].lines[0].middle[1]) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
+				if (headings2[h2].top_pix > headings1[h].lines[0].top_left[1]) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
 					
 				}
 			}
