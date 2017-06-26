@@ -48,14 +48,14 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 #[derive(Debug, Clone)]
 struct ImgBlob {
 	blob_type: u8, //0: object, 1: line
-	top_right: [usize; 2],
+	top_left: [usize; 2],
 	middle: [usize; 2],
 	bitmap: Vec <Vec <bool>>
 }
 
 impl ImgBlob {
-	fn from_top_right(x: usize, y: usize, claim: &mut Vec <Vec <bool>>, img: &Vec <Vec <bool>>) -> Option<ImgBlob>{
-		let mut right = x;
+	fn from_top_left(x: usize, y: usize, claim: &mut Vec <Vec <bool>>, img: &Vec <Vec <bool>>) -> Option<ImgBlob>{
+		let mut left = x;
 		let mut top = y; //pretty sure that this is not supposed to change and can be eliminated
 		let mut bitmap: Vec <Vec <bool>> = Vec::new();
 		let mut queue: Vec <[usize; 2]> = Vec::new();
@@ -68,9 +68,9 @@ impl ImgBlob {
 			let tempy = queue[0][0];
 			if (tempy < img.len()) && (tempx < img[0].len()) && (tempy > 0) && (tempx > 0) {
 				if img[tempy][tempx] && !(claim[tempy][tempx]){
-					boundless_insert(((tempy as i64)-(top as i64)), ((tempx as i64)-(right as i64)), true, &mut bitmap);
-					if tempx < right {
-						right = tempx;
+					boundless_insert(((tempy as i64)-(top as i64)), ((tempx as i64)-(left as i64)), true, &mut bitmap);
+					if tempx < left {
+						left = tempx;
 					}
 					if tempy < top {
 						top = tempy;
@@ -90,8 +90,8 @@ impl ImgBlob {
 			println!("Found: {} x {}", bitmap[0].len(), bitmap.len());
 			Some(ImgBlob {
 				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
-				top_right: [right, top],
-				middle: [right+(bitmap[0].len()/2), top+(bitmap.len()/2)],
+				top_left: [left, top],
+				middle: [left+(bitmap[0].len()/2), top+(bitmap.len()/2)],
 				bitmap: bitmap
 			})
 		} else {
@@ -130,7 +130,7 @@ impl Page {
 		for y in 0..thresh.len() {
 			for x in 0..thresh[0].len() {
 				if thresh[y][x] {
-					match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
+					match ImgBlob::from_top_left(x, y, &mut claimed, &thresh){
 						Some(o) => rblobs.push(o),
 						None => {},
 					}
@@ -144,7 +144,7 @@ impl Page {
 		for y in 0..thresh.len() {
 			for x in 0..thresh[0].len() {
 				if thresh[y][x] {
-					match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
+					match ImgBlob::from_top_left(x, y, &mut claimed, &thresh){
 						Some(o) => gblobs.push(o),
 						None => {},
 					}
@@ -158,7 +158,7 @@ impl Page {
 		for y in 0..thresh.len() {
 			for x in 0..thresh[0].len() {
 				if thresh[y][x] {
-					match ImgBlob::from_top_right(x, y, &mut claimed, &thresh){
+					match ImgBlob::from_top_left(x, y, &mut claimed, &thresh){
 						Some(o) => bblobs.push(o),
 						None => {},
 					}
@@ -179,8 +179,8 @@ struct Heading {
 	number: u8,
 	top_pix: u32,
 	top_precent: f64,
-	right_pix: u32,
-	right_precent: f64,
+	left_pix: u32,
+	left_precent: f64,
 	width_pix: u32,
 	width_precent: f64,
 	height_pix: u32,
@@ -195,8 +195,8 @@ impl Heading {
 			number: 0,
 			top_pix: 0u32,
 			top_precent: 0f64,
-			right_pix: 0u32,
-			right_precent: 0f64,
+			left_pix: 0u32,
+			left_precent: 0f64,
 			width_pix: 0u32,
 			width_precent: 0f64,
 			height_pix: 0u32,
@@ -214,8 +214,8 @@ impl Heading {
 			number: 0,
 			top_pix: 0u32,
 			top_precent: 0f64,
-			right_pix: 0u32,
-			right_precent: 0f64,
+			left_pix: 0u32,
+			left_precent: 0f64,
 			width_pix: 0u32,
 			width_precent: 0f64,
 			height_pix: 0u32,
@@ -232,8 +232,8 @@ impl Heading {
 			number: 1,
 			top_pix: 0u32,
 			top_precent: 0f64,
-			right_pix: 0u32,
-			right_precent: 0f64,
+			left_pix: 0u32,
+			left_precent: 0f64,
 			width_pix: 0u32,
 			width_precent: 0f64,
 			height_pix: 0u32,
@@ -260,8 +260,8 @@ struct Idea {
 	id: Uuid,
 	top_pix: u32,
 	top_precent: f64,
-	right_pix: u32,
-	right_precent: f64,
+	left_pix: u32,
+	left_precent: f64,
 	width_pix: u32,
 	width_precent: f64,
 	height_pix: u32,
@@ -280,8 +280,8 @@ struct Content {
 	id: Uuid,
 	top_pix: u32,
 	top_precent: f64,
-	right_pix: u32,
-	right_precent: f64,
+	left_pix: u32,
+	left_precent: f64,
 	width_pix: u32,
 	width_precent: f64,
 	height_pix: u32,
