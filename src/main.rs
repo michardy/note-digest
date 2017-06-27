@@ -285,15 +285,44 @@ impl Heading {
 		self.left_pix = right - left;
 		self.left_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
 	}
-	/*fn cluster(blobs: &mut Vec <ImgBlob>) -> Vec <Heading> {
-		let mut h: usize = 0;
+	fn cluster(blobs: &mut Vec <ImgBlob>, page: Page) -> Vec <Heading> {
+		let mut b: usize = 0;
 		let mut out: Vec <Heading> = Vec::new();
 		let mut curcluster: Vec <ImgBlob> = Vec::new();
-		while h < blobs.len() {
-			
-			h += 1;
+		while b < blobs.len() {
+			let mut ci: usize = 0;
+			curcluster.push(blobs.remove(b));
+			while ci < curcluster.len() {
+				let mut s: usize = 0;
+				while s < blobs.len() {
+					let x: f64 = curcluster[ci].top_left[0] as f64 - blobs[s].top_left[0] as f64;
+					let y: f64 = curcluster[ci].top_left[1] as f64 - blobs[s].top_left[1] as f64;
+					if (x.abs().powf(2.0) + y.abs().powf(2.0)).sqrt() < (0.09)*(page.dimensions[1] as f64) {
+						curcluster.push(blobs.remove(s));
+					} else {
+						s += 1
+					}
+				}
+				ci += 1;
+			}
+			let mut head = Heading {
+				number: 2,
+				top_pix: 0u32,
+				top_precent: 0f64,
+				left_pix: 0u32,
+				left_precent: 0f64,
+				width_pix: 0u32,
+				width_precent: 0f64,
+				height_pix: 0u32,
+				height_precent: 0f64,
+				lines: Vec::new(),
+				blobs: curcluster.clone()
+			};
+			head.update_size_pos(&page);
+			out.push(head);
 		}
-	}*/
+		out
+	}
 }
 
 struct Idea {
