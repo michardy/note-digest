@@ -175,6 +175,7 @@ impl Page {
 	}
 }
 
+#[derive(Clone)]
 struct Heading {
 	number: u8,
 	top_pix: u32,
@@ -242,8 +243,47 @@ impl Heading {
 			blobs: blobs
 		}
 	}
-	fn update_size_pos(mut self) {
-		
+	fn update_size_pos(&mut self, page: &Page) {
+		let mut top: u32 = 0;
+		let mut left: u32 = 0;
+		let mut bottom: u32 = 0;
+		let mut right: u32 = 0;
+		for b in &self.blobs {
+			if b.top_left[1] > top as usize {
+				top = b.top_left[1] as u32;
+			}
+			if b.top_left[0] > left as usize {
+				left = b.top_left[0] as u32;
+			}
+			if b.bottom_right[1] > bottom as usize {
+				bottom = b.bottom_right[1] as u32;
+			}
+			if b.bottom_right[0] > right as usize {
+				right = b.bottom_right[0] as u32;
+			}
+		}
+		for l in &self.lines {
+			if l.top_left[1] > top as usize {
+				top = l.top_left[1] as u32;
+			}
+			if l.top_left[0] > left as usize {
+				left = l.top_left[0] as u32;
+			}
+			if l.bottom_right[1] > bottom as usize {
+				bottom = l.bottom_right[1] as u32;
+			}
+			if l.bottom_right[0] > right as usize {
+				right = l.bottom_right[0] as u32;
+			}
+		}
+		self.top_pix = top;
+		self.top_precent = (top as f64) / (page.dimensions[1] as f64);
+		self.left_pix = left;
+		self.left_precent = (left as f64) / (page.dimensions[0] as f64);
+		self.width_pix = bottom - top;
+		self.width_precent = (self.width_pix as f64) / (page.dimensions[1] as f64);
+		self.left_pix = right - left;
+		self.left_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
 	}
 	/*fn cluster(blobs: &mut Vec <ImgBlob>) -> Vec <Heading> {
 		let mut h: usize = 0;
@@ -465,6 +505,7 @@ fn main() {
 			let mut b: usize = 0;
 			let mut previous: Vec <ImgBlob> = Vec::new();
 			let mut current: Vec <ImgBlob> = Vec::new();
+			let mut sub: Vec <Heading> = Vec::new();
 			while b < p.rblobs.len() {
 				if p.rblobs[b].top_left[1] < ((headings1[h].lines[0].top_left[1]) - (1/22*p.dimensions[1]) as usize) {
 					headings1[h].blobs.push(p.rblobs[b].clone());
@@ -475,11 +516,14 @@ fn main() {
 				}
 				b += 1;
 			}
+			(&mut headings1[h]).update_size_pos(&p);
 			let mut h2: usize = 0;
 			while h2 < headings2.len() {
-				if (headings2[h2].top_pix > headings1[h].lines[0].top_left[1]) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
-					
+				if (headings2[h2].top_pix > (headings1[h].lines[0].top_left[1] as u32)) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize) as u32){
+					(&mut headings2[h2]).update_size_pos(&p);
+					sub.push(headings2[h2].clone())
 				}
+				h2 += 1;
 			}
 			if started {
 				//chapter.blobs.append(&mut previous);
