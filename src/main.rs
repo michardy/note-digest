@@ -244,15 +244,15 @@ impl Heading {
 		}
 	}
 	fn update_size_pos(&mut self, page: &Page) {
-		let mut top: u32 = 0;
-		let mut left: u32 = 0;
+		let mut top: u32 = <u32>::max_value();
+		let mut left: u32 = <u32>::max_value();
 		let mut bottom: u32 = 0;
 		let mut right: u32 = 0;
 		for b in &self.blobs {
-			if b.top_left[1] > top as usize {
+			if b.top_left[1] < top as usize {
 				top = b.top_left[1] as u32;
 			}
-			if b.top_left[0] > left as usize {
+			if b.top_left[0] < left as usize {
 				left = b.top_left[0] as u32;
 			}
 			if b.bottom_right[1] > bottom as usize {
@@ -261,12 +261,13 @@ impl Heading {
 			if b.bottom_right[0] > right as usize {
 				right = b.bottom_right[0] as u32;
 			}
+			println!("({}, {}), ({}, {})", left, top, b.top_left[0], b.top_left[1]);
 		}
 		for l in &self.lines {
-			if l.top_left[1] > top as usize {
+			if l.top_left[1] < top as usize {
 				top = l.top_left[1] as u32;
 			}
-			if l.top_left[0] > left as usize {
+			if l.top_left[0] < left as usize {
 				left = l.top_left[0] as u32;
 			}
 			if l.bottom_right[1] > bottom as usize {
@@ -275,15 +276,18 @@ impl Heading {
 			if l.bottom_right[0] > right as usize {
 				right = l.bottom_right[0] as u32;
 			}
+			println!("({}, {}), ({}, {})", left, top, l.top_left[0], l.top_left[1]);
 		}
+		println!("{}, {}", left, top);
 		self.top_pix = top;
 		self.top_precent = (top as f64) / (page.dimensions[1] as f64);
 		self.left_pix = left;
+		println!("{}, {}", left, self.left_pix);
 		self.left_precent = (left as f64) / (page.dimensions[0] as f64);
 		self.width_pix = bottom - top;
 		self.width_precent = (self.width_pix as f64) / (page.dimensions[1] as f64);
-		self.left_pix = right - left;
-		self.left_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
+		self.height_pix = right - left;
+		self.height_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
 	}
 	fn cluster(blobs: &mut Vec <ImgBlob>, page: Page) -> Vec <Heading> {
 		let mut b: usize = 0;
@@ -322,6 +326,38 @@ impl Heading {
 			out.push(head);
 		}
 		out
+	}
+	fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
+		println!("{}, {}", self.width_pix, self.height_pix);
+		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
+			(self.width_pix as u32)+100, (self.height_pix as u32)+100
+		);
+		println!("created buffer");
+		for b in &self.blobs {
+			println!("getting dimensions\n{}-{},{}-{}", b.top_left[0], self.left_pix, b.top_left[1], self.top_pix);
+			let xoff = (b.top_left[0] as u32) - self.left_pix;
+			let yoff = (b.top_left[1] as u32) - self.top_pix;
+			let mut y: usize = 0;
+			let mut x: usize = 0;
+			println!("iterating y; {}", b.bitmap.len());
+			while y < b.bitmap.len() {
+				println!("iterating x; {}", b.bitmap[y].len());
+				while x < b.bitmap[y].len() {
+					println!("printing");
+					println!("{}", b.bitmap[y][x]);
+					println!("putting pix: {}, {}", x+(xoff as usize), y+(yoff as usize));
+					imgbuf.put_pixel(
+						(x as u32)+xoff,
+						(y as u32)+yoff,
+						image::LumaA(if b.bitmap[y][x] {[0, 255]} else {[0, 0]})
+					);
+					println!("pass");
+					x += 1;
+				}
+				y += 1;
+			}
+		}
+		imgbuf
 	}
 }
 
@@ -545,7 +581,9 @@ fn main() {
 				}
 				b += 1;
 			}
+			println!("{}", headings1[h].left_pix);
 			(&mut headings1[h]).update_size_pos(&p);
+			println!("{}", headings1[h].left_pix);
 			let mut h2: usize = 0;
 			while h2 < headings2.len() {
 				if (headings2[h2].top_pix > (headings1[h].lines[0].top_left[1] as u32)) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize) as u32){
@@ -559,6 +597,13 @@ fn main() {
 			} else {
 				destroyed += previous.len();
 			}
+			println!("Making image");
+			let img = (&headings1[h]).to_image();
+			println!("Making file name");
+			let num = &h.to_string()[..];
+			let ref mut fout = File::create(&Path::new(&(String::from("outh")+num+".png")[..])).unwrap();
+			println!("Saving image");
+			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			h += 1;
 		}
 	}
