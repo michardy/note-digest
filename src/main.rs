@@ -284,9 +284,9 @@ impl Heading {
 		self.left_pix = left;
 		println!("{}, {}", left, self.left_pix);
 		self.left_precent = (left as f64) / (page.dimensions[0] as f64);
-		self.width_pix = bottom - top;
+		self.width_pix = right - left;
 		self.width_precent = (self.width_pix as f64) / (page.dimensions[1] as f64);
-		self.height_pix = right - left;
+		self.height_pix = bottom - top;
 		self.height_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
 	}
 	fn cluster(blobs: &mut Vec <ImgBlob>, page: Page) -> Vec <Heading> {
