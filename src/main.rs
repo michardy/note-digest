@@ -325,7 +325,7 @@ impl Heading {
 	}
 	fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
 		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
-			(self.width_pix as u32)+100, (self.height_pix as u32)+100
+			(self.width_pix as u32), (self.height_pix as u32)
 		);
 		for b in &self.blobs {
 			let xoff = (b.top_left[0] as u32) - self.left_pix;
