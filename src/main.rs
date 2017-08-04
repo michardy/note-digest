@@ -331,8 +331,8 @@ impl Heading {
 			let xoff = (b.top_left[0] as u32) - self.left_pix;
 			let yoff = (b.top_left[1] as u32) - self.top_pix;
 			let mut y: usize = 0;
-			let mut x: usize = 0;
 			while y < b.bitmap.len() {
+				let mut x: usize = 0;
 				while x < b.bitmap[y].len() {
 					imgbuf.put_pixel(
 						(x as u32)+xoff,
