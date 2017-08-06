@@ -334,11 +334,13 @@ impl Heading {
 			while y < b.bitmap.len() {
 				let mut x: usize = 0;
 				while x < b.bitmap[y].len() {
-					imgbuf.put_pixel(
-						(x as u32)+xoff,
-						(y as u32)+yoff,
-						image::LumaA(if b.bitmap[y][x] {[0, 255]} else {[0, 0]})
-					);
+					if b.bitmap[y][x] {
+						imgbuf.put_pixel(
+							(x as u32)+xoff,
+							(y as u32)+yoff,
+							image::LumaA([0, 255])
+						);
+					}
 					x += 1;
 				}
 				y += 1;
