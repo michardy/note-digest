@@ -547,7 +547,7 @@ fn main() {
 			let mut previous: Vec <ImgBlob> = Vec::new();
 			let mut current: Vec <ImgBlob> = Vec::new();
 			while b < p.rblobs.len() {
-				if p.rblobs[b].top_left[1] < ((headings2[h2].lines[0].top_left[1]) - (1/22*p.dimensions[1]) as usize) {
+				if p.rblobs[b].top_left[1] > ((headings2[h2].lines[0].top_left[1]) - (1/11*p.dimensions[1]) as usize) && p.rblobs[b].top_left[1] < (headings2[h2].lines[0].top_left[1] as usize) {
 					headings2[h2].blobs.push(p.rblobs.remove(b));
 				}
 				b += 1;
@@ -561,7 +561,7 @@ fn main() {
 			let mut current: Vec <ImgBlob> = Vec::new();
 			let mut sub: Vec <Heading> = Vec::new();
 			while b < p.rblobs.len() {
-				if p.rblobs[b].top_left[1] < ((headings1[h].lines[0].top_left[1]) - (1/22*p.dimensions[1]) as usize) {
+				if p.rblobs[b].top_left[1] as f64 > (headings1[h].lines[0].top_left[1] as f64) - (1f64/11f64*(p.dimensions[1] as f64)) && p.rblobs[b].top_left[1] < headings1[h].lines[0].top_left[1] {
 					headings1[h].blobs.push(p.rblobs[b].clone());
 				} else if (p.rblobs[b].top_left[1] > headings1[h].lines[0].top_left[1]) && (p.rblobs[b].top_left[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
 					current.push(p.rblobs[b].clone());
