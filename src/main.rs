@@ -529,6 +529,7 @@ fn main() {
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.rblobs.len() {
+			//replace with interleave chunking
 			if p.rblobs[i].blob_type == 1u8 && get_blob_type(&p.rblobs, i+1) == 1u8 {
 				headings1.push(Heading::heading_one(p.rblobs.remove(i), p.rblobs.remove(i)));
 				i -= 1;
@@ -547,7 +548,7 @@ fn main() {
 			let mut previous: Vec <ImgBlob> = Vec::new();
 			let mut current: Vec <ImgBlob> = Vec::new();
 			while b < p.rblobs.len() {
-				if p.rblobs[b].top_left[1] > ((headings2[h2].lines[0].top_left[1]) - (1/11*p.dimensions[1]) as usize) && p.rblobs[b].top_left[1] < (headings2[h2].lines[0].top_left[1] as usize) {
+				if p.rblobs[b].top_left[1] as f64 > (headings2[h2].lines[0].top_left[1] as f64) - (1f64/11f64*(p.dimensions[1] as f64)) && p.rblobs[b].top_left[1] < (headings2[h2].lines[0].top_left[1] as usize) {
 					headings2[h2].blobs.push(p.rblobs.remove(b));
 				}
 				b += 1;
