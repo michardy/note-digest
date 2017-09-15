@@ -108,10 +108,11 @@ struct Clump {
 impl Clump {
 	fn clump_update(blob:ImgBlob, t: u8, clumps: &mut Vec <Clump>){
 		println!("Starting clump_update");
-		if clumps.len() > 0 {
-			if t == clumps[0].ctype {
+		let clen = clumps.len();
+		if clen > 0 {
+			if t == clumps[clen-1].ctype {
 				print!("Pushing to exisiting clump... ");
-				clumps[0].blobs.push(blob);
+				clumps[clen-1].blobs.push(blob);
 				println!("Done");
 			} else {
 				print!("Creating new clump... ");
@@ -124,7 +125,7 @@ impl Clump {
 				println!("Done");
 			}
 		} else {
-			print!("Creating new clump... ");
+			print!("Creating FIRST clump... ");
 			clumps.push(
 				Clump {
 					ctype: t,
@@ -133,6 +134,31 @@ impl Clump {
 			);
 			println!("Done");
 		}
+	}
+	fn to_image(&self, w: u32, h: u32) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
+		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
+			w, h
+		);
+		for b in &self.blobs {
+			let xoff = (b.top_left[0] as u32);
+			let yoff = (b.top_left[1] as u32);
+			let mut y: usize = 0;
+			while y < b.bitmap.len() {
+				let mut x: usize = 0;
+				while x < b.bitmap[y].len() {
+					if b.bitmap[y][x] {
+						imgbuf.put_pixel(
+							(x as u32)+xoff,
+							(y as u32)+yoff,
+							image::LumaA([0, 255])
+						);
+					}
+					x += 1;
+				}
+				y += 1;
+			}
+		}
+		imgbuf
 	}
 }
 
@@ -166,21 +192,21 @@ impl Page {
 		while rblobs.len() + gblobs.len() + bblobs.len() > 0 {
 			print!("Assigning rpos... ");
 			if rblobs.len() > 0 {
-				rpos = rblobs[0].top_left[0];
+				rpos = rblobs[0].top_left[1];
 			} else {
 				rpos = <usize>::max_value();
 			}
 			println!("Done");
 			print!("Assigning gpos... ");
 			if gblobs.len() > 0 {
-				gpos = gblobs[0].top_left[0];
+				gpos = gblobs[0].top_left[1];
 			} else {
 				gpos = <usize>::max_value();
 			}
 			println!("Done");
 			print!("Assigning bpos... ");
 			if bblobs.len() > 0 {
-				bpos = bblobs[0].top_left[0];
+				bpos = bblobs[0].top_left[1];
 			} else {
 				bpos = <usize>::max_value();
 			}
@@ -623,6 +649,10 @@ fn main() {
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
 			println!("Checking clump {}", i);
+			let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
+			let num = &i.to_string()[..];
+			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
+			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
 				0 => println!("Heading(s) of some type"),
 				1 => println!("Defintions(s) of some type"),
