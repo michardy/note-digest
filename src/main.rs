@@ -100,14 +100,105 @@ impl ImgBlob {
 	}
 }
 
+struct Clump {
+	ctype: u8,
+	blobs: Vec <ImgBlob>
+}
+
+impl Clump {
+	fn clump_update(blob:ImgBlob, t: u8, clumps: &mut Vec <Clump>){
+		println!("Starting clump_update");
+		if clumps.len() > 0 {
+			if t == clumps[0].ctype {
+				print!("Pushing to exisiting clump... ");
+				clumps[0].blobs.push(blob);
+				println!("Done");
+			} else {
+				print!("Creating new clump... ");
+				clumps.push(
+					Clump {
+						ctype: t,
+						blobs: vec![blob]
+					}
+				);
+				println!("Done");
+			}
+		} else {
+			print!("Creating new clump... ");
+			clumps.push(
+				Clump {
+					ctype: t,
+					blobs: vec![blob]
+				}
+			);
+			println!("Done");
+		}
+	}
+}
+
 struct Page {
-	rblobs: Vec <ImgBlob>,
-	gblobs: Vec <ImgBlob>,
-	bblobs: Vec <ImgBlob>,
+	clumps: Vec <Clump>,
 	dimensions: [u32; 2]
 }
 
 impl Page {
+	fn get_highest(a:usize, b:usize, c:usize) -> u8 {
+		if a <= b && a <= c {
+			0
+		} else if a > b && b <= c {
+			1
+		} else {
+			2
+		}
+	}
+	fn from_blobs(
+		mut rblobs: Vec <ImgBlob>,
+		mut gblobs: Vec <ImgBlob>,
+		mut bblobs: Vec <ImgBlob>,
+		dimensions: [u32; 2]
+	) -> Page {
+		println!("Blobs received");
+		let mut clumps = Vec::new();
+		let mut rpos;
+		let mut gpos;
+		let mut bpos;
+		println!("Starting loop");
+		while rblobs.len() + gblobs.len() + bblobs.len() > 0 {
+			print!("Assigning rpos... ");
+			if rblobs.len() > 0 {
+				rpos = rblobs[0].top_left[0];
+			} else {
+				rpos = <usize>::max_value();
+			}
+			println!("Done");
+			print!("Assigning gpos... ");
+			if gblobs.len() > 0 {
+				gpos = gblobs[0].top_left[0];
+			} else {
+				gpos = <usize>::max_value();
+			}
+			println!("Done");
+			print!("Assigning bpos... ");
+			if bblobs.len() > 0 {
+				bpos = bblobs[0].top_left[0];
+			} else {
+				bpos = <usize>::max_value();
+			}
+			println!("Done");
+			println!("Starting get_highest");
+			match Page::get_highest(rpos, gpos, bpos) {
+				0 => Clump::clump_update(rblobs.remove(0), 0, &mut clumps),
+				1 => Clump::clump_update(gblobs.remove(0), 1, &mut clumps),
+				2 => Clump::clump_update(bblobs.remove(0), 2, &mut clumps),
+				_ => panic!("Invalid clump type(>2)"),
+			};
+		}
+		println!("Dumping page");
+		Page {
+			clumps: clumps,
+			dimensions: dimensions
+		}
+	}
 	fn from_path(path: String) -> Page {
 		let mut claimed: Vec <Vec <bool>> = Vec::new();
 		let mut thresh: Vec <Vec <bool>> = Vec::new();
@@ -166,12 +257,12 @@ impl Page {
 			}
 		}
 		println!("Finished B");
-		Page {
-			rblobs: rblobs,
-			gblobs: gblobs,
-			bblobs: bblobs,
-			dimensions: [img.width(), img.height()]
-		}
+		Page::from_blobs(
+			rblobs,
+			gblobs,
+			bblobs,
+			[img.width(), img.height()]
+		)
 	}
 }
 
@@ -519,78 +610,27 @@ fn main() {
 	for img in selected {
 		pages.push(Page::from_path(img));
 	}
+	println!("Finished decomposing and clumping pages");
 	let mut chapter: Chapter = Chapter::new();
 	let mut started = false;
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
+	println!("iterating");
 	for mut p in pages {
 		let mut headings: Vec <Heading> = Vec::new();
 		let mut headings1: Vec <Heading> = Vec::new();
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
-		while i < p.rblobs.len() {
-			//replace with interleave chunking
-			if p.rblobs[i].blob_type == 1u8 && get_blob_type(&p.rblobs, i+1) == 1u8 {
-				headings1.push(Heading::heading_one(p.rblobs.remove(i), p.rblobs.remove(i)));
-				i -= 1;
-				if i >= p.rblobs.len() {
-					break;
-				}
-			} else if p.rblobs[i].blob_type == 1 {
-				headings2.push(Heading::heading_two(p.rblobs.remove(i)));
-				i -= 1;
+		while i < p.clumps.len() {
+			println!("Checking clump {}", i);
+			match p.clumps[i].ctype {
+				0 => println!("Heading(s) of some type"),
+				1 => println!("Defintions(s) of some type"),
+				2 => println!("Content"),
+				_ => panic!("Invalid Content")
 			}
 			i += 1;
 		}
-		let mut h2: usize = 0;
-		while h2 < headings2.len() {
-			let mut b: usize = 0;
-			let mut previous: Vec <ImgBlob> = Vec::new();
-			let mut current: Vec <ImgBlob> = Vec::new();
-			while b < p.rblobs.len() {
-				if p.rblobs[b].top_left[1] as f64 > (headings2[h2].lines[0].top_left[1] as f64) - (1f64/11f64*(p.dimensions[1] as f64)) && p.rblobs[b].top_left[1] < (headings2[h2].lines[0].top_left[1] as usize) {
-					headings2[h2].blobs.push(p.rblobs.remove(b));
-				}
-				b += 1;
-			}
-			h2 += 1;
-		}
-		let mut h: usize = 0;
-		while h < headings1.len() {
-			let mut b: usize = 0;
-			let mut previous: Vec <ImgBlob> = Vec::new();
-			let mut current: Vec <ImgBlob> = Vec::new();
-			let mut sub: Vec <Heading> = Vec::new();
-			while b < p.rblobs.len() {
-				if p.rblobs[b].top_left[1] as f64 > (headings1[h].lines[0].top_left[1] as f64) - (1f64/11f64*(p.dimensions[1] as f64)) && p.rblobs[b].top_left[1] < headings1[h].lines[0].top_left[1] {
-					headings1[h].blobs.push(p.rblobs[b].clone());
-				} else if (p.rblobs[b].top_left[1] > headings1[h].lines[0].top_left[1]) && (p.rblobs[b].top_left[1] < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize)){
-					current.push(p.rblobs[b].clone());
-				} else {
-					previous.push(p.rblobs[b].clone());
-				}
-				b += 1;
-			}
-			(&mut headings1[h]).update_size_pos(&p);
-			let mut h2: usize = 0;
-			while h2 < headings2.len() {
-				if (headings2[h2].top_pix > (headings1[h].lines[0].top_left[1] as u32)) && (headings2[h2].top_pix < ((get_head_height(&headings, h+1) as usize) - (1/22*p.dimensions[1]) as usize) as u32){
-					(&mut headings2[h2]).update_size_pos(&p);
-					sub.push(headings2[h2].clone())
-				}
-				h2 += 1;
-			}
-			if started {
-				//chapter.blobs.append(&mut previous);
-			} else {
-				destroyed += previous.len();
-			}
-			let img = (&headings1[h]).to_image();
-			let num = &h.to_string()[..];
-			let ref mut fout = File::create(&Path::new(&(String::from("outh")+num+".png")[..])).unwrap();
-			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
-			h += 1;
-		}
 	}
-	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed)
+	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed);
 }
