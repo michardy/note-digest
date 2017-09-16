@@ -95,7 +95,6 @@ impl ImgBlob {
 			queue.remove(0);
 		}
 		if (bitmap[0].len() + bitmap.len() > 6) && (bitmap.len() > 3) && (bitmap[0].len() > 3) {
-			println!("Found: {} x {}", bitmap[0].len(), bitmap.len());
 			Some(ImgBlob {
 				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
 				top_left: [left, top],
@@ -115,32 +114,25 @@ struct Clump {
 
 impl Clump {
 	fn clump_update(blob:ImgBlob, t: u8, clumps: &mut Vec <Clump>){
-		println!("Starting clump_update");
 		let clen = clumps.len();
 		if clen > 0 {
 			if t == clumps[clen-1].ctype {
-				print!("Pushing to exisiting clump... ");
 				clumps[clen-1].blobs.push(blob);
-				println!("Done");
 			} else {
-				print!("Creating new clump... ");
 				clumps.push(
 					Clump {
 						ctype: t,
 						blobs: vec![blob]
 					}
 				);
-				println!("Done");
 			}
 		} else {
-			print!("Creating FIRST clump... ");
 			clumps.push(
 				Clump {
 					ctype: t,
 					blobs: vec![blob]
 				}
 			);
-			println!("Done");
 		}
 	}
 	fn to_image(&self, w: u32, h: u32) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
@@ -191,35 +183,28 @@ impl Page {
 		mut bblobs: Vec <ImgBlob>,
 		dimensions: [u32; 2]
 	) -> Page {
-		println!("Blobs received");
+		print!("\r◔: Clustering objects ");
+		std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 		let mut clumps = Vec::new();
 		let mut rpos;
 		let mut gpos;
 		let mut bpos;
-		println!("Starting loop");
 		while rblobs.len() + gblobs.len() + bblobs.len() > 0 {
-			print!("Assigning rpos... ");
 			if rblobs.len() > 0 {
 				rpos = rblobs[0].top_left[1];
 			} else {
 				rpos = <usize>::max_value();
 			}
-			println!("Done");
-			print!("Assigning gpos... ");
 			if gblobs.len() > 0 {
 				gpos = gblobs[0].top_left[1];
 			} else {
 				gpos = <usize>::max_value();
 			}
-			println!("Done");
-			print!("Assigning bpos... ");
 			if bblobs.len() > 0 {
 				bpos = bblobs[0].top_left[1];
 			} else {
 				bpos = <usize>::max_value();
 			}
-			println!("Done");
-			println!("Starting get_highest");
 			match Page::get_highest(rpos, gpos, bpos) {
 				0 => Clump::clump_update(rblobs.remove(0), 0, &mut clumps),
 				1 => Clump::clump_update(gblobs.remove(0), 1, &mut clumps),
@@ -227,7 +212,6 @@ impl Page {
 				_ => panic!("Invalid clump type(>2)"),
 			};
 		}
-		println!("Dumping page");
 		Page {
 			clumps: clumps,
 			dimensions: dimensions
@@ -286,11 +270,8 @@ impl Page {
 		}
 		let rgbimg = img.to_rgb();
 		thresh_and_blob(&rgbimg, RED, &mut claimed, &mut thresh, &mut rblobs);
-		println!("Finished R");
 		thresh_and_blob(&rgbimg, GREEN, &mut claimed, &mut thresh, &mut gblobs);
-		println!("Finished G");
 		thresh_and_blob(&rgbimg, BLUE, &mut claimed, &mut thresh, &mut bblobs);
-		println!("Finished B");
 		Page::from_blobs(
 			rblobs,
 			gblobs,
@@ -642,34 +623,38 @@ fn main() {
 	//iterate through pages parsing blobs and creating chapters
 	let selected = get_images();
 	let mut pages: Vec <Page> = Vec::new();
+	print!("○: Identifying objects");
+	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	for img in selected {
 		pages.push(Page::from_path(img));
 	}
-	println!("Finished decomposing and clumping pages");
+	print!("\r◑: Dividing by chapter");
+	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	let mut chapter: Chapter = Chapter::new();
 	let mut started = false;
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
-	println!("iterating");
 	for mut p in pages {
 		let mut headings: Vec <Heading> = Vec::new();
 		let mut headings1: Vec <Heading> = Vec::new();
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
-			println!("Checking clump {}", i);
 			let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
 			let num = &i.to_string()[..];
 			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
 			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
-				RED   => println!("Heading(s) of some type"),
-				GREEN => println!("Defintions(s) of some type"),
-				BLUE  => println!("Content"),
+				RED   => {},//Heading(s) of some type
+				GREEN => {},//Defintions(s) of some type
+				BLUE  => {},//Content"
 				_ => panic!("Invalid Content")
 			}
 			i += 1;
 		}
 	}
+	print!("\r◕: Writing            ");
+	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
+	println!("\r●: Done               ");
 	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed);
 }
