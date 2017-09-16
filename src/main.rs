@@ -16,6 +16,13 @@ use uuid::Uuid;
 const IMPORTED: &'static str = "./.imported";
 const OUT_PATH: &'static str = "~/Documemts/Notebook";
 
+const MIN_THRESH: u8 = 140;
+const MAX_THRESH: u8 = 170;
+
+const RED: u8 = 0;
+const GREEN: u8 = 1;
+const BLUE: u8 = 2;
+
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
 fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 	let mut tx = x;
@@ -140,8 +147,8 @@ impl Clump {
 			w, h
 		);
 		for b in &self.blobs {
-			let xoff = (b.top_left[0] as u32);
-			let yoff = (b.top_left[1] as u32);
+			let xoff = b.top_left[0] as u32;
+			let yoff = b.top_left[1] as u32;
 			let mut y: usize = 0;
 			while y < b.bitmap.len() {
 				let mut x: usize = 0;
@@ -226,6 +233,42 @@ impl Page {
 		}
 	}
 	fn from_path(path: String) -> Page {
+		fn thresh_and_blob(
+			rgbimg: &image::RgbImage,
+			channel: u8,
+			claimed: &mut Vec <Vec <bool>>,
+			thresh: &mut Vec <Vec <bool>>,
+			blobs: &mut Vec <ImgBlob>
+		) {
+			match channel {
+				RED => {
+					for (x, y, pixel) in rgbimg.enumerate_pixels() {
+						thresh[y as usize][x as usize] = if (pixel[0] > MIN_THRESH) && (pixel[1] <= MAX_THRESH) && (pixel[2] <= MAX_THRESH) {true} else {false};
+					}
+				},
+				GREEN => {
+					for (x, y, pixel) in rgbimg.enumerate_pixels() {
+						thresh[y as usize][x as usize] = if (pixel[1] > MIN_THRESH) && (pixel[0] <= MAX_THRESH) && (pixel[2] <= MAX_THRESH) {true} else {false};
+					}
+				},
+				BLUE => {
+					for (x, y, pixel) in rgbimg.enumerate_pixels() {
+						thresh[y as usize][x as usize] = if (pixel[2] > MIN_THRESH) && (pixel[1] <= MAX_THRESH) && (pixel[0] <= MAX_THRESH) {true} else {false};
+					}
+				},
+				_ => panic!("Invalid color")
+			}
+			for y in 0..thresh.len() {
+				for x in 0..thresh[0].len() {
+					if thresh[y][x] {
+						match ImgBlob::from_top_left(x, y, claimed, &thresh){
+							Some(o) => blobs.push(o),
+							None => {},
+						}
+					}
+				}
+			}
+		}
 		let mut claimed: Vec <Vec <bool>> = Vec::new();
 		let mut thresh: Vec <Vec <bool>> = Vec::new();
 		let mut rblobs: Vec <ImgBlob> = Vec::new();
@@ -241,47 +284,11 @@ impl Page {
 			thresh.push(row.clone());
 		}
 		let rgbimg = img.to_rgb();
-		for (x, y, pixel) in rgbimg.enumerate_pixels() {
-			thresh[y as usize][x as usize] = if (pixel[0] > 140) && (pixel[1] <= 170) && (pixel[2] <= 170) {true} else {false};
-		}
-		for y in 0..thresh.len() {
-			for x in 0..thresh[0].len() {
-				if thresh[y][x] {
-					match ImgBlob::from_top_left(x, y, &mut claimed, &thresh){
-						Some(o) => rblobs.push(o),
-						None => {},
-					}
-				}
-			}
-		}
+		thresh_and_blob(&rgbimg, RED, &mut claimed, &mut thresh, &mut rblobs);
 		println!("Finished R");
-		for (x, y, pixel) in rgbimg.enumerate_pixels() {
-			thresh[y as usize][x as usize] = if (pixel[1] > 140) && (pixel[0] <= 170) && (pixel[2] <= 170) {true} else {false};
-		}
-		for y in 0..thresh.len() {
-			for x in 0..thresh[0].len() {
-				if thresh[y][x] {
-					match ImgBlob::from_top_left(x, y, &mut claimed, &thresh){
-						Some(o) => gblobs.push(o),
-						None => {},
-					}
-				}
-			}
-		}
+		thresh_and_blob(&rgbimg, GREEN, &mut claimed, &mut thresh, &mut gblobs);
 		println!("Finished G");
-		for (x, y, pixel) in rgbimg.enumerate_pixels() {
-			thresh[y as usize][x as usize] = if (pixel[2] > 140) && (pixel[1] <= 170) && (pixel[0] <= 170) {true} else {false};
-		}
-		for y in 0..thresh.len() {
-			for x in 0..thresh[0].len() {
-				if thresh[y][x] {
-					match ImgBlob::from_top_left(x, y, &mut claimed, &thresh){
-						Some(o) => bblobs.push(o),
-						None => {},
-					}
-				}
-			}
-		}
+		thresh_and_blob(&rgbimg, BLUE, &mut claimed, &mut thresh, &mut bblobs);
 		println!("Finished B");
 		Page::from_blobs(
 			rblobs,
@@ -654,9 +661,9 @@ fn main() {
 			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
 			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
-				0 => println!("Heading(s) of some type"),
-				1 => println!("Defintions(s) of some type"),
-				2 => println!("Content"),
+				RED   => println!("Heading(s) of some type"),
+				GREEN => println!("Defintions(s) of some type"),
+				BLUE  => println!("Content"),
 				_ => panic!("Invalid Content")
 			}
 			i += 1;
