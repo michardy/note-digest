@@ -107,6 +107,7 @@ impl ImgBlob {
 	}
 }
 
+#[derive(Clone)]
 struct Clump {
 	ctype: u8,
 	blobs: Vec <ImgBlob>
@@ -490,9 +491,50 @@ struct Content {
 }
 
 impl Content {
-	//fn cluster() -> Vec <Content> {
-	//	
-	//}
+	fn update_size_pos(&mut self, dim: [u32; 2]) {
+		let mut top: u32 = <u32>::max_value();
+		let mut left: u32 = <u32>::max_value();
+		let mut bottom: u32 = 0;
+		let mut right: u32 = 0;
+		for b in &self.blobs {
+			if b.top_left[1] < top as usize {
+				top = b.top_left[1] as u32;
+			}
+			if b.top_left[0] < left as usize {
+				left = b.top_left[0] as u32;
+			}
+			if b.bottom_right[1] > bottom as usize {
+				bottom = b.bottom_right[1] as u32;
+			}
+			if b.bottom_right[0] > right as usize {
+				right = b.bottom_right[0] as u32;
+			}
+		}
+		self.top_pix = top;
+		self.top_precent = (top as f64) / (dim[1] as f64);
+		self.left_pix = left;
+		self.left_precent = (left as f64) / (dim[0] as f64);
+		self.width_pix = right - left;
+		self.width_precent = (self.width_pix as f64) / (dim[1] as f64);
+		self.height_pix = bottom - top;
+		self.height_precent = (self.left_pix as f64) / (dim[0] as f64);
+	}
+	fn new(blobs: Vec <ImgBlob>, dim: [u32; 2]) -> Content {
+		let mut out = Content {
+			id: Uuid::new_v4(),
+			top_pix: 0u32,
+			top_precent: 0f64,
+			left_pix: 0u32,
+			left_precent: 0f64,
+			width_pix: 0u32,
+			width_precent: 0f64,
+			height_pix: 0u32,
+			height_precent: 0f64,
+			blobs: blobs.clone()
+		};
+		out.update_size_pos(dim);
+		out
+	}
 }
 	
 struct Chapter {
@@ -618,6 +660,20 @@ fn add_chapter(chapter: Chapter) {
 	}
 }
 
+fn add_content(
+	clump: Clump,
+	page: &Page,
+	chapter: &mut Chapter,
+	destroyed: &mut usize,
+	started: bool
+) {
+	if started {
+		chapter.content.push(Content::new(clump.blobs, page.dimensions));
+	} else {
+		*destroyed += 1;
+	}
+}
+
 fn main() {
 	//iterate through images pulling out blobs
 	//iterate through pages parsing blobs and creating chapters
@@ -640,16 +696,16 @@ fn main() {
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
-			let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
-			let num = &i.to_string()[..];
-			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
-			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
+			//let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
+			//let num = &i.to_string()[..];
+			//let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
+			//let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
 				RED   => {},//Heading(s) of some type
 				GREEN => {},//Defintions(s) of some type
-				BLUE  => {},//Content"
+				BLUE  => add_content(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Content"
 				_ => panic!("Invalid Content")
-			}
+			};
 			i += 1;
 		}
 	}
