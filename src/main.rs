@@ -7,6 +7,7 @@ use std::env;
 use std::path::Path;
 use std::path::PathBuf;
 use std::io;
+use std::io::Write;
 use std::io::BufReader;
 use std::io::BufRead;
 use std::fs::File;
@@ -593,7 +594,8 @@ fn get_images() -> Vec <String> {
 	println!("Enter 5-6 to import images 5 through 6.  ");
 	println!("Enter + to import the images you have not imported.  (These images are indicated in the list by + signs)");
 	println!("Use spaces to seperate multiple selections.  ");
-	println!("select: ");
+	print!("select: ");
+	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	let mut uin = String::new();
 	io::stdin().read_line(&mut uin).ok().expect("Error reading line");
 	uin.pop();
