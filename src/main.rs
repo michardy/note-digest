@@ -675,8 +675,8 @@ fn add_content(
 }
 
 fn main() {
-	//iterate through images pulling out blobs
-	//iterate through pages parsing blobs and creating chapters
+	//iterate through images pulling out clumps
+	//iterate through pages parsing clumps and creating chapters
 	let selected = get_images();
 	let mut pages: Vec <Page> = Vec::new();
 	print!("○: Identifying objects");
@@ -696,10 +696,6 @@ fn main() {
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
-			//let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
-			//let num = &i.to_string()[..];
-			//let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
-			//let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
 				RED   => {},//Heading(s) of some type
 				GREEN => {},//Defintions(s) of some type
