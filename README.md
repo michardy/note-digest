@@ -16,7 +16,7 @@ I am still learning rust. This code is probably a little questionable.
   - [x] Thresholding
   - [x] Identifying objects with floodfill
   - [x] Line detection
-- [ ] Object lumping
+- [x] Object lumping
 - [ ] Parsing lumps
   - [ ] Heading identification
     - [ ] Heading 1
