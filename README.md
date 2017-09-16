@@ -29,7 +29,7 @@ I am still learning rust. This code is probably a little questionable.
       - [ ] Title text identification
   - [ ] Definition identification
     - [ ] Definition header identification
-  - [x] Splitting chapters by occurences of heading 1
+  - [ ] Splitting chapters by occurences of heading 1
  - [ ] Exporting chapters
   - [ ] Adding to table of contents
     - [ ] Adding chapter titles
