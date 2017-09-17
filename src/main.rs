@@ -283,6 +283,34 @@ impl Page {
 }
 
 #[derive(Clone)]
+struct Subject {
+	id: Uuid,
+	top_pix: u32,
+	top_precent: f64,
+	left_pix: u32,
+	left_precent: f64,
+	width_pix: u32,
+	width_precent: f64,
+	height_pix: u32,
+	height_precent: f64,
+	blobs: Vec <ImgBlob>,
+}
+
+#[derive(Clone)]
+struct Extension {
+	id: Uuid,
+	top_pix: u32,
+	top_precent: f64,
+	left_pix: u32,
+	left_precent: f64,
+	width_pix: u32,
+	width_precent: f64,
+	height_pix: u32,
+	height_precent: f64,
+	blobs: Vec <ImgBlob>,
+}
+
+#[derive(Clone)]
 struct Heading {
 	number: u8,
 	top_pix: u32,
@@ -294,7 +322,7 @@ struct Heading {
 	height_pix: u32,
 	height_precent: f64,
 	lines: Vec <ImgBlob>,
-	blobs: Vec <ImgBlob>,
+	subject: Subject
 }
 
 impl Heading {
@@ -467,8 +495,8 @@ struct Idea {
 	width_precent: f64,
 	height_pix: u32,
 	height_precent: f64,
-	heading: Heading,
-	blobs: Vec <ImgBlob>
+	subject: Subject, // Just the header
+	extension: Extension // just the content
 }
 
 impl Idea {
