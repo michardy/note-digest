@@ -260,7 +260,8 @@ impl Page {
 		let mut rblobs: Vec <ImgBlob> = Vec::new();
 		let mut gblobs: Vec <ImgBlob> = Vec::new();
 		let mut bblobs: Vec <ImgBlob> = Vec::new();
-		let img = image::open(&Path::new(&path)).unwrap();
+		let mut img = image::open(&Path::new(&path)).unwrap();
+		img = img.adjust_contrast(2f32);
 		let mut row:Vec <bool> = Vec::new();
 		for x in 0..img.width() {
 			row.push(false);
