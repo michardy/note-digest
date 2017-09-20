@@ -326,58 +326,6 @@ struct Heading {
 }
 
 impl Heading {
-	fn new() -> Heading {
-		Heading {
-			number: 0,
-			top_pix: 0u32,
-			top_precent: 0f64,
-			left_pix: 0u32,
-			left_precent: 0f64,
-			width_pix: 0u32,
-			width_precent: 0f64,
-			height_pix: 0u32,
-			height_precent: 0f64,
-			lines: Vec::new(),
-			blobs: Vec::new()
-		}
-	}
-	fn heading_one(top: ImgBlob, bottom: ImgBlob) -> Heading {
-		let mut lines: Vec <ImgBlob> = Vec::new();
-		let mut blobs: Vec <ImgBlob> = Vec::new();
-		lines.push(top);
-		lines.push(bottom);
-		Heading {
-			number: 0,
-			top_pix: 0u32,
-			top_precent: 0f64,
-			left_pix: 0u32,
-			left_precent: 0f64,
-			width_pix: 0u32,
-			width_precent: 0f64,
-			height_pix: 0u32,
-			height_precent: 0f64,
-			lines: lines,
-			blobs: blobs
-		}
-	}
-	fn heading_two(top: ImgBlob, ) -> Heading {
-		let mut lines: Vec <ImgBlob> = Vec::new();
-		let mut blobs: Vec <ImgBlob> = Vec::new();
-		lines.push(top);
-		Heading {
-			number: 1,
-			top_pix: 0u32,
-			top_precent: 0f64,
-			left_pix: 0u32,
-			left_precent: 0f64,
-			width_pix: 0u32,
-			width_precent: 0f64,
-			height_pix: 0u32,
-			height_precent: 0f64,
-			lines: lines,
-			blobs: blobs
-		}
-	}
 	fn update_size_pos(&mut self, page: &Page) {
 		let mut top: u32 = <u32>::max_value();
 		let mut left: u32 = <u32>::max_value();
@@ -699,6 +647,21 @@ fn add_content(
 		chapter.content.push(Content::new(clump.blobs, page.dimensions));
 	} else {
 		*destroyed += 1;
+	}
+}
+
+fn add_heading(
+	clump: Clump,
+	page: &Page,
+	chapter: &mut Chapter,
+	destroyed: &mut usize,
+	started: &mut bool
+) {
+	
+	if started {
+		
+	} else {
+		
 	}
 }
 
