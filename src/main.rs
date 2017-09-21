@@ -261,7 +261,7 @@ impl Page {
 		let mut gblobs: Vec <ImgBlob> = Vec::new();
 		let mut bblobs: Vec <ImgBlob> = Vec::new();
 		let mut img = image::open(&Path::new(&path)).unwrap();
-		img = img.adjust_contrast(2f32);
+		img = img.adjust_contrast(-22f32);
 		let mut row:Vec <bool> = Vec::new();
 		for x in 0..img.width() {
 			row.push(false);
@@ -326,7 +326,7 @@ struct Heading {
 	subject: Subject
 }
 
-impl Heading {
+/*impl Heading {
 	fn update_size_pos(&mut self, page: &Page) {
 		let mut top: u32 = <u32>::max_value();
 		let mut left: u32 = <u32>::max_value();
@@ -432,7 +432,7 @@ impl Heading {
 		}
 		imgbuf
 	}
-}
+}*/
 
 struct Idea {
 	id: Uuid,
@@ -515,7 +515,7 @@ impl Content {
 }
 	
 struct Chapter {
-	heading: Heading,
+	//heading: Heading,
 	sub_headings: Vec <Heading>,
 	ideas: Vec <Idea>,
 	content: Vec <Content>
@@ -524,7 +524,7 @@ struct Chapter {
 impl Chapter {
 	fn new() -> Chapter {
 		Chapter {
-			heading: Heading::new(),
+			//heading: Heading::new(),
 			sub_headings: Vec::new(),
 			ideas: Vec::new(),
 			content: Vec::new()
@@ -659,7 +659,7 @@ fn add_heading(
 	started: &mut bool
 ) {
 	
-	if started {
+	if *started {
 		
 	} else {
 		
@@ -688,6 +688,10 @@ fn main() {
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
+			let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
+			let num = &i.to_string()[..];
+			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
+			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
 				RED   => {},//Heading(s) of some type
 				GREEN => {},//Defintions(s) of some type
