@@ -1,3 +1,6 @@
+#![crate_name = "notedigest"]
+/// Application that converts handwritten notes into organized html pages.
+
 extern crate image;
 extern crate uuid;
 
@@ -14,10 +17,16 @@ use std::fs::File;
 use image::GenericImage;
 use uuid::Uuid;
 
+/// The location where a list of already imported files may be found
 const IMPORTED: &'static str = "./.imported";
+
+/// The location where the organized notes should be written to
 const OUT_PATH: &'static str = "~/Documemts/Notebook";
 
+/// Minimum value for a channel to be considered on
 const MIN_THRESH: u8 = 140;
+
+/// Maximum value for a channel to be considered off
 const MAX_THRESH: u8 = 170;
 
 const RED: u8 = 0;
@@ -25,6 +34,18 @@ const GREEN: u8 = 1;
 const BLUE: u8 = 2;
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
+/** Inserts boolean into `Vec <Vec <bool>>` at specified point.  If the point does not exist the vector is expanded.
+
+ # Arguments
+
+ * `y` - A 64 bit integer with the row to insert relative to the top right corner.
+
+ * `x` - A 64 bit integer with the collum to insert relative to the top right corner.
+
+ * `value` - The boolean value you wish to insert
+
+ * `img` - The 2d boolean vector.  Must be `&mut`
+ */
 fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 	let mut tx = x;
 	let mut ty = y;
@@ -54,14 +75,24 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 }
 
 #[derive(Debug, Clone)]
+/// Monochrome image fragment
 struct ImgBlob {
+	/// Is it a line?
 	blob_type: u8, //0: object, 1: line
+
+	/// Top left coordinate. (collum first then row)
 	top_left: [usize; 2],
+
+	/// Bottom right coordinate. (collum first then row)
 	bottom_right: [usize; 2],
+
+	/// 2d array of booleans representing monochrome image fragment
 	bitmap: Vec <Vec <bool>>
 }
 
 impl ImgBlob {
+	/// Checks using a floodfill if an image blob can be started at a coordinate.
+	/// If one can be found it returns it.
 	fn from_top_left(x: usize, y: usize, claim: &mut Vec <Vec <bool>>, img: &Vec <Vec <bool>>) -> Option<ImgBlob>{
 		let mut left = x;
 		let mut top = y; //pretty sure that this is not supposed to change and can be eliminated
@@ -108,12 +139,19 @@ impl ImgBlob {
 }
 
 #[derive(Clone)]
+/// A group of blob objects along with the color information for the blobs
 struct Clump {
+	/// What color is it? Uses color constants
 	ctype: u8,
+
+	/// Blob objects
 	blobs: Vec <ImgBlob>
 }
 
 impl Clump {
+	/// Add an `ImgBlob` object to an array of clumps.
+	/// If the blob is not of the same type as the current clump create a new clump.
+	/// Otherwise add it to the current clump.
 	fn clump_update(blob:ImgBlob, t: u8, clumps: &mut Vec <Clump>){
 		let clen = clumps.len();
 		if clen > 0 {
@@ -136,6 +174,8 @@ impl Clump {
 			);
 		}
 	}
+
+	/// Convert a clump to a grayscale image object.  Used for debugging
 	fn to_image(&self, w: u32, h: u32) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
 		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
 			w, h
@@ -163,8 +203,12 @@ impl Clump {
 	}
 }
 
+/// Representation of a page.  Holds clumps and original page dimensions.
 struct Page {
+	/// Vector of `Clump` objects
 	clumps: Vec <Clump>,
+
+	/// Dimensions of original page
 	dimensions: [u32; 2]
 }
 
