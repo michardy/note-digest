@@ -78,7 +78,8 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 /// Monochrome image fragment
 struct ImgBlob {
 	/// Is it a line?
-	blob_type: u8, //0: object, 1: line
+	/// 0: object, 1: line
+	blob_type: u8,
 
 	/// Top left coordinate. (collum first then row)
 	top_left: [usize; 2],
@@ -719,7 +720,13 @@ fn add_heading(
 	destroyed: &mut usize,
 	started: &mut bool
 ) {
-	
+	let i: usize = 0;
+	while i < clump.blobs.len() {
+		let blob = clump.blobs[i];
+		if blob.blob_type == 1 {
+			
+		}
+	}
 	if *started {
 		
 	} else {
