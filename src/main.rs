@@ -222,6 +222,8 @@ impl Page {
 			2
 		}
 	}
+
+	/// Convert three channels of `ImgBlob` vectors to clumps in `Page` objects.
 	fn from_blobs(
 		mut rblobs: Vec <ImgBlob>,
 		mut gblobs: Vec <ImgBlob>,
@@ -262,6 +264,8 @@ impl Page {
 			dimensions: dimensions
 		}
 	}
+
+	/// Create a `Page` object from a file path.
 	fn from_path(path: String) -> Page {
 		fn thresh_and_blob(
 			rgbimg: &image::RgbImage,
@@ -328,6 +332,7 @@ impl Page {
 }
 
 #[derive(Clone)]
+/// Representation of a heading for a section object.  Shown in tables.
 struct Subject {
 	id: Uuid,
 	top_pix: u32,
@@ -338,10 +343,11 @@ struct Subject {
 	width_precent: f64,
 	height_pix: u32,
 	height_precent: f64,
-	blobs: Vec <ImgBlob>,
+	blobs: Vec <ImgBlob>
 }
 
 #[derive(Clone)]
+/// Representation of the remainder of the content in a object.  Hidden by default.
 struct Extension {
 	id: Uuid,
 	top_pix: u32,
@@ -352,10 +358,11 @@ struct Extension {
 	width_precent: f64,
 	height_pix: u32,
 	height_precent: f64,
-	blobs: Vec <ImgBlob>,
+	blobs: Vec <ImgBlob>
 }
 
 #[derive(Clone)]
+/// Representation of a heading.
 struct Heading {
 	number: u8,
 	top_pix: u32,
@@ -478,6 +485,7 @@ struct Heading {
 	}
 }*/
 
+/// Definition or important idea
 struct Idea {
 	id: Uuid,
 	top_pix: u32,
@@ -498,6 +506,7 @@ impl Idea {
 	//}
 }
 
+/// Content cluster
 struct Content {
 	id: Uuid,
 	top_pix: u32,
@@ -557,7 +566,8 @@ impl Content {
 		out
 	}
 }
-	
+
+/// Objects holding `Heading`, `Idea`, and `Content` objects
 struct Chapter {
 	//heading: Heading,
 	sub_headings: Vec <Heading>,
@@ -566,6 +576,7 @@ struct Chapter {
 }
 
 impl Chapter {
+	/// Create a `Chapter` object
 	fn new() -> Chapter {
 		Chapter {
 			//heading: Heading::new(),
@@ -576,7 +587,9 @@ impl Chapter {
 	}
 }
 
+/// Get a vector of image paths to import from a user.
 fn get_images() -> Vec <String> {
+	/// Get vector containing already imported images from Imported.
 	fn get_imported_images() -> Vec <String> {
 		if Path::new(IMPORTED).exists() {
 			let mut list: Vec <String> = Vec::new();
@@ -591,6 +604,7 @@ fn get_images() -> Vec <String> {
 			Vec::new()
 		}
 	}
+	/// Get user selections as a `Vec <String>`
 	fn parse_input(uin: String, mpaths: Vec <String>, new: &mut Vec <String>) -> Vec <String> {
 		let mut selected: Vec <String> = Vec::new();
 		let stringified: Vec <String> = uin.split(' ').map(|x| x.to_string()).collect();
@@ -660,6 +674,7 @@ fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
 	}
 }
 
+
 fn add_chapter(chapter: Chapter) {
 	fn setup_dirs() {
 		fs::create_dir_all(OUT_PATH);
@@ -681,6 +696,7 @@ fn add_chapter(chapter: Chapter) {
 	}
 }
 
+/// Add content objects to chapter or destroy them because they lack a chapter.
 fn add_content(
 	clump: Clump,
 	page: &Page,
@@ -695,6 +711,7 @@ fn add_content(
 	}
 }
 
+/// Create new chapter, add heading objects to chapter, or destroy them because they lack a chapter.
 fn add_heading(
 	clump: Clump,
 	page: &Page,
@@ -710,6 +727,7 @@ fn add_heading(
 	}
 }
 
+/// Entry point to the program
 fn main() {
 	//iterate through images pulling out clumps
 	//iterate through pages parsing clumps and creating chapters
