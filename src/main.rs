@@ -712,6 +712,17 @@ fn add_content(
 	}
 }
 
+trait Sub {
+	fn sub(self, other: [usize;2]) -> [usize; 2];
+}
+
+///Difference between 2D usize array
+impl Sub for [usize; 2] {
+	fn sub(self, other: [usize;2]) -> [usize; 2] {
+		[self[0]-other[0], self[0]-other[0]]
+	}
+}
+
 /// Create new chapter, add heading objects to chapter, or destroy them because they lack a chapter.
 fn add_heading(
 	clump: Clump,
@@ -721,10 +732,20 @@ fn add_heading(
 	started: &mut bool
 ) {
 	let i: usize = 0;
+	let mut linemode = false;
+	let mut lines: u8 = 0;
+	let mut past = [0usize; 2];
 	while i < clump.blobs.len() {
-		let blob = clump.blobs[i];
+		let blob = clump.blobs[i].clone();
 		if blob.blob_type == 1 {
-			
+			if linemode {
+				// 1/17 of width and 1/22 height off acceptable
+			} else {
+				linemode = true;
+				lines += 1;
+				past = blob.top_left;
+				// create heading line element
+			}
 		}
 	}
 	if *started {
