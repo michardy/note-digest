@@ -378,8 +378,16 @@ struct Heading {
 	subject: Subject
 }
 
-/*impl Heading {
-	fn update_size_pos(&mut self, page: &Page) {
+impl Heading {
+	fn new() -> Heading {
+		Heading {
+			number:0,
+			top_pix: 0,
+			top_precent: 0,
+			
+		}
+	}
+	/*fn update_size_pos(&mut self, page: &Page) {
 		let mut top: u32 = <u32>::max_value();
 		let mut left: u32 = <u32>::max_value();
 		let mut bottom: u32 = 0;
@@ -483,8 +491,8 @@ struct Heading {
 			}
 		}
 		imgbuf
-	}
-}*/
+	}*/
+}
 
 /// Definition or important idea
 struct Idea {
@@ -735,16 +743,36 @@ fn add_heading(
 	let mut linemode = false;
 	let mut lines: u8 = 0;
 	let mut past = [0usize; 2];
+	let mut head: Heading;
 	while i < clump.blobs.len() {
-		let blob = clump.blobs[i].clone();
+		let mut blob = clump.blobs[i].clone();
 		if blob.blob_type == 1 {
+			// TODO: reduce cyclomatic complexity
 			if linemode {
 				// 1/17 of width and 1/22 height off acceptable
+				let diff = past.sub(blob.top_left);
+				if
+					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
+					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
+				{
+					lines += 1;
+					head.lines.push(blob);
+				}
 			} else {
 				linemode = true;
 				lines += 1;
 				past = blob.top_left;
 				// create heading line element
+			}
+		} else {
+			if !linemode {
+				let diff = past.sub(blob.top_left);
+				if
+					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
+					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
+				{
+					head.subject.blobs.push(blob);
+				}
 			}
 		}
 	}
