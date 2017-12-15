@@ -110,7 +110,7 @@ install:
   - ps: Invoke-WebRequest -Uri $url -OutFile $output
   - ps: echo "Initializing rustup..."
   - ps: ls
-  - ps: c:\projects\note-digest\rustup-init.exe -yv
+  - ps: c:\projects\note-digest\rustup-init.exe -y
   - ps: $env:Path += ";%USERPROFILE%\.cargo\bin"
 
 #  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
