@@ -101,12 +101,12 @@ matrix:
 #
 # For simple configurations, instead of using the build matrix, you can simply set the
 # default-toolchain and default-host manually here.
-install:
-  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
-  - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
-  - rustup-init -yv --default-toolchain %channel% --default-host %target%
-  - rustc -vV
-  - cargo -vV
+#install:
+#  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
+#  - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
+#  - rustup-init -yv --default-toolchain %channel% --default-host %target%
+#  - rustc -vV
+#  - cargo -vV
 
 ## Build Script ##
 
@@ -118,4 +118,5 @@ build: false
 #directly or perform other testing commands. Rust will automatically be placed in the PATH
 # environment variable.
 test_script:
-- cargo test --verbose %cargoflags%
+  - appveyor.ps1
+#- cargo test --verbose %cargoflags%
