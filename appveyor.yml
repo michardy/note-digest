@@ -102,7 +102,16 @@ matrix:
 # For simple configurations, instead of using the build matrix, you can simply set the
 # default-toolchain and default-host manually here.
 install:
-  - cmd: appveyor.ps1
+  - ps: $url = "https://win.rustup.rs"
+  - ps: $output = "$PSScriptRoot\rustup-init.exe"
+  - ps: echo "Running setup:"
+  - ps: echo ""
+  - ps: echo "Downloading..."
+  - ps: Invoke-WebRequest -Uri $url -OutFile $output
+  - ps: echo "Initializing rustup..."
+  - ps: rustup-init -yv
+  - ps: $env:Path += ";%USERPROFILE%\.cargo\bin"
+
 #  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
 #  - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
 #  - rustup-init -yv --default-toolchain %channel% --default-host %target%
