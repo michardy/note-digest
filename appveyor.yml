@@ -103,14 +103,13 @@ matrix:
 # default-toolchain and default-host manually here.
 install:
   - ps: $url = "https://win.rustup.rs"
-  - ps: $output = "$PSScriptRoot\rustup-init.exe"
+  - ps: $output = "c:\projects\note-digest\rustup-init.exe"
   - ps: echo "Running setup:"
   - ps: echo ""
   - ps: echo "Downloading..."
   - ps: Invoke-WebRequest -Uri $url -OutFile $output
   - ps: echo "Initializing rustup..."
   - ps: ls
-  - ps: echo "$PSScriptRoot"
   - ps: rustup-init.exe -yv
   - ps: $env:Path += ";%USERPROFILE%\.cargo\bin"
 
