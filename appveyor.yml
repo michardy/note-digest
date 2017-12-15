@@ -110,6 +110,7 @@ install:
   - ps: Invoke-WebRequest -Uri $url -OutFile $output
   - ps: echo "Initializing rustup..."
   - ps: ls
+  - ps: echo "$PSScriptRoot"
   - ps: rustup-init.exe -yv
   - ps: $env:Path += ";%USERPROFILE%\.cargo\bin"
 
