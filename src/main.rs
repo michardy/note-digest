@@ -792,6 +792,9 @@ fn main() {
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	for img in selected {
 		pages.push(Page::from_path(img.clone()));
+		if !fs::metadata(IMPORTED).is_ok() {
+			File::create(IMPORTED).unwrap();
+		}
 		let mut file = OpenOptions::new()
 			.write(true)
 			.append(true)
