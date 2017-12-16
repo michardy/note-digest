@@ -11,7 +11,6 @@ use std::io;
 use std::io::Write;
 use std::io::BufReader;
 use std::io::BufRead;
-use std::io::prelude::*;
 use std::fs::File;
 use std::fs::OpenOptions;
 use image::GenericImage;
@@ -379,14 +378,14 @@ struct Heading {
 }
 
 impl Heading {
-	fn new() -> Heading {
+	/*fn new() -> Heading {
 		Heading {
 			number:0,
 			top_pix: 0,
-			top_precent: 0,
+			top_precent: 0.0,
 			
 		}
-	}
+	}*/
 	/*fn update_size_pos(&mut self, page: &Page) {
 		let mut top: u32 = <u32>::max_value();
 		let mut left: u32 = <u32>::max_value();
@@ -756,7 +755,7 @@ fn add_heading(
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
 					lines += 1;
-					head.lines.push(blob);
+					//head.lines.push(blob);
 				}
 			} else {
 				linemode = true;
@@ -771,7 +770,7 @@ fn add_heading(
 					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
-					head.subject.blobs.push(blob);
+					//head.subject.blobs.push(blob);
 				}
 			}
 		}
@@ -792,13 +791,13 @@ fn main() {
 	print!("○: Identifying objects");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	for img in selected {
-		pages.push(Page::from_path(img));
+		pages.push(Page::from_path(img.clone()));
 		let mut file = OpenOptions::new()
 			.write(true)
 			.append(true)
 			.open(IMPORTED)
 			.unwrap();
-		writeln!(file, img)
+		writeln!(file, "{}", img);
 	}
 	print!("\r◑: Dividing by chapter");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
