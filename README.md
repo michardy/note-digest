@@ -1,4 +1,4 @@
-# note-digest
+# note-digest [![Build Status](https://travis-ci.org/michardy/note-digest.svg?branch=master)](https://travis-ci.org/michardy/note-digest) [![Build status](https://ci.appveyor.com/api/projects/status/6jxdfvg7hg8wg89f?svg=true)](https://ci.appveyor.com/project/michardy/note-digest)
 A system for taking hand written color coded notes and converting them into an organized digital notebook.  The system can automaticaly split notes into chapters, identify headings and identify important definitions and ideas.  The headings and definitions are added to a table of contents.  
 
 # Warning:
