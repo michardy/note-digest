@@ -6,14 +6,14 @@ extern crate uuid;
 
 
 use std::fs;
-use std::env;
 use std::path::Path;
-use std::path::PathBuf;
 use std::io;
 use std::io::Write;
 use std::io::BufReader;
 use std::io::BufRead;
+use std::io::prelude::*;
 use std::fs::File;
+use std::fs::OpenOptions;
 use image::GenericImage;
 use uuid::Uuid;
 
@@ -793,6 +793,12 @@ fn main() {
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	for img in selected {
 		pages.push(Page::from_path(img));
+		let mut file = OpenOptions::new()
+			.write(true)
+			.append(true)
+			.open(IMPORTED)
+			.unwrap();
+		writeln!(file, img)
 	}
 	print!("\r◑: Dividing by chapter");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");

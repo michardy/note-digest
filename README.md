@@ -8,9 +8,9 @@ I am still learning rust. This code is probably a little questionable.
 - [ ] File selection
   - [x] Displays only supported files
   - [x] Allows for the selection of a of multiple images
-  - [ ] New image identification
+  - [x] New image identification
     - [x] Allows you to select all new images
-    - [ ] Records images after use
+    - [x] Records images after use
 - [x] Image processing
   - [x] Seperating headings notes and definitions
   - [x] Thresholding
