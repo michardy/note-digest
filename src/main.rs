@@ -346,6 +346,23 @@ struct Subject {
 	blobs: Vec <ImgBlob>
 }
 
+impl Subject {
+	fn new() -> Subject {
+		Subject {
+			id: Uuid::new_v4(),
+			top_pix: 0,
+			top_precent: 0.0,
+			left_pix: 0,
+			left_precent: 0.0,
+			width_pix: 0,
+			width_precent: 0.0,
+			height_pix: 0,
+			height_precent: 0.0,
+			blobs: Vec::new()
+		}
+	}
+}
+
 #[derive(Clone)]
 /// Representation of the remainder of the content in a object.  Hidden by default.
 struct Extension {
@@ -364,6 +381,7 @@ struct Extension {
 #[derive(Clone)]
 /// Representation of a heading.
 struct Heading {
+	id: Uuid,
 	number: u8,
 	top_pix: u32,
 	top_precent: f64,
@@ -378,14 +396,22 @@ struct Heading {
 }
 
 impl Heading {
-	/*fn new() -> Heading {
+	fn new() -> Heading {
 		Heading {
+			id: Uuid::new_v4(),
 			number:0,
 			top_pix: 0,
 			top_precent: 0.0,
-			
+			left_pix: 0,
+			left_precent: 0.0,
+			width_pix: 0,
+			width_precent: 0.0,
+			height_pix: 0,
+			height_precent: 0.0,
+			lines: Vec::new(),
+			subject: Subject::new()
 		}
-	}*/
+	}
 	/*fn update_size_pos(&mut self, page: &Page) {
 		let mut top: u32 = <u32>::max_value();
 		let mut left: u32 = <u32>::max_value();
