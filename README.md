@@ -5,7 +5,7 @@ A system for taking hand written color coded notes and converting them into an o
 I am still learning rust. This code is probably a little questionable.  
 
 # Completion:
-- [ ] File selection
+- [x] File selection
   - [x] Displays only supported files
   - [x] Allows for the selection of a of multiple images
   - [x] New image identification
