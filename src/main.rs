@@ -382,7 +382,7 @@ struct Extension {
 /// Representation of a heading.
 struct Heading {
 	id: Uuid,
-	number: u8,
+	number: u8, /// Heading number.
 	top_pix: u32,
 	top_precent: f64,
 	left_pix: u32,
@@ -391,7 +391,7 @@ struct Heading {
 	width_precent: f64,
 	height_pix: u32,
 	height_precent: f64,
-	lines: Vec <ImgBlob>,
+	//lines: Vec <ImgBlob>,
 	subject: Subject
 }
 
@@ -408,7 +408,7 @@ impl Heading {
 			width_precent: 0.0,
 			height_pix: 0,
 			height_precent: 0.0,
-			lines: Vec::new(),
+			//lines: Vec::new(), // Not immediatly nessisary
 			subject: Subject::new()
 		}
 	}
@@ -768,7 +768,7 @@ fn add_heading(
 	let mut linemode = false;
 	let mut lines: u8 = 0;
 	let mut past = [0usize; 2];
-	let mut head: Heading;
+	let mut head: Heading = Heading::new();
 	while i < clump.blobs.len() {
 		let mut blob = clump.blobs[i].clone();
 		if blob.blob_type == 1 {
@@ -780,8 +780,7 @@ fn add_heading(
 					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
-					lines += 1;
-					//head.lines.push(blob);
+					// These might be later
 				}
 			} else {
 				linemode = true;
