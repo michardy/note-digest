@@ -520,6 +520,7 @@ impl Heading {
 }
 
 /// Definition or important idea
+#[derive(Clone)]
 struct Idea {
 	id: Uuid,
 	top_pix: u32,
@@ -541,6 +542,7 @@ impl Idea {
 }
 
 /// Content cluster
+#[derive(Clone)]
 struct Content {
 	id: Uuid,
 	top_pix: u32,
@@ -602,21 +604,46 @@ impl Content {
 }
 
 /// Objects holding `Heading`, `Idea`, and `Content` objects
+#[derive(Clone)]
 struct Chapter {
-	//heading: Heading,
+	heading: Heading,
 	sub_headings: Vec <Heading>,
 	ideas: Vec <Idea>,
-	content: Vec <Content>
+	content: Vec <Content>,
+	writeable: bool,
+	height_precent: f64
 }
 
 impl Chapter {
 	/// Create a `Chapter` object
 	fn new() -> Chapter {
 		Chapter {
-			//heading: Heading::new(),
+			heading: Heading::new(),
 			sub_headings: Vec::new(),
 			ideas: Vec::new(),
-			content: Vec::new()
+			content: Vec::new(),
+			writeable: false,
+			height_precent: 0.0
+		}
+	}
+	fn add_chapter() {
+		fn setup_dirs() {
+			fs::create_dir_all(OUT_PATH).expect("Output Generation: error creating output path");
+		}
+		//Probably not the solution
+		//should probably do page leve clumping calculate pos from that and assemble later
+		/*fn blobs_to_image(blobs: Vec <ImgBlob>) -> image::ImageBuffer {
+			let mut imgbuf = image::ImageBuffer::new(imgx, imgy);
+		}*/
+		fn update_toc() {
+			
+		}
+		fn make_chapter() {
+			
+		}
+		let cuid = Uuid::new_v4();
+		if !Path::new(OUT_PATH).exists() {
+			setup_dirs();
 		}
 	}
 }
@@ -701,34 +728,12 @@ fn get_blob_type(blobs: &Vec <ImgBlob>, index: usize) -> u8 {
 	}
 }
 
-fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
+/*fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
 	match heads.get(index) {
 		Some(h) => h.lines[0].top_left[1],
 		None => 255
 	}
-}
-
-
-fn add_chapter(chapter: Chapter) {
-	fn setup_dirs() {
-		fs::create_dir_all(OUT_PATH);
-	}
-	//Probably not the solution
-	//should probably do page leve clumping calculate pos from that and assemble later
-	/*fn blobs_to_image(blobs: Vec <ImgBlob>) -> image::ImageBuffer {
-		let mut imgbuf = image::ImageBuffer::new(imgx, imgy);
-	}*/
-	fn update_toc() {
-		
-	}
-	fn make_chapter() {
-		
-	}
-	let cuid = Uuid::new_v4();
-	if !Path::new(OUT_PATH).exists() {
-		setup_dirs();
-	}
-}
+}*/
 
 /// Add content objects to chapter or destroy them because they lack a chapter.
 fn add_content(
@@ -765,45 +770,60 @@ fn add_heading(
 	started: &mut bool
 ) {
 	let i: usize = 0;
-	let mut linemode = false;
-	let mut lines: u8 = 0;
+	let mut linemode: i8 = 0;
 	let mut past = [0usize; 2];
 	let mut head: Heading = Heading::new();
 	while i < clump.blobs.len() {
 		let mut blob = clump.blobs[i].clone();
 		if blob.blob_type == 1 {
 			// TODO: reduce cyclomatic complexity
-			if linemode {
+			if linemode==1 {
 				// 1/17 of width and 1/22 height off acceptable
 				let diff = past.sub(blob.top_left);
 				if
 					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
-					// These might be later
+					head.number = 1;
+					// add_chapter
+					// initialize new chaper object
+					linemode = -1;
 				}
+			} else if linemode == 0 {
+				head.number = 2;
+				linemode = 1;
 			} else {
-				linemode = true;
-				lines += 1;
-				past = blob.top_left;
-				// create heading line element
+				*destroyed += 1;
 			}
 		} else {
-			if !linemode {
+			if linemode < 1 {
+				if linemode == -1 {
+					linemode = 0;
+				}
 				let diff = past.sub(blob.top_left);
 				if
 					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
-					//head.subject.blobs.push(blob);
+					head.subject.blobs.push(blob);
 				}
+			} else {
+				*destroyed += 1;
+				assert!(
+					head.number == 2,
+					"Found heading.number of {}. Expected 2",
+					head.number
+				);
+				chapter.sub_headings.push(head.clone());
 			}
 		}
 	}
-	if *started {
-		
-	} else {
-		
+	if linemode != -1 {
+		assert!(
+			head.number != 1,
+			"Found heading.number of 1. Expected 2 or 3"
+		);
+		chapter.sub_headings.push(head);
 	}
 }
 
