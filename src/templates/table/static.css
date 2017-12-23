@@ -1,0 +1,53 @@
+html, body {
+	background-color:black;
+	height: 100%;
+}
+
+main {
+	background-color:white;
+	width:100%;
+}
+
+header {
+	background-color: lightgray;
+}
+
+footer {
+	color:white;
+}
+
+#fscreen {
+	width:3.5%;
+	padding: 0px
+}
+
+#fscreen-icon {
+	width:100%;
+	height:100%;
+}
+
+.hcontrol {
+	text-align:right;
+}
+
+.head {
+	filter: url("hue.svg#red");
+	border-bottom: double 10px;
+}
+.cont {
+	filter: url("hue.svg#blue");
+}
+.defi {
+	filter: url("hue.svg#green");
+}
+
+
+.tc .h1 {
+	right:110;
+}
+.tc .h2 {
+	right:120;
+}
+.tc .h3 {
+	right:130;
+}
