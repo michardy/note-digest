@@ -344,15 +344,6 @@ impl Page {
 struct Heading {
 	id: Uuid,
 	number: u8, /// Heading number.
-	top_pix: u32,
-	top_precent: f64,
-	left_pix: u32,
-	left_precent: f64,
-	width_pix: u32,
-	width_precent: f64,
-	height_pix: u32,
-	height_precent: f64,
-	//lines: Vec <ImgBlob>,
 	subject: Content
 }
 
@@ -361,61 +352,10 @@ impl Heading {
 		Heading {
 			id: Uuid::new_v4(),
 			number:0,
-			top_pix: 0,
-			top_precent: 0.0,
-			left_pix: 0,
-			left_precent: 0.0,
-			width_pix: 0,
-			width_precent: 0.0,
-			height_pix: 0,
-			height_precent: 0.0,
-			//lines: Vec::new(), // Not immediatly nessisary
 			subject: Content::empty()
 		}
 	}
-	/*fn update_size_pos(&mut self, page: &Page) {
-		let mut top: u32 = <u32>::max_value();
-		let mut left: u32 = <u32>::max_value();
-		let mut bottom: u32 = 0;
-		let mut right: u32 = 0;
-		for b in &self.blobs {
-			if b.top_left[1] < top as usize {
-				top = b.top_left[1] as u32;
-			}
-			if b.top_left[0] < left as usize {
-				left = b.top_left[0] as u32;
-			}
-			if b.bottom_right[1] > bottom as usize {
-				bottom = b.bottom_right[1] as u32;
-			}
-			if b.bottom_right[0] > right as usize {
-				right = b.bottom_right[0] as u32;
-			}
-		}
-		for l in &self.lines {
-			if l.top_left[1] < top as usize {
-				top = l.top_left[1] as u32;
-			}
-			if l.top_left[0] < left as usize {
-				left = l.top_left[0] as u32;
-			}
-			if l.bottom_right[1] > bottom as usize {
-				bottom = l.bottom_right[1] as u32;
-			}
-			if l.bottom_right[0] > right as usize {
-				right = l.bottom_right[0] as u32;
-			}
-		}
-		self.top_pix = top;
-		self.top_precent = (top as f64) / (page.dimensions[1] as f64);
-		self.left_pix = left;
-		self.left_precent = (left as f64) / (page.dimensions[0] as f64);
-		self.width_pix = right - left;
-		self.width_precent = (self.width_pix as f64) / (page.dimensions[1] as f64);
-		self.height_pix = bottom - top;
-		self.height_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
-	}
-	fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
+	/*fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
 		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
 			(self.width_pix as u32), (self.height_pix as u32)
 		);
@@ -474,7 +414,7 @@ impl Idea {
 			extension: Content::empty() // just the content
 		}
 	}
-	fn update_size_and_pos(&mut self, dim: [u32; 2]) {
+	fn update_size_pos(&mut self, dim: [u32; 2]) {
 		if self.subject.top_pix < self.extension.top_pix {
 			self.top_pix = self.subject.top_pix;
 		} else {
@@ -769,7 +709,7 @@ fn add_definition(
 		let mut idea = Idea::new();
 		idea.subject = Content::new(name, page.dimensions);
 		idea.extension = Content::new(cont, page.dimensions);
-		idea.update_size_and_pos(page.dimensions);
+		idea.update_size_pos(page.dimensions);
 		chapter.ideas.push(idea);
 	} else {
 		*destroyed += clump.blobs.len();
@@ -811,6 +751,7 @@ fn add_heading(
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
 					head.number = 1;
+					head.subject.update_size_pos(page.dimensions);
 					// add_chapter
 					chapter.blank();
 					*started = true;
@@ -841,6 +782,7 @@ fn add_heading(
 					"Found heading.number of {}. Expected 2",
 					head.number
 				);
+				head.subject.update_size_pos(page.dimensions);
 				chapter.sub_headings.push(head.clone());
 			}
 		}
@@ -851,6 +793,7 @@ fn add_heading(
 			head.number != 1,
 			"Found heading.number of 1. Expected 2 or 3"
 		);
+		head.subject.update_size_pos(page.dimensions);
 		chapter.sub_headings.push(head);
 	}
 }
