@@ -52,11 +52,17 @@ footer {
 
 .head {
 	filter: url("hue.svg#red");
-	border-bottom: double 10px;
 }
 .cont {
 	filter: url("hue.svg#blue");
 }
 .defi {
 	filter: url("hue.svg#green");
+}
+
+.h1 {
+	border-bottom: double 10px;
+}
+.h2 {
+	border-bottom: solid 5px;
 }
