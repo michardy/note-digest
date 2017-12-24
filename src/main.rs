@@ -332,53 +332,6 @@ impl Page {
 }
 
 #[derive(Clone)]
-/// Representation of a heading for a section object.  Shown in tables.
-struct Subject {
-	id: Uuid,
-	top_pix: u32,
-	top_precent: f64,
-	left_pix: u32,
-	left_precent: f64,
-	width_pix: u32,
-	width_precent: f64,
-	height_pix: u32,
-	height_precent: f64,
-	blobs: Vec <ImgBlob>
-}
-
-impl Subject {
-	fn new() -> Subject {
-		Subject {
-			id: Uuid::new_v4(),
-			top_pix: 0,
-			top_precent: 0.0,
-			left_pix: 0,
-			left_precent: 0.0,
-			width_pix: 0,
-			width_precent: 0.0,
-			height_pix: 0,
-			height_precent: 0.0,
-			blobs: Vec::new()
-		}
-	}
-}
-
-#[derive(Clone)]
-/// Representation of the remainder of the content in a object.  Hidden by default.
-struct Extension {
-	id: Uuid,
-	top_pix: u32,
-	top_precent: f64,
-	left_pix: u32,
-	left_precent: f64,
-	width_pix: u32,
-	width_precent: f64,
-	height_pix: u32,
-	height_precent: f64,
-	blobs: Vec <ImgBlob>
-}
-
-#[derive(Clone)]
 /// Representation of a heading.
 struct Heading {
 	id: Uuid,
@@ -392,7 +345,7 @@ struct Heading {
 	height_pix: u32,
 	height_precent: f64,
 	//lines: Vec <ImgBlob>,
-	subject: Subject
+	subject: Content
 }
 
 impl Heading {
@@ -409,7 +362,7 @@ impl Heading {
 			height_pix: 0,
 			height_precent: 0.0,
 			//lines: Vec::new(), // Not immediatly nessisary
-			subject: Subject::new()
+			subject: Content::empty()
 		}
 	}
 	/*fn update_size_pos(&mut self, page: &Page) {
@@ -493,12 +446,26 @@ struct Idea {
 	width_precent: f64,
 	height_pix: u32,
 	height_precent: f64,
-	subject: Subject, // Just the header
-	extension: Extension // just the content
+	subject: Content, // Just the header
+	extension: Content // just the content
 }
 
 impl Idea {
-	
+	fn new() -> Idea {
+		Idea {
+			id: Uuid::new_v4(),
+			top_pix: 0,
+			top_precent: 0.0,
+			left_pix: 0,
+			left_precent: 0.0,
+			width_pix: 0,
+			width_precent: 0.0,
+			height_pix: 0,
+			height_precent: 0.0,
+			subject: Content::empty(), // Just the header
+			extension: Content::empty() // just the content
+		}
+	}
 }
 
 /// Content cluster
@@ -560,6 +527,20 @@ impl Content {
 		};
 		out.update_size_pos(dim);
 		out
+	}
+	fn empty() -> Content {
+		Content {
+			id: Uuid::new_v4(),
+			top_pix: 0u32,
+			top_precent: 0f64,
+			left_pix: 0u32,
+			left_precent: 0f64,
+			width_pix: 0u32,
+			width_precent: 0f64,
+			height_pix: 0u32,
+			height_precent: 0f64,
+			blobs: Vec::new()
+		}
 	}
 }
 
@@ -692,7 +673,32 @@ fn add_content(
 	if started {
 		chapter.content.push(Content::new(clump.blobs, page.dimensions));
 	} else {
-		*destroyed += 1;
+		*destroyed += clump.blobs.len();
+	}
+}
+
+/// Add definition objects to chapter or destroy them because they lack a chapter.
+fn add_definition(
+	clump: Clump,
+	page: &Page,
+	chapter: &mut Chapter,
+	destroyed: &mut usize,
+	started: bool
+) {
+	if started {
+		let mut line: ImgBlob;
+		for i in 0..clump.blobs.len() {
+			if clump.blobs[i].blob_type == 1 {
+				line = clump.blobs[i].clone();
+			}
+		}
+		for i in 0..clump.blobs.len() {
+			if clump.blobs[i].blob_type == 0 {
+				line = clump.blobs[i].clone();
+			}
+		}
+	} else {
+		*destroyed += clump.blobs.len();
 	}
 }
 
@@ -715,7 +721,7 @@ fn add_heading(
 	destroyed: &mut usize,
 	started: &mut bool
 ) {
-	let i: usize = 0;
+	let mut i: usize = 0;
 	let mut linemode: i8 = 0;
 	let mut past = [0usize; 2];
 	let mut head: Heading = Heading::new();
@@ -764,6 +770,7 @@ fn add_heading(
 				chapter.sub_headings.push(head.clone());
 			}
 		}
+		i += 1;
 	}
 	if linemode != -1 {
 		assert!(
