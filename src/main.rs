@@ -887,10 +887,6 @@ fn main() {
 		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
-			let img = (&p.clumps[i]).to_image(p.dimensions[0], p.dimensions[1]);
-			let num = &i.to_string()[..];
-			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
-			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
 				RED   => add_heading(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, &mut started),//Heading(s) of some type
 				GREEN => add_definition(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Defintions(s) of some type
