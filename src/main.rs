@@ -615,6 +615,16 @@ impl Chapter {
 			height_precent: 0.0
 		}
 	}
+	/// Blanks a `Chapter` object.
+	/// Used to avoid scope problems that would arise due to initializing a new object in a subroutine.
+	fn blank(&mut self) {
+		self.heading = Heading::new();
+		self.sub_headings = Vec::new();
+		self.ideas = Vec::new();
+		self.content = Vec::new();
+		self.writeable = false;
+		self.height_precent = 0.0;
+	}
 	fn add_chapter() {
 		fn setup_dirs() {
 			fs::create_dir_all(OUT_PATH).expect("Output Generation: error creating output path");
@@ -802,7 +812,7 @@ fn add_heading(
 				{
 					head.number = 1;
 					// add_chapter
-					// initialize new chaper object
+					chapter.blank();
 					*started = true;
 					linemode = -1;
 				}
