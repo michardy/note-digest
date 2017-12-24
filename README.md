@@ -30,7 +30,7 @@ I am still learning rust. This code is probably a little questionable.
   - [ ] Definition identification
     - [ ] Definition header identification
   - [ ] Splitting chapters by occurences of heading 1
- - [ ] Exporting chapters
+- [ ] Exporting chapters
   - [ ] Adding to table of contents
     - [ ] Adding chapter titles
     - [ ] Adding definitions
