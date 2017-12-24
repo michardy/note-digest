@@ -454,44 +454,6 @@ impl Heading {
 		self.height_pix = bottom - top;
 		self.height_precent = (self.left_pix as f64) / (page.dimensions[0] as f64);
 	}
-	fn cluster(blobs: &mut Vec <ImgBlob>, page: Page) -> Vec <Heading> {
-		let mut b: usize = 0;
-		let mut out: Vec <Heading> = Vec::new();
-		let mut curcluster: Vec <ImgBlob> = Vec::new();
-		while b < blobs.len() {
-			let mut ci: usize = 0;
-			curcluster.push(blobs.remove(b));
-			while ci < curcluster.len() {
-				let mut s: usize = 0;
-				while s < blobs.len() {
-					let x: f64 = curcluster[ci].top_left[0] as f64 - blobs[s].top_left[0] as f64;
-					let y: f64 = curcluster[ci].top_left[1] as f64 - blobs[s].top_left[1] as f64;
-					if (x.abs().powf(2.0) + y.abs().powf(2.0)).sqrt() < (0.09)*(page.dimensions[1] as f64) {
-						curcluster.push(blobs.remove(s));
-					} else {
-						s += 1
-					}
-				}
-				ci += 1;
-			}
-			let mut head = Heading {
-				number: 2,
-				top_pix: 0u32,
-				top_precent: 0f64,
-				left_pix: 0u32,
-				left_precent: 0f64,
-				width_pix: 0u32,
-				width_precent: 0f64,
-				height_pix: 0u32,
-				height_precent: 0f64,
-				lines: Vec::new(),
-				blobs: curcluster.clone()
-			};
-			head.update_size_pos(&page);
-			out.push(head);
-		}
-		out
-	}
 	fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
 		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
 			(self.width_pix as u32), (self.height_pix as u32)
@@ -536,9 +498,7 @@ struct Idea {
 }
 
 impl Idea {
-	//fn cluster() -> Vec <Idea> {
-	//	
-	//}
+	
 }
 
 /// Content cluster
@@ -721,20 +681,6 @@ fn get_images() -> Vec <String> {
 	parse_input(uin, mpaths, &mut new)
 }
 
-fn get_blob_type(blobs: &Vec <ImgBlob>, index: usize) -> u8 {
-	match blobs.get(index) {
-		Some(b) => b.blob_type,
-		None => 255
-	}
-}
-
-/*fn get_head_height(heads: &Vec <Heading>, index: usize) -> usize {
-	match heads.get(index) {
-		Some(h) => h.lines[0].top_left[1],
-		None => 255
-	}
-}*/
-
 /// Add content objects to chapter or destroy them because they lack a chapter.
 fn add_content(
 	clump: Clump,
@@ -787,6 +733,7 @@ fn add_heading(
 					head.number = 1;
 					// add_chapter
 					// initialize new chaper object
+					*started = true;
 					linemode = -1;
 				}
 			} else if linemode == 0 {
@@ -864,7 +811,7 @@ fn main() {
 			let ref mut fout = File::create(&Path::new(&(String::from("outC")+num+".png")[..])).unwrap();
 			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
-				RED   => {},//Heading(s) of some type
+				RED   => add_heading(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, &mut started),//Heading(s) of some type
 				GREEN => {},//Defintions(s) of some type
 				BLUE  => add_content(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Content"
 				_ => panic!("Invalid Content")
