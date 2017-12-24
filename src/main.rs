@@ -136,6 +136,14 @@ impl ImgBlob {
 			None
 		}
 	}
+	fn new() -> ImgBlob {
+		ImgBlob {
+			bitmap: Vec::new(),
+			blob_type: 0,
+			bottom_right: [0, 0],
+			top_left: [0, 0]
+		}
+	}
 }
 
 #[derive(Clone)]
@@ -466,6 +474,46 @@ impl Idea {
 			extension: Content::empty() // just the content
 		}
 	}
+	fn update_size_and_pos(&mut self, dim: [u32; 2]) {
+		if self.subject.top_pix < self.extension.top_pix {
+			self.top_pix = self.subject.top_pix;
+		} else {
+			self.top_pix = self.extension.top_pix;
+		}
+		if self.subject.left_pix < self.extension.left_pix {
+			self.top_pix = self.subject.left_pix;
+		} else {
+			self.top_pix = self.extension.left_pix;
+		}
+		if
+			self.subject.top_pix + self.subject.height_pix >
+			self.extension.top_pix + self.extension.height_pix
+		{
+			self.height_pix = self.top_pix - (
+				self.subject.top_pix + self.subject.height_pix
+			);
+		} else {
+			self.height_pix = self.top_pix - (
+				self.extension.top_pix + self.extension.height_pix
+			);
+		}
+		if
+			self.subject.left_pix + self.subject.width_pix >
+			self.extension.left_pix + self.extension.width_pix
+		{
+			self.width_pix = self.left_pix - (
+				self.subject.left_pix + self.subject.width_pix
+			);
+		} else {
+			self.width_pix = self.left_pix - (
+				self.extension.left_pix + self.extension.width_pix
+			);
+		}
+		self.left_precent = (self.left_pix as f64) / (dim[0] as f64);
+		self.top_precent = (self.top_pix as f64) / (dim[1] as f64);
+		self.width_precent = (self.width_pix as f64) / (dim[0] as f64);
+		self.height_precent = (self.height_pix as f64) / (dim[1] as f64);
+	}
 }
 
 /// Content cluster
@@ -685,8 +733,15 @@ fn add_definition(
 	destroyed: &mut usize,
 	started: bool
 ) {
+	fn is_underlined(blob: ImgBlob, line: &ImgBlob) -> bool {
+		(blob.top_left[0] <= line.top_left[0]) &&
+		(blob.top_left[0] >= line.bottom_right[0]) &&
+		(blob.bottom_right[1] > line.top_left[1])
+	}
 	if started {
-		let mut line: ImgBlob;
+		let mut line: ImgBlob = ImgBlob::new();
+		let mut name: Vec<ImgBlob> = Vec::new();
+		let mut cont: Vec<ImgBlob> = Vec::new();
 		for i in 0..clump.blobs.len() {
 			if clump.blobs[i].blob_type == 1 {
 				line = clump.blobs[i].clone();
@@ -694,9 +749,18 @@ fn add_definition(
 		}
 		for i in 0..clump.blobs.len() {
 			if clump.blobs[i].blob_type == 0 {
-				line = clump.blobs[i].clone();
+				if is_underlined(clump.blobs[i].clone(), &line) {
+					name.push(clump.blobs[i].clone());
+				} else {
+					cont.push(clump.blobs[i].clone());
+				}
 			}
 		}
+		let mut idea = Idea::new();
+		idea.subject = Content::new(name, page.dimensions);
+		idea.extension = Content::new(cont, page.dimensions);
+		idea.update_size_and_pos(page.dimensions);
+		chapter.ideas.push(idea);
 	} else {
 		*destroyed += clump.blobs.len();
 	}
@@ -819,8 +883,8 @@ fn main() {
 			let _ = image::ImageLumaA8(img).save(fout, image::PNG);
 			match p.clumps[i].ctype {
 				RED   => add_heading(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, &mut started),//Heading(s) of some type
-				GREEN => {},//Defintions(s) of some type
-				BLUE  => add_content(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Content"
+				GREEN => add_definition(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Defintions(s) of some type
+				BLUE  => add_content(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Content
 				_ => panic!("Invalid Content")
 			};
 			i += 1;
