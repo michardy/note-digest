@@ -27,8 +27,8 @@ I am still learning rust. This code is probably a little questionable.
       - [x] Title text identification
     - [x] Heading 3
       - [x] Title text identification
-  - [ ] Definition identification
-    - [ ] Definition header identification
+  - [x] Definition identification
+    - [x] Definition header identification
   - [ ] Splitting chapters by occurences of heading 1
 - [ ] Exporting chapters
   - [ ] Adding to table of contents
