@@ -18,15 +18,15 @@ I am still learning rust. This code is probably a little questionable.
   - [x] Line detection
 - [x] Object lumping
 - [ ] Parsing lumps
-  - [ ] Heading identification
-    - [ ] Heading 1
-      - [ ] Double line detection
-      - [ ] Title text identification
-    - [ ] Heading 2
-      - [ ] Single line detection
-      - [ ] Title text identification
-    - [ ] Heading 3
-      - [ ] Title text identification
+  - [x] Heading identification
+    - [x] Heading 1
+      - [x] Double line detection
+      - [x] Title text identification
+    - [x] Heading 2
+      - [x] Single line detection
+      - [x] Title text identification
+    - [x] Heading 3
+      - [x] Title text identification
   - [ ] Definition identification
     - [ ] Definition header identification
   - [ ] Splitting chapters by occurences of heading 1
