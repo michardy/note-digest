@@ -182,33 +182,6 @@ impl Clump {
 			);
 		}
 	}
-
-	/// Convert a clump to a grayscale image object.  Used for debugging
-	fn to_image(&self, w: u32, h: u32) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
-		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
-			w, h
-		);
-		for b in &self.blobs {
-			let xoff = b.top_left[0] as u32;
-			let yoff = b.top_left[1] as u32;
-			let mut y: usize = 0;
-			while y < b.bitmap.len() {
-				let mut x: usize = 0;
-				while x < b.bitmap[y].len() {
-					if b.bitmap[y][x] {
-						imgbuf.put_pixel(
-							(x as u32)+xoff,
-							(y as u32)+yoff,
-							image::LumaA([0, 255])
-						);
-					}
-					x += 1;
-				}
-				y += 1;
-			}
-		}
-		imgbuf
-	}
 }
 
 /// Representation of a page.  Holds clumps and original page dimensions.
