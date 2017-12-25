@@ -355,31 +355,6 @@ impl Heading {
 			subject: Content::empty()
 		}
 	}
-	/*fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
-		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
-			(self.width_pix as u32), (self.height_pix as u32)
-		);
-		for b in &self.blobs {
-			let xoff = (b.top_left[0] as u32) - self.left_pix;
-			let yoff = (b.top_left[1] as u32) - self.top_pix;
-			let mut y: usize = 0;
-			while y < b.bitmap.len() {
-				let mut x: usize = 0;
-				while x < b.bitmap[y].len() {
-					if b.bitmap[y][x] {
-						imgbuf.put_pixel(
-							(x as u32)+xoff,
-							(y as u32)+yoff,
-							image::LumaA([0, 255])
-						);
-					}
-					x += 1;
-				}
-				y += 1;
-			}
-		}
-		imgbuf
-	}*/
 }
 
 /// Definition or important idea
@@ -530,11 +505,37 @@ impl Content {
 			blobs: Vec::new()
 		}
 	}
+	fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
+		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
+			(self.width_pix as u32), (self.height_pix as u32)
+		);
+		for b in &self.blobs {
+			let xoff = (b.top_left[0] as u32) - self.left_pix;
+			let yoff = (b.top_left[1] as u32) - self.top_pix;
+			let mut y: usize = 0;
+			while y < b.bitmap.len() {
+				let mut x: usize = 0;
+				while x < b.bitmap[y].len() {
+					if b.bitmap[y][x] {
+						imgbuf.put_pixel(
+							(x as u32)+xoff,
+							(y as u32)+yoff,
+							image::LumaA([0, 255])
+						);
+					}
+					x += 1;
+				}
+				y += 1;
+			}
+		}
+		imgbuf
+	}
 }
 
 /// Objects holding `Heading`, `Idea`, and `Content` objects
 #[derive(Clone)]
 struct Chapter {
+	id: Uuid,
 	heading: Heading,
 	sub_headings: Vec <Heading>,
 	ideas: Vec <Idea>,
@@ -547,6 +548,7 @@ impl Chapter {
 	/// Create a `Chapter` object
 	fn new() -> Chapter {
 		Chapter {
+			id: Uuid::new_v4(),
 			heading: Heading::new(),
 			sub_headings: Vec::new(),
 			ideas: Vec::new(),
@@ -558,6 +560,7 @@ impl Chapter {
 	/// Blanks a `Chapter` object.
 	/// Used to avoid scope problems that would arise due to initializing a new object in a subroutine.
 	fn blank(&mut self) {
+		self.id = Uuid::new_v4();
 		self.heading = Heading::new();
 		self.sub_headings = Vec::new();
 		self.ideas = Vec::new();
@@ -565,25 +568,15 @@ impl Chapter {
 		self.writeable = false;
 		self.height_precent = 0.0;
 	}
-	fn add_chapter() {
+	fn add_chapter(self) {
 		fn setup_dirs() {
 			fs::create_dir_all(OUT_PATH).expect("Output Generation: error creating output path");
-		}
-		//Probably not the solution
-		//should probably do page leve clumping calculate pos from that and assemble later
-		/*fn blobs_to_image(blobs: Vec <ImgBlob>) -> image::ImageBuffer {
-			let mut imgbuf = image::ImageBuffer::new(imgx, imgy);
-		}*/
-		fn update_toc() {
-			
-		}
-		fn make_chapter() {
-			
 		}
 		let cuid = Uuid::new_v4();
 		if !Path::new(OUT_PATH).exists() {
 			setup_dirs();
 		}
+		fs::create_dir_all(OUT_PATH.to_string()+&self.id.simple().to_string()).expect("Output Generation: error creating output path");
 	}
 }
 
@@ -754,6 +747,9 @@ fn add_heading(
 					head.subject.update_size_pos(page.dimensions);
 					// add_chapter
 					chapter.blank();
+					chapter.height_precent +=
+						(page.dimensions[1] as f64)/
+						(page.dimensions[0] as f64);
 					*started = true;
 					linemode = -1;
 				}
@@ -825,6 +821,7 @@ fn main() {
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
 	for mut p in pages {
+		chapter.height_precent += (p.dimensions[1] as f64)/(p.dimensions[0] as f64);
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
 			match p.clumps[i].ctype {
