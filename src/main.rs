@@ -825,9 +825,6 @@ fn main() {
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
 	for mut p in pages {
-		let mut headings: Vec <Heading> = Vec::new();
-		let mut headings1: Vec <Heading> = Vec::new();
-		let mut headings2: Vec <Heading> = Vec::new();
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
 			match p.clumps[i].ctype {
