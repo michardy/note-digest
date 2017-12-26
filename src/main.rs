@@ -4,9 +4,9 @@
 extern crate image;
 extern crate uuid;
 
-
+use std::env;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::io;
 use std::io::Write;
 use std::io::BufReader;
@@ -20,7 +20,7 @@ use uuid::Uuid;
 const IMPORTED: &'static str = "./.imported";
 
 /// The location where the organized notes should be written to
-const OUT_PATH: &'static str = "~/Documemts/Notebook";
+const OUT_PATH: &'static str = "/Documemts/Notebook/";
 
 /// Minimum value for a channel to be considered on
 const MIN_THRESH: u8 = 140;
@@ -542,14 +542,54 @@ impl Chapter {
 		self.height_precent = 0.0;
 	}
 	fn add_chapter(self) {
+		fn assemble_path() -> PathBuf {
+			let dir: PathBuf;
+			match env::home_dir() {
+				Some(path) => dir = path,
+				None => panic!("Output Generation: system lacks valid home directory"),
+			}
+			dir.join(Path::new(OUT_PATH))
+		}
 		fn setup_dirs() {
-			fs::create_dir_all(OUT_PATH).expect("Output Generation: error creating output path");
+			let comp_out = assemble_path();
+			fs::create_dir_all(assemble_path).expect(
+				"Output Generation: error creating root path"
+			);
+			let mut file = File::create(
+				OUT_PATH.to_string()+&("index.html".to_string())
+			).expect(
+				"Output Generation: error creating root index"
+			);
+			writeln!(file, include_str!("templates/table/index.html"));
+			file = File::create(
+				OUT_PATH.to_string()+&("static.css".to_string())
+			).expect(
+				"Output Generation: error creating root style"
+			);
+			writeln!(file, "{}", include_str!("templates/table/static.css"));
+			file = File::create(
+				OUT_PATH.to_string()+&("hue.svg".to_string())
+			).expect(
+				"Output Generation: error creating root color profile"
+			);
+			writeln!(file, include_str!("templates/table/hue.svg"));
+			file = File::create(
+				OUT_PATH.to_string()+&("fullscreen-op.svg".to_string())
+			).expect(
+				"Output Generation: error creating root fullscreen"
+			);
+			writeln!(file, include_str!("templates/table/fullscreen-op.svg"));
 		}
 		let cuid = Uuid::new_v4();
-		if !Path::new(OUT_PATH).exists() {
+		if !Path::new(&(
+			OUT_PATH.to_string()+&("index.html".to_string())
+		)).exists() {
 			setup_dirs();
 		}
-		fs::create_dir_all(OUT_PATH.to_string()+&self.id.simple().to_string()).expect("Output Generation: error creating output path");
+		fs::create_dir_all(
+			OUT_PATH.to_string()+&self.id.simple().to_string()
+		).expect("Output Generation: error creating chapter path");
+		
 	}
 }
 
@@ -689,7 +729,9 @@ trait Sub {
 ///Difference between 2D usize array
 impl Sub for [usize; 2] {
 	fn sub(self, other: [usize;2]) -> [usize; 2] {
-		[self[0]-other[0], self[0]-other[0]]
+		//println!("[{}, {}]", self[0], other[0]);
+		//println!("[{}, {}]", self[1], other[1]);
+		[self[0]-other[0], self[1]-other[1]]
 	}
 }
 
@@ -699,10 +741,11 @@ fn add_heading(
 	page: &Page,
 	chapter: &mut Chapter,
 	destroyed: &mut usize,
+	created: &mut usize,
 	started: &mut bool
 ) {
 	let mut i: usize = 0;
-	let mut linemode: i8 = 0;
+	let mut linemode: i8 = -1;
 	let mut past = [0usize; 2];
 	let mut head: Heading = Heading::new();
 	while i < clump.blobs.len() {
@@ -711,24 +754,34 @@ fn add_heading(
 			// TODO: reduce cyclomatic complexity
 			if linemode==1 {
 				// 1/17 of width and 1/22 height off acceptable
-				let diff = past.sub(blob.top_left);
+				//println!("OUT");
+				let diff = blob.top_left.sub(past);
 				if
 					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
+					//println!("PASS");
+					if *started {
+						(chapter.clone()).add_chapter();
+						*created += 1;
+					}
+					chapter.blank();
 					head.number = 1;
 					head.subject.update_size_pos(page.dimensions);
-					// add_chapter
-					chapter.blank();
+					chapter.heading = head.clone();
+					println!("{}", chapter.heading.subject.blobs.len());
 					chapter.height_precent +=
 						(page.dimensions[1] as f64)/
 						(page.dimensions[0] as f64);
 					*started = true;
 					linemode = -1;
+				} else {
+					//println!("{}, {}", diff[0], diff[1]);
 				}
 			} else if linemode == 0 {
 				head.number = 2;
 				linemode = 1;
+				past = blob.top_left;
 			} else {
 				*destroyed += 1;
 			}
@@ -737,13 +790,7 @@ fn add_heading(
 				if linemode == -1 {
 					linemode = 0;
 				}
-				let diff = past.sub(blob.top_left);
-				if
-					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
-					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
-				{
-					head.subject.blobs.push(blob);
-				}
+				head.subject.blobs.push(blob);
 			} else {
 				*destroyed += 1;
 				assert!(
@@ -751,8 +798,12 @@ fn add_heading(
 					"Found heading.number of {}. Expected 2",
 					head.number
 				);
-				head.subject.update_size_pos(page.dimensions);
-				chapter.sub_headings.push(head.clone());
+				if *started {
+					head.subject.update_size_pos(page.dimensions);
+					chapter.sub_headings.push(head.clone());
+				} else {
+					*destroyed += head.subject.blobs.len();
+				}
 			}
 		}
 		i += 1;
@@ -762,8 +813,12 @@ fn add_heading(
 			head.number != 1,
 			"Found heading.number of 1. Expected 2 or 3"
 		);
-		head.subject.update_size_pos(page.dimensions);
-		chapter.sub_headings.push(head);
+		if *started {
+			head.subject.update_size_pos(page.dimensions);
+			chapter.sub_headings.push(head);
+		} else {
+			*destroyed += head.subject.blobs.len();
+		}
 	}
 }
 
@@ -798,13 +853,20 @@ fn main() {
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
 			match p.clumps[i].ctype {
-				RED   => add_heading(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, &mut started),//Heading(s) of some type
+				RED   => add_heading(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, &mut created_chapters, &mut started),//Heading(s) of some type
 				GREEN => add_definition(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Defintions(s) of some type
 				BLUE  => add_content(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Content
 				_ => panic!("Invalid Content")
 			};
 			i += 1;
 		}
+	}
+	if chapter.heading.subject.blobs.len() > 0 {
+		chapter.add_chapter();
+		println!("writ");
+		created_chapters += 1;
+	} else {
+		println!("{}", chapter.heading.subject.blobs.len());
 	}
 	print!("\r◕: Writing            ");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
