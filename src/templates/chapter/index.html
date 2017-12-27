@@ -12,9 +12,11 @@ https://github.com/michardy/note-digest
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
 		<title>Notes</title>
 		<link rel="stylesheet" href="static.css"/>
-		<meta charset="utf-8">
+		<link rel="stylesheet" href="gen.css"/>
+		<script src="util.js"></script>
 		<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0">
 		<!--Please wait while I sacrafice a newborn goat to IE/Edge. (Edit: It still does not work)-->
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -25,7 +27,7 @@ https://github.com/michardy/note-digest
 			<span><a id="home"href="/">⌂</a></span>
 			<span id="himg">{{ BREAK }}</span>
 			<span class="hcontrol">
-				Size:&nbsp;<select id="">
+				Size:&nbsp;<select onchange="adjust_size(this);">
 					<option>200%</option>
 					<option>150%</option>
 					<option default>100%</option>
