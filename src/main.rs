@@ -60,7 +60,7 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 		tx = ttx
 	}
 	let mut row:Vec <bool> = Vec::new();
-	for i in 0..img[0].len() {
+	for _ in 0..img[0].len() {
 		row.push(false);
 	}
 	while ty < 0 {
@@ -292,10 +292,10 @@ impl Page {
 		let mut img = image::open(&Path::new(&path)).unwrap();
 		img = img.adjust_contrast(-22f32);
 		let mut row:Vec <bool> = Vec::new();
-		for x in 0..img.width() {
+		for _ in 0..img.width() {
 			row.push(false);
 		}
-		for y in 0..img.height() {
+		for _ in 0..img.height() {
 			claimed.push(row.clone());
 			thresh.push(row.clone());
 		}
@@ -559,34 +559,43 @@ impl Chapter {
 			).expect(
 				"Output Generation: error creating root index"
 			);
-			writeln!(file, include_str!("templates/table/index.html"));
+			writeln!(file, include_str!("templates/table/index.html")).expect(
+				"Output Generation: error writing to root index"
+			);
 			file = File::create(
 				comp_out.join("/static.css")
 			).expect(
 				"Output Generation: error creating root style"
 			);
-			writeln!(file, "{}", include_str!("templates/table/static.css"));
+			writeln!(file, "{}", include_str!("templates/table/static.css")).expect(
+				"Output Generation: error writing to root style"
+			);
 			file = File::create(
 				comp_out.join("/hue.svg")
 			).expect(
 				"Output Generation: error creating root color profile"
 			);
-			writeln!(file, include_str!("templates/table/hue.svg"));
+			writeln!(file, include_str!("templates/table/hue.svg")).expect(
+				"Output Generation: error writing to root color profile"
+			);
 			file = File::create(
 				comp_out.join("/fullscreen-op.svg")
 			).expect(
 				"Output Generation: error creating root fullscreen"
 			);
-			writeln!(file, include_str!("templates/table/fullscreen-op.svg"));
+			writeln!(file, include_str!("templates/table/fullscreen-op.svg")).expect(
+				"Output Generation: error writing to root fullscreen"
+			);
 			file = File::create(
 				comp_out.join("/util.js")
 			).expect(
-				"Output Generation: error creating root fullscreen"
+				"Output Generation: error creating root utilities"
 			);
-			writeln!(file, "{}", include_str!("templates/table/util.js"));
+			writeln!(file, "{}", include_str!("templates/table/util.js")).expect(
+				"Output Generation: error writing to root utilities"
+			);
 		}
 		let comp_out = assemble_path();
-		let cuid = Uuid::new_v4();
 		if !Path::new(&(
 			comp_out.join("index.html")
 		)).exists() {
@@ -606,7 +615,7 @@ fn get_images() -> Vec <String> {
 		if Path::new(IMPORTED).exists() {
 			let mut list: Vec <String> = Vec::new();
 			let f = (File::open(IMPORTED)).unwrap();
-			let mut file = BufReader::new(&f);
+			let file = BufReader::new(&f);
 			for line in file.lines() {
 				let templ = line.unwrap();
 				list.push(templ);
@@ -640,7 +649,7 @@ fn get_images() -> Vec <String> {
 	let paths = fs::read_dir("./").unwrap();
 	let mut mpaths: Vec <String> = Vec::new();
 	let mut new: Vec <String> = Vec::new();
-	let mut imported: Vec <String> = get_imported_images();
+	let imported: Vec <String> = get_imported_images();
 	for p in paths {
 		let path = p.unwrap().path();
 		if !(path.extension() == None) {
@@ -755,7 +764,7 @@ fn add_heading(
 	let mut past = [0usize; 2];
 	let mut head: Heading = Heading::new();
 	while i < clump.blobs.len() {
-		let mut blob = clump.blobs[i].clone();
+		let blob = clump.blobs[i].clone();
 		if blob.blob_type == 1 {
 			// TODO: reduce cyclomatic complexity
 			if linemode==1 {
@@ -846,7 +855,7 @@ fn main() {
 			.append(true)
 			.open(IMPORTED)
 			.unwrap();
-		writeln!(file, "{}", img);
+		let _ = writeln!(file, "{}", img); // TODO: Warn the user about errors here
 	}
 	print!("\r◑: Dividing by chapter");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
