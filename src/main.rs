@@ -550,44 +550,50 @@ impl Chapter {
 			}
 			dir.join(Path::new(OUT_PATH))
 		}
-		fn setup_dirs() {
-			let comp_out = assemble_path();
-			fs::create_dir_all(assemble_path).expect(
+		fn setup_dirs(comp_out: &PathBuf) {
+			fs::create_dir_all(comp_out).expect(
 				"Output Generation: error creating root path"
 			);
 			let mut file = File::create(
-				OUT_PATH.to_string()+&("index.html".to_string())
+				comp_out.join("/index.html")
 			).expect(
 				"Output Generation: error creating root index"
 			);
 			writeln!(file, include_str!("templates/table/index.html"));
 			file = File::create(
-				OUT_PATH.to_string()+&("static.css".to_string())
+				comp_out.join("/static.css")
 			).expect(
 				"Output Generation: error creating root style"
 			);
 			writeln!(file, "{}", include_str!("templates/table/static.css"));
 			file = File::create(
-				OUT_PATH.to_string()+&("hue.svg".to_string())
+				comp_out.join("/hue.svg")
 			).expect(
 				"Output Generation: error creating root color profile"
 			);
 			writeln!(file, include_str!("templates/table/hue.svg"));
 			file = File::create(
-				OUT_PATH.to_string()+&("fullscreen-op.svg".to_string())
+				comp_out.join("/fullscreen-op.svg")
 			).expect(
 				"Output Generation: error creating root fullscreen"
 			);
 			writeln!(file, include_str!("templates/table/fullscreen-op.svg"));
+			file = File::create(
+				comp_out.join("/util.js")
+			).expect(
+				"Output Generation: error creating root fullscreen"
+			);
+			writeln!(file, "{}", include_str!("templates/table/util.js"));
 		}
+		let comp_out = assemble_path();
 		let cuid = Uuid::new_v4();
 		if !Path::new(&(
-			OUT_PATH.to_string()+&("index.html".to_string())
+			comp_out.join("index.html")
 		)).exists() {
-			setup_dirs();
+			setup_dirs(&comp_out);
 		}
 		fs::create_dir_all(
-			OUT_PATH.to_string()+&self.id.simple().to_string()
+			comp_out.join(&self.id.simple().to_string())
 		).expect("Output Generation: error creating chapter path");
 		
 	}
