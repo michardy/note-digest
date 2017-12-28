@@ -20,7 +20,7 @@ use uuid::Uuid;
 const IMPORTED: &'static str = "./.imported";
 
 /// The location where the organized notes should be written to
-const OUT_PATH: &'static str = "/Documemts/Notebook/";
+const OUT_PATH: &'static str = "Documents/Notebook/";
 
 /// Minimum value for a channel to be considered on
 const MIN_THRESH: u8 = 140;
@@ -548,7 +548,7 @@ impl Chapter {
 				Some(path) => dir = path,
 				None => panic!("Output Generation: system lacks valid home directory"),
 			}
-			dir.join(Path::new(OUT_PATH))
+			dir.as_path().join(Path::new(OUT_PATH))
 		}
 		fn setup_dirs(comp_out: &PathBuf) {
 			fs::create_dir_all(comp_out).expect(
