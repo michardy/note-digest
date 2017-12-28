@@ -784,7 +784,6 @@ fn add_heading(
 					head.number = 1;
 					head.subject.update_size_pos(page.dimensions);
 					chapter.heading = head.clone();
-					println!("{}", chapter.heading.subject.blobs.len());
 					chapter.height_precent +=
 						(page.dimensions[1] as f64)/
 						(page.dimensions[0] as f64);
@@ -878,10 +877,7 @@ fn main() {
 	}
 	if chapter.heading.subject.blobs.len() > 0 {
 		chapter.add_chapter();
-		println!("writ");
 		created_chapters += 1;
-	} else {
-		println!("{}", chapter.heading.subject.blobs.len());
 	}
 	print!("\r◕: Writing            ");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
