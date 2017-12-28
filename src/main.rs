@@ -555,7 +555,7 @@ impl Chapter {
 				"Output Generation: error creating root path"
 			);
 			let mut file = File::create(
-				comp_out.join("/index.html")
+				comp_out.join("index.html")
 			).expect(
 				"Output Generation: error creating root index"
 			);
@@ -563,7 +563,7 @@ impl Chapter {
 				"Output Generation: error writing to root index"
 			);
 			file = File::create(
-				comp_out.join("/static.css")
+				comp_out.join("static.css")
 			).expect(
 				"Output Generation: error creating root style"
 			);
@@ -571,7 +571,7 @@ impl Chapter {
 				"Output Generation: error writing to root style"
 			);
 			file = File::create(
-				comp_out.join("/hue.svg")
+				comp_out.join("hue.svg")
 			).expect(
 				"Output Generation: error creating root color profile"
 			);
@@ -579,7 +579,7 @@ impl Chapter {
 				"Output Generation: error writing to root color profile"
 			);
 			file = File::create(
-				comp_out.join("/fullscreen-op.svg")
+				comp_out.join("fullscreen-op.svg")
 			).expect(
 				"Output Generation: error creating root fullscreen"
 			);
@@ -587,7 +587,7 @@ impl Chapter {
 				"Output Generation: error writing to root fullscreen"
 			);
 			file = File::create(
-				comp_out.join("/util.js")
+				comp_out.join("util.js")
 			).expect(
 				"Output Generation: error creating root utilities"
 			);
