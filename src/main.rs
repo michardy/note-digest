@@ -369,33 +369,33 @@ impl Idea {
 			self.top_pix = self.extension.top_pix;
 		}
 		if self.subject.left_pix < self.extension.left_pix {
-			self.top_pix = self.subject.left_pix;
+			self.left_pix = self.subject.left_pix;
 		} else {
-			self.top_pix = self.extension.left_pix;
+			self.left_pix = self.extension.left_pix;
 		}
 		if
 			self.subject.top_pix + self.subject.height_pix >
 			self.extension.top_pix + self.extension.height_pix
 		{
-			self.height_pix = self.top_pix - (
+			self.height_pix = (
 				self.subject.top_pix + self.subject.height_pix
-			);
+			) - self.top_pix;
 		} else {
-			self.height_pix = self.top_pix - (
+			self.height_pix = (
 				self.extension.top_pix + self.extension.height_pix
-			);
+			) - self.top_pix;
 		}
 		if
 			self.subject.left_pix + self.subject.width_pix >
 			self.extension.left_pix + self.extension.width_pix
 		{
-			self.width_pix = self.left_pix - (
+			self.width_pix = (
 				self.subject.left_pix + self.subject.width_pix
-			);
+			) - self.left_pix;
 		} else {
-			self.width_pix = self.left_pix - (
+			self.width_pix = (
 				self.extension.left_pix + self.extension.width_pix
-			);
+			) - self.left_pix;
 		}
 		self.left_precent = (self.left_pix as f64) / (dim[0] as f64);
 		self.top_precent = (self.top_pix as f64) / (dim[1] as f64);
@@ -601,10 +601,58 @@ impl Chapter {
 		)).exists() {
 			setup_dirs(&comp_out);
 		}
-		fs::create_dir_all(
-			comp_out.join(&self.id.simple().to_string())
-		).expect("Output Generation: error creating chapter path");
-		
+		let ch_path = comp_out.join(&self.id.simple().to_string());
+		fs::create_dir(&ch_path)
+			.expect("Output Generation: error creating chapter path");
+		fs::create_dir(
+			ch_path.join("img")
+		).expect("Output Generation: error creating chapter image path");
+		let ref mut fout = File::create(
+			ch_path.join(
+				"img/t".to_string()+&self.heading.id.simple().to_string()+&".png".to_string()
+			)
+		).unwrap();
+		let _ = image::ImageLumaA8(
+			self.heading.subject.to_image()
+		).save(fout, image::PNG);
+		for head in self.sub_headings {
+			let ref mut fout = File::create(
+				ch_path.join(
+					"img/h".to_string()+&head.id.simple().to_string()+&".png".to_string()
+				)
+			).unwrap();
+			let _ = image::ImageLumaA8(
+				head.subject.to_image()
+			).save(fout, image::PNG);
+		}
+		for cont in self.content {
+			let ref mut fout = File::create(
+				ch_path.join(
+					"img/c".to_string()+&cont.id.simple().to_string()+&".png".to_string()
+				)
+			).unwrap();
+			let _ = image::ImageLumaA8(
+				cont.to_image()
+			).save(fout, image::PNG);
+		}
+		for idea in self.ideas {
+			let ref mut hout = File::create(
+				ch_path.join(
+					"img/dh".to_string()+&idea.id.simple().to_string()+&".png".to_string()
+				)
+			).unwrap();
+			let _ = image::ImageLumaA8(
+				idea.subject.to_image()
+			).save(hout, image::PNG);
+			let ref mut cout = File::create(
+				ch_path.join(
+					"img/dc".to_string()+&idea.id.simple().to_string()+&".png".to_string()
+				)
+			).unwrap();
+			let _ = image::ImageLumaA8(
+				idea.extension.to_image()
+			).save(cout, image::PNG);
+		}
 	}
 }
 
