@@ -792,8 +792,6 @@ trait Sub {
 ///Difference between 2D usize array
 impl Sub for [usize; 2] {
 	fn sub(self, other: [usize;2]) -> [usize; 2] {
-		//println!("[{}, {}]", self[0], other[0]);
-		//println!("[{}, {}]", self[1], other[1]);
 		[self[0]-other[0], self[1]-other[1]]
 	}
 }
@@ -817,13 +815,11 @@ fn add_heading(
 			// TODO: reduce cyclomatic complexity
 			if linemode==1 {
 				// 1/17 of width and 1/22 height off acceptable
-				//println!("OUT");
 				let diff = blob.top_left.sub(past);
 				if
 					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
 					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
 				{
-					//println!("PASS");
 					if *started {
 						(chapter.clone()).add_chapter();
 						*created += 1;
@@ -837,8 +833,6 @@ fn add_heading(
 						(page.dimensions[0] as f64);
 					*started = true;
 					linemode = -1;
-				} else {
-					//println!("{}, {}", diff[0], diff[1]);
 				}
 			} else if linemode == 0 {
 				head.number = 2;
