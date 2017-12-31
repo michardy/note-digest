@@ -607,11 +607,16 @@ impl Chapter {
 		fs::create_dir(
 			ch_path.join("img")
 		).expect("Output Generation: error creating chapter image path");
+		let mut out = String::from(
+			include_str!("template_fragments/chapter/index.html0")
+		);
 		let ref mut fout = File::create(
 			ch_path.join(
 				"img/t".to_string()+&self.heading.id.simple().to_string()+&".png".to_string()
 			)
 		).unwrap();
+		out += &("<img src=\"img/t".to_string()+&self.heading.id.simple().to_string()+&".png\"></img>".to_string());
+		out += include_str!("template_fragments/chapter/index.html1");
 		let _ = image::ImageLumaA8(
 			self.heading.subject.to_image()
 		).save(fout, image::PNG);
@@ -624,6 +629,14 @@ impl Chapter {
 			let _ = image::ImageLumaA8(
 				head.subject.to_image()
 			).save(fout, image::PNG);
+			out += &(
+				"<img id=\"h".to_string()+
+				&head.id.simple().to_string()+
+				&"\"".to_string()+
+				&"src=\"img/h".to_string()+
+				&head.id.simple().to_string()+
+				&".png\"></img>".to_string()
+			);
 		}
 		for cont in self.content {
 			let ref mut fout = File::create(
@@ -634,6 +647,14 @@ impl Chapter {
 			let _ = image::ImageLumaA8(
 				cont.to_image()
 			).save(fout, image::PNG);
+			out += &(
+				"<img id=\"c".to_string()+
+				&cont.id.simple().to_string()+
+				&"\"".to_string()+
+				&"src=\"img/c".to_string()+
+				&cont.id.simple().to_string()+
+				&".png\"></img>".to_string()
+			);
 		}
 		for idea in self.ideas {
 			let ref mut hout = File::create(
@@ -650,9 +671,14 @@ impl Chapter {
 				)
 			).unwrap();
 			let _ = image::ImageLumaA8(
-				idea.extension.to_image()
+				idea.subject.to_image()
 			).save(cout, image::PNG);
 		}
+		out += include_str!("template_fragments/chapter/index.html2");
+		let ref mut file = File::create(
+			ch_path.join("index.html")
+		).unwrap();
+		writeln!(file, "{}", out);
 	}
 }
 
@@ -857,6 +883,7 @@ fn add_heading(
 				if *started {
 					head.subject.update_size_pos(page.dimensions);
 					chapter.sub_headings.push(head.clone());
+					linemode = -1;
 				} else {
 					*destroyed += head.subject.blobs.len();
 				}
