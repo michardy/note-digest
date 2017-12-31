@@ -753,9 +753,9 @@ fn add_definition(
 	started: bool
 ) {
 	fn is_underlined(blob: ImgBlob, line: &ImgBlob) -> bool {
-		(blob.top_left[0] <= line.top_left[0]) &&
-		(blob.top_left[0] >= line.bottom_right[0]) &&
-		(blob.bottom_right[1] > line.top_left[1])
+		((blob.top_left[0] as i64 - line.top_left[0] as i64) > -50) && // Make -50 proportional
+		((line.bottom_right[0] as i64 - blob.bottom_right[0] as i64) > -50) &&
+		(blob.bottom_right[1] < line.top_left[1])
 	}
 	if started {
 		let mut line: ImgBlob = ImgBlob::new();
