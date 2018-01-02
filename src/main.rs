@@ -854,6 +854,7 @@ fn add_heading(
 					head.number = 1;
 					head.subject.update_size_pos(page.dimensions);
 					chapter.heading = head.clone();
+					head = Heading::new();
 					chapter.height_precent +=
 						(page.dimensions[1] as f64)/
 						(page.dimensions[0] as f64);
@@ -873,6 +874,7 @@ fn add_heading(
 					linemode = 0;
 				}
 				head.subject.blobs.push(blob);
+				head = Heading::new();
 			} else {
 				*destroyed += 1;
 				assert!(
