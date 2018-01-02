@@ -888,7 +888,8 @@ fn add_heading(
 					head = Heading::new();
 					head.subject.blobs.push(blob);
 				} else {
-					*destroyed += head.subject.blobs.len();
+					*destroyed += head.subject.blobs.len() + 1;
+					
 				}
 			}
 		}
