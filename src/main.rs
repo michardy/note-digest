@@ -23,7 +23,7 @@ const IMPORTED: &'static str = "./.imported";
 const OUT_PATH: &'static str = "Documents/Notebook/";
 
 /// Minimum value for a channel to be considered on
-const MIN_THRESH: u8 = 135;
+const MIN_THRESH: u8 = 90;
 
 /// Maximum value for a channel to be considered off
 const MAX_THRESH: u8 = 120;
@@ -874,7 +874,6 @@ fn add_heading(
 					linemode = 0;
 				}
 				head.subject.blobs.push(blob);
-				head = Heading::new();
 			} else {
 				assert!(
 					head.number == 2,
@@ -889,7 +888,6 @@ fn add_heading(
 					head.subject.blobs.push(blob);
 				} else {
 					*destroyed += head.subject.blobs.len() + 1;
-					
 				}
 			}
 		}
