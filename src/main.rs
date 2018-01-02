@@ -876,7 +876,6 @@ fn add_heading(
 				head.subject.blobs.push(blob);
 				head = Heading::new();
 			} else {
-				*destroyed += 1;
 				assert!(
 					head.number == 2,
 					"Found heading.number of {}. Expected 2",
@@ -885,7 +884,9 @@ fn add_heading(
 				if *started {
 					head.subject.update_size_pos(page.dimensions);
 					chapter.sub_headings.push(head.clone());
-					linemode = -1;
+					linemode = 0;
+					head = Heading::new();
+					head.subject.blobs.push(blob);
 				} else {
 					*destroyed += head.subject.blobs.len();
 				}
