@@ -23,10 +23,10 @@ const IMPORTED: &'static str = "./.imported";
 const OUT_PATH: &'static str = "Documents/Notebook/";
 
 /// Minimum value for a channel to be considered on
-const MIN_THRESH: u8 = 140;
+const MIN_THRESH: u8 = 135;
 
 /// Maximum value for a channel to be considered off
-const MAX_THRESH: u8 = 170;
+const MAX_THRESH: u8 = 120;
 
 const RED: u8 = 0;
 const GREEN: u8 = 1;
