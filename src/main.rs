@@ -671,7 +671,7 @@ impl Chapter {
 				)
 			).unwrap();
 			let _ = image::ImageLumaA8(
-				idea.subject.to_image()
+				idea.extension.to_image()
 			).save(cout, image::PNG);
 		}
 		out += include_str!("template_fragments/chapter/index.html2");
@@ -790,6 +790,7 @@ fn add_definition(
 		for i in 0..clump.blobs.len() {
 			if clump.blobs[i].blob_type == 1 {
 				line = clump.blobs[i].clone();
+				break;
 			}
 		}
 		for i in 0..clump.blobs.len() {
