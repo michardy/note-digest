@@ -116,16 +116,20 @@ impl ImgBlob {
 					}
 					claim[tempy][tempx] = true;
 					if queue[0][1] > top {
+						queue.push([tempy-1, tempx-1]);
 						queue.push([tempy-1, tempx]);
+						queue.push([tempy-1, tempx+1]);
 					}
 					queue.push([tempy, tempx-1]);
+					queue.push([tempy+1, tempx-1]);
 					queue.push([tempy+1, tempx]);
+					queue.push([tempy+1, tempx+1]);
 					queue.push([tempy, tempx+1]);
 				}
 			}
 			queue.remove(0);
 		}
-		if (bitmap[0].len() + bitmap.len() > 6) && (bitmap.len() > 3) && (bitmap[0].len() > 3) {
+		if (bitmap[0].len() + bitmap.len() > 2) && (bitmap.len() > 1) && (bitmap[0].len() > 1) {
 			Some(ImgBlob {
 				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
 				top_left: [left, top],
