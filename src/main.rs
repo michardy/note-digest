@@ -23,13 +23,19 @@ const IMPORTED: &'static str = "./.imported";
 const OUT_PATH: &'static str = "Documents/Notebook/";
 
 /// Minimum value for a channel to be considered on
-const MIN_THRESH: u8 = 90;
+const MIN_THRESH: u8 = 120;
 
 /// Maximum value for a channel to be considered off
-const MAX_THRESH: u8 = 120;
+const MAX_THRESH: u8 = 125;
 
+/// Minimum width to heigth ratio for object to be considered a line
+const LINE_RATIO: f32 = 10.0;
+
+/// Defines red channel index
 const RED: u8 = 0;
+/// Defines green channel index
 const GREEN: u8 = 1;
+/// Defines blue channel index
 const BLUE: u8 = 2;
 
 //should be a trait.  I am not sure how to impliment one for only Vec <Vec <bool>> and not Vec <T>
@@ -131,7 +137,11 @@ impl ImgBlob {
 		}
 		if (bitmap[0].len() + bitmap.len() > 2) && (bitmap.len() > 1) && (bitmap[0].len() > 1) {
 			Some(ImgBlob {
-				blob_type: if (bitmap[0].len() / bitmap.len()) > 10 {1} else {0},
+				blob_type:
+					if
+						(bitmap[0].len() as f32 / bitmap.len() as f32) > LINE_RATIO &&
+						bitmap[0].len() > 60
+					{1} else {0},
 				top_left: [left, top],
 				bottom_right: [left+bitmap[0].len(), top+bitmap.len()],
 				bitmap: bitmap
@@ -429,6 +439,10 @@ impl Content {
 		let mut left: u32 = <u32>::max_value();
 		let mut bottom: u32 = 0;
 		let mut right: u32 = 0;
+		assert!(
+			&self.blobs.len() > &0,
+			"Output Generation: Error empty content object"
+		);
 		for b in &self.blobs {
 			if b.top_left[1] < top as usize {
 				top = b.top_left[1] as u32;
@@ -823,7 +837,15 @@ trait Sub {
 ///Difference between 2D usize array
 impl Sub for [usize; 2] {
 	fn sub(self, other: [usize;2]) -> [usize; 2] {
-		[self[0]-other[0], self[1]-other[1]]
+		if (self[0] > other[0]) && (self[1] > other[1]) {
+			[self[0]-other[0], self[1]-other[1]]
+		} else if (self[0] > other[0]) && (self[1] < other[1]) {
+			[self[0]-other[0], other[1]-self[1]]
+		} else if (self[0] < other[0]) && (self[1] > other[1]) {
+			[other[0]-self[0], self[1]-other[1]]
+		} else{
+			[other[0]-self[0], other[1]-self[1]]
+		}
 	}
 }
 
@@ -848,8 +870,8 @@ fn add_heading(
 				// 1/17 of width and 1/22 height off acceptable
 				let diff = blob.top_left.sub(past);
 				if
-					(diff[0] as f32) < 1f32/17f32*(page.dimensions[0] as f32) &&
-					(diff[1] as f32) < 1f32/22f32*(page.dimensions[1] as f32)
+					(diff[0] as f32) < 1f32/4f32*(page.dimensions[0] as f32) &&
+					(diff[1] as f32) < 1f32/20f32*(page.dimensions[1] as f32)
 				{
 					if *started {
 						(chapter.clone()).add_chapter();
