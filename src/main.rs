@@ -26,10 +26,10 @@ const OUT_PATH: &'static str = "Documents/Notebook/";
 const MIN_THRESH: u8 = 120;
 
 /// Maximum value for a channel to be considered off
-const MAX_THRESH: u8 = 125;
+const MAX_THRESH: u8 = 126;
 
 /// Minimum width to heigth ratio for object to be considered a line
-const LINE_RATIO: f32 = 10.0;
+const LINE_RATIO: f32 = 0.07;
 
 /// Defines red channel index
 const RED: u8 = 0;
@@ -79,7 +79,7 @@ fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
 	img[ty as usize][tx as usize] = value;
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 /// Monochrome image fragment
 struct ImgBlob {
 	/// Is it a line?
@@ -799,7 +799,7 @@ fn add_definition(
 	fn is_underlined(blob: ImgBlob, line: &ImgBlob) -> bool {
 		((blob.top_left[0] as i64 - line.top_left[0] as i64) > -50) && // Make -50 proportional
 		((line.bottom_right[0] as i64 - blob.bottom_right[0] as i64) > -50) &&
-		(blob.bottom_right[1] < line.top_left[1])
+		(blob.bottom_right[1] < line.bottom_right[1])
 	}
 	if started {
 		let mut line: ImgBlob = ImgBlob::new();
@@ -812,7 +812,7 @@ fn add_definition(
 			}
 		}
 		for i in 0..clump.blobs.len() {
-			if clump.blobs[i].blob_type == 0 {
+			if clump.blobs[i] != line {
 				if is_underlined(clump.blobs[i].clone(), &line) {
 					name.push(clump.blobs[i].clone());
 				} else {
