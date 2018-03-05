@@ -128,8 +128,8 @@ impl ImgBlob {
 			{
 				if img[tempy][tempx] && !(claim[tempy][tempx]){
 					boundless_insert(
-						((tempy as i64)-(top as i64)),
-						((tempx as i64)-(left as i64)),
+						(tempy as i64)-(top as i64),
+						(tempx as i64)-(left as i64),
 						true,
 						&mut bitmap
 					);
@@ -553,7 +553,7 @@ impl Content {
 	}
 	fn to_image(&self) -> image::ImageBuffer<image::LumaA<u8>, Vec<u8>> {
 		let mut imgbuf = image::ImageBuffer::<image::LumaA<u8>, Vec<u8>>::new(
-			(self.width_pix as u32), (self.height_pix as u32)
+			self.width_pix as u32, self.height_pix as u32
 		);
 		for b in &self.blobs {
 			let xoff = (b.top_left[0] as u32) - self.left_pix;
@@ -771,23 +771,40 @@ impl Chapter {
 		let ref mut file = File::create(
 			ch_path.join("index.html")
 		).unwrap();
-		writeln!(file, "{}", out);
-		let ref mut file = File::create(
+		writeln!(file, "{}", out)
+			.expect("Chapter output: error creating index");
+		let ref mut file_scss = File::create(
 			ch_path.join("static.css")
 		).unwrap();
-		writeln!(file, "{}", include_str!("templates/chapter/static.css"));
-		let ref mut file = File::create(
+		writeln!(
+			file_scss,
+			"{}",
+			include_str!("templates/chapter/static.css")
+		).expect("Chapter output: error creating static CSS");
+		let ref mut file_fscr = File::create(
 			ch_path.join("fullscreen-op.svg")
 		).unwrap();
-		writeln!(file, "{}", include_str!("templates/chapter/fullscreen-op.svg"));
-		let ref mut file = File::create(
+		writeln!(
+			file_fscr,
+			"{}",
+			include_str!("templates/chapter/fullscreen-op.svg")
+		).expect("Chapter output: error creating fullscreen");
+		let ref mut file_hue = File::create(
 			ch_path.join("hue.svg")
 		).unwrap();
-		writeln!(file, "{}", include_str!("templates/chapter/hue.svg"));
-		let ref mut file = File::create(
+		writeln!(
+			file_hue,
+			"{}",
+			include_str!("templates/chapter/hue.svg")
+		).expect("Chapter output: error creating hue");
+		let ref mut file_util = File::create(
 			ch_path.join("util.js")
 		).unwrap();
-		writeln!(file, "{}", include_str!("templates/chapter/util.js"));
+		writeln!(
+			file_util,
+			"{}",
+			include_str!("templates/chapter/util.js")
+		).expect("Chapter output: error creating util");
 	}
 }
 
