@@ -51,7 +51,12 @@ const BLUE: u8 = 2;
 
  * `img` - The 2d boolean vector.  Must be `&mut`
  */
-fn boundless_insert(y: i64, x: i64, value: bool, img: &mut Vec<Vec <bool>>) {
+fn boundless_insert(
+	y: i64,
+	x: i64,
+	value: bool,
+	img: &mut Vec<Vec <bool>>
+) {
 	let mut tx = x;
 	let mut ty = y;
 	for i in 0..img.len(){
@@ -99,7 +104,12 @@ struct ImgBlob {
 impl ImgBlob {
 	/// Checks using a floodfill if an image blob can be started at a coordinate.
 	/// If one can be found it returns it.
-	fn from_top_left(x: usize, y: usize, claim: &mut Vec <Vec <bool>>, img: &Vec <Vec <bool>>) -> Option<ImgBlob>{
+	fn from_top_left(
+		x: usize,
+		y: usize,
+		claim: &mut Vec <Vec <bool>>,
+		img: &Vec <Vec <bool>>
+	) -> Option<ImgBlob>{
 		let mut left = x;
 		let mut top = y; //pretty sure that this is not supposed to change and can be eliminated
 		let mut bitmap: Vec <Vec <bool>> = Vec::new();
@@ -111,9 +121,18 @@ impl ImgBlob {
 		while queue.len() > 0 {
 			let tempx = queue[0][1];
 			let tempy = queue[0][0];
-			if (tempy < img.len()) && (tempx < img[0].len()) && (tempy > 0) && (tempx > 0) {
+			if
+				(tempy < img.len()) &&
+				(tempx < img[0].len()) &&
+				(tempy > 0) && (tempx > 0)
+			{
 				if img[tempy][tempx] && !(claim[tempy][tempx]){
-					boundless_insert(((tempy as i64)-(top as i64)), ((tempx as i64)-(left as i64)), true, &mut bitmap);
+					boundless_insert(
+						((tempy as i64)-(top as i64)),
+						((tempx as i64)-(left as i64)),
+						true,
+						&mut bitmap
+					);
 					if tempx < left {
 						left = tempx;
 					}
@@ -135,7 +154,10 @@ impl ImgBlob {
 			}
 			queue.remove(0);
 		}
-		if (bitmap[0].len() + bitmap.len() > 2) && (bitmap.len() > 1) && (bitmap[0].len() > 1) {
+		if (
+			bitmap[0].len() + bitmap.len() > 2) &&
+			(bitmap.len() > 1) && (bitmap[0].len() > 1
+		) {
 			Some(ImgBlob {
 				blob_type:
 					if
@@ -272,17 +294,32 @@ impl Page {
 			match channel {
 				RED => {
 					for (x, y, pixel) in rgbimg.enumerate_pixels() {
-						thresh[y as usize][x as usize] = if (pixel[0] > MIN_THRESH) && (pixel[1] <= MAX_THRESH) && (pixel[2] <= MAX_THRESH) {true} else {false};
+						thresh[y as usize][x as usize] =
+							if
+								(pixel[0] > MIN_THRESH) &&
+								(pixel[1] <= MAX_THRESH) &&
+								(pixel[2] <= MAX_THRESH)
+							{true} else {false};
 					}
 				},
 				GREEN => {
 					for (x, y, pixel) in rgbimg.enumerate_pixels() {
-						thresh[y as usize][x as usize] = if (pixel[1] > MIN_THRESH) && (pixel[0] <= MAX_THRESH) && (pixel[2] <= MAX_THRESH) {true} else {false};
+						thresh[y as usize][x as usize] =
+						if
+							(pixel[1] > MIN_THRESH) &&
+							(pixel[0] <= MAX_THRESH) &&
+							(pixel[2] <= MAX_THRESH)
+						{true} else {false};
 					}
 				},
 				BLUE => {
 					for (x, y, pixel) in rgbimg.enumerate_pixels() {
-						thresh[y as usize][x as usize] = if (pixel[2] > MIN_THRESH) && (pixel[1] <= MAX_THRESH) && (pixel[0] <= MAX_THRESH) {true} else {false};
+						thresh[y as usize][x as usize] =
+							if
+								(pixel[2] > MIN_THRESH) &&
+								(pixel[1] <= MAX_THRESH) &&
+								(pixel[0] <= MAX_THRESH)
+							{true} else {false};
 					}
 				},
 				_ => panic!("Invalid color")
@@ -314,9 +351,27 @@ impl Page {
 			thresh.push(row.clone());
 		}
 		let rgbimg = img.to_rgb();
-		thresh_and_blob(&rgbimg, RED, &mut claimed, &mut thresh, &mut rblobs);
-		thresh_and_blob(&rgbimg, GREEN, &mut claimed, &mut thresh, &mut gblobs);
-		thresh_and_blob(&rgbimg, BLUE, &mut claimed, &mut thresh, &mut bblobs);
+		thresh_and_blob(
+			&rgbimg,
+			RED,
+			&mut claimed,
+			&mut thresh,
+			&mut rblobs
+		);
+		thresh_and_blob(
+			&rgbimg,
+			GREEN,
+			&mut claimed,
+			&mut thresh,
+			&mut gblobs
+		);
+		thresh_and_blob(
+			&rgbimg,
+			BLUE,
+			&mut claimed,
+			&mut thresh,
+			&mut bblobs
+		);
 		Page::from_blobs(
 			rblobs,
 			gblobs,
@@ -564,7 +619,9 @@ impl Chapter {
 			let dir: PathBuf;
 			match env::home_dir() {
 				Some(path) => dir = path,
-				None => panic!("Output Generation: system lacks valid home directory"),
+				None => panic!(
+					"Output Generation: system lacks valid home directory"
+				),
 			}
 			dir.as_path().join(Path::new(OUT_PATH))
 		}
@@ -577,17 +634,19 @@ impl Chapter {
 			).expect(
 				"Output Generation: error creating root index"
 			);
-			writeln!(file, include_str!("templates/table/index.html")).expect(
-				"Output Generation: error writing to root index"
-			);
+			writeln!(file, include_str!("templates/table/index.html"))
+				.expect(
+					"Output Generation: error writing to root index"
+				);
 			file = File::create(
 				comp_out.join("static.css")
 			).expect(
 				"Output Generation: error creating root style"
 			);
-			writeln!(file, "{}", include_str!("templates/table/static.css")).expect(
-				"Output Generation: error writing to root style"
-			);
+			writeln!(file, "{}", include_str!("templates/table/static.css"))
+				.expect(
+					"Output Generation: error writing to root style"
+				);
 			file = File::create(
 				comp_out.join("hue.svg")
 			).expect(
@@ -601,17 +660,19 @@ impl Chapter {
 			).expect(
 				"Output Generation: error creating root fullscreen"
 			);
-			writeln!(file, include_str!("templates/table/fullscreen-op.svg")).expect(
-				"Output Generation: error writing to root fullscreen"
-			);
+			writeln!(file, include_str!("templates/table/fullscreen-op.svg"))
+				.expect(
+					"Output Generation: error writing to root fullscreen"
+				);
 			file = File::create(
 				comp_out.join("util.js")
 			).expect(
 				"Output Generation: error creating root utilities"
 			);
-			writeln!(file, "{}", include_str!("templates/table/util.js")).expect(
-				"Output Generation: error writing to root utilities"
-			);
+			writeln!(file, "{}", include_str!("templates/table/util.js"))
+				.expect(
+					"Output Generation: error writing to root utilities"
+				);
 		}
 		let comp_out = assemble_path();
 		if !Path::new(&(
@@ -630,10 +691,16 @@ impl Chapter {
 		);
 		let ref mut fout = File::create(
 			ch_path.join(
-				"img/t".to_string()+&self.heading.id.simple().to_string()+&".png".to_string()
+				"img/t".to_string()+
+				&self.heading.id.simple().to_string()+
+				&".png".to_string()
 			)
 		).unwrap();
-		out += &("<img src=\"img/t".to_string()+&self.heading.id.simple().to_string()+&".png\"></img>".to_string());
+		out += &(
+			"<img src=\"img/t".to_string()+
+			&self.heading.id.simple().to_string()+
+			&".png\"></img>".to_string()
+		);
 		out += include_str!("template_fragments/chapter/index.html1");
 		let _ = image::ImageLumaA8(
 			self.heading.subject.to_image()
@@ -641,7 +708,9 @@ impl Chapter {
 		for head in self.sub_headings {
 			let ref mut fout = File::create(
 				ch_path.join(
-					"img/h".to_string()+&head.id.simple().to_string()+&".png".to_string()
+					"img/h".to_string()+
+					&head.id.simple().to_string()+
+					&".png".to_string()
 				)
 			).unwrap();
 			let _ = image::ImageLumaA8(
@@ -659,7 +728,9 @@ impl Chapter {
 		for cont in self.content {
 			let ref mut fout = File::create(
 				ch_path.join(
-					"img/c".to_string()+&cont.id.simple().to_string()+&".png".to_string()
+					"img/c".to_string()+
+					&cont.id.simple().to_string()+
+					&".png".to_string()
 				)
 			).unwrap();
 			let _ = image::ImageLumaA8(
@@ -677,7 +748,9 @@ impl Chapter {
 		for idea in self.ideas {
 			let ref mut hout = File::create(
 				ch_path.join(
-					"img/dh".to_string()+&idea.id.simple().to_string()+&".png".to_string()
+					"img/dh".to_string()+
+					&idea.id.simple().to_string()+
+					&".png".to_string()
 				)
 			).unwrap();
 			let _ = image::ImageLumaA8(
@@ -685,7 +758,9 @@ impl Chapter {
 			).save(hout, image::PNG);
 			let ref mut cout = File::create(
 				ch_path.join(
-					"img/dc".to_string()+&idea.id.simple().to_string()+&".png".to_string()
+					"img/dc".to_string()+
+					&idea.id.simple().to_string()+
+					&".png".to_string()
 				)
 			).unwrap();
 			let _ = image::ImageLumaA8(
@@ -718,14 +793,20 @@ fn get_images() -> Vec <String> {
 		}
 	}
 	/// Get user selections as a `Vec <String>`
-	fn parse_input(uin: String, mpaths: Vec <String>, new: &mut Vec <String>) -> Vec <String> {
+	fn parse_input(
+		uin: String,
+		mpaths: Vec <String>,
+		new: &mut Vec <String>
+	) -> Vec <String> {
 		let mut selected: Vec <String> = Vec::new();
-		let stringified: Vec <String> = uin.split(' ').map(|x| x.to_string()).collect();
+		let stringified: Vec <String> = uin.split(' ')
+			.map(|x| x.to_string()).collect();
 		for sel in stringified {
 			if sel == "+" {
 				selected.append(new);
 			} else if sel.to_string().contains("-") {
-				let numbers: Vec <String> = uin.split('-').map(|x| x.to_string()).collect();
+				let numbers: Vec <String> = uin.split('-')
+					.map(|x| x.to_string()).collect();
 				let start = numbers[0].parse::<usize>().unwrap();
 				let end = numbers[1].parse::<usize>().unwrap();
 				for i in start..end {
@@ -746,7 +827,12 @@ fn get_images() -> Vec <String> {
 		let path = p.unwrap().path();
 		if !(path.extension() == None) {
 			//The next line needs to be cleaned up.  It is written like this to appease the borrow checker
-			if path.extension().unwrap() == "png" || path.extension().unwrap() == "jpg" || path.extension().unwrap() == "bpm" || path.extension().unwrap() == "gif" {
+			if
+				path.extension().unwrap() == "png" ||
+				path.extension().unwrap() == "jpg" ||
+				path.extension().unwrap() == "bpm" ||
+				path.extension().unwrap() == "gif"
+			{
 				mpaths.push(path.into_os_string().into_string().unwrap());//ugly hack but as_path().to_string() does not work
 			}
 		}
@@ -961,13 +1047,33 @@ fn main() {
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
 	for mut p in pages {
-		chapter.height_precent += (p.dimensions[1] as f64)/(p.dimensions[0] as f64);
+		chapter.height_precent +=
+			(p.dimensions[1] as f64)/(p.dimensions[0] as f64);
 		let mut i: usize = 0;
 		while i < p.clumps.len() {
 			match p.clumps[i].ctype {
-				RED   => add_heading(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, &mut created_chapters, &mut started),//Heading(s) of some type
-				GREEN => add_definition(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Defintions(s) of some type
-				BLUE  => add_content(p.clumps[i].clone(), &p, &mut chapter, &mut destroyed, started),//Content
+				RED   => add_heading( // Heading(s) of some type
+					p.clumps[i].clone(),
+					&p,
+					&mut chapter,
+					&mut destroyed,
+					&mut created_chapters,
+					&mut started
+				),
+				GREEN => add_definition( // Defintions(s) of some type
+					p.clumps[i].clone(),
+					&p,
+					&mut chapter,
+					&mut destroyed,
+					started
+				),
+				BLUE  => add_content( // Content
+					p.clumps[i].clone(),
+					&p,
+					&mut chapter,
+					&mut destroyed,
+					started
+				),
 				_ => panic!("Invalid Content")
 			};
 			i += 1;
@@ -980,5 +1086,9 @@ fn main() {
 	print!("\r◕: Writing            ");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	println!("\r●: Done               ");
-	println!("{} chapters added.  {} orphaned objects destroyed", created_chapters, destroyed);
+	println!(
+		"{} chapters added.  {} orphaned objects destroyed",
+		created_chapters,
+		destroyed
+	);
 }
