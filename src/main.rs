@@ -772,6 +772,22 @@ impl Chapter {
 			ch_path.join("index.html")
 		).unwrap();
 		writeln!(file, "{}", out);
+		let ref mut file = File::create(
+			ch_path.join("static.css")
+		).unwrap();
+		writeln!(file, "{}", include_str!("templates/chapter/static.css"));
+		let ref mut file = File::create(
+			ch_path.join("fullscreen-op.svg")
+		).unwrap();
+		writeln!(file, "{}", include_str!("templates/chapter/fullscreen-op.svg"));
+		let ref mut file = File::create(
+			ch_path.join("hue.svg")
+		).unwrap();
+		writeln!(file, "{}", include_str!("templates/chapter/hue.svg"));
+		let ref mut file = File::create(
+			ch_path.join("util.js")
+		).unwrap();
+		writeln!(file, "{}", include_str!("templates/chapter/util.js"));
 	}
 }
 
