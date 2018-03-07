@@ -689,6 +689,9 @@ impl Chapter {
 		let mut out = String::from(
 			include_str!("template_fragments/chapter/index.html0")
 		);
+		let mut gencss = String::from(
+			include_str!("template_fragments/chapter/gen.css1")
+		);
 		let ref mut fout = File::create(
 			ch_path.join(
 				"img/t".to_string()+
@@ -697,9 +700,22 @@ impl Chapter {
 			)
 		).unwrap();
 		out += &(
-			"<img src=\"img/t".to_string()+
+			"<img class=\"head h1\" id=\"".to_string()+
+			&self.heading.id.simple().to_string()+
+			&"\" src=\"img/t".to_string()+
 			&self.heading.id.simple().to_string()+
 			&".png\"></img>".to_string()
+		);
+		gencss += &(
+			"#t".to_string()+
+			&self.heading.id.simple().to_string()+
+			&"{\n\ttop:".to_string()+
+			&self.heading.subject.top_precent.to_string()+
+			&"%;\n\tleft:".to_string()+
+			&self.heading.subject.left_precent.to_string()+
+			&"%;\n\twidth:".to_string()+
+			&self.heading.subject.width_precent.to_string()+
+			&"%;\n}\n".to_string()
 		);
 		out += include_str!("template_fragments/chapter/index.html1");
 		let _ = image::ImageLumaA8(
@@ -717,12 +733,23 @@ impl Chapter {
 				head.subject.to_image()
 			).save(fout, image::PNG);
 			out += &(
-				"<img id=\"h".to_string()+
+				"<img class=\"head\" id=\"h".to_string()+
 				&head.id.simple().to_string()+
 				&"\"".to_string()+
 				&"src=\"img/h".to_string()+
 				&head.id.simple().to_string()+
 				&".png\"></img>".to_string()
+			);
+			gencss += &(
+				"#h".to_string()+
+				&head.id.simple().to_string()+
+				&"{\n\ttop:".to_string()+
+				&head.subject.top_precent.to_string()+
+				&"%;\n\tleft:".to_string()+
+				&head.subject.left_precent.to_string()+
+				&"%;\n\twidth:".to_string()+
+				&head.subject.width_precent.to_string()+
+				&"%;\n}\n".to_string()
 			);
 		}
 		for cont in self.content {
@@ -737,12 +764,23 @@ impl Chapter {
 				cont.to_image()
 			).save(fout, image::PNG);
 			out += &(
-				"<img id=\"c".to_string()+
+				"<img class=\"cont\" id=\"c".to_string()+
 				&cont.id.simple().to_string()+
 				&"\"".to_string()+
 				&"src=\"img/c".to_string()+
 				&cont.id.simple().to_string()+
 				&".png\"></img>".to_string()
+			);
+			gencss += &(
+				"#c".to_string()+
+				&cont.id.simple().to_string()+
+				&"{\n\ttop:".to_string()+
+				&cont.top_precent.to_string()+
+				&"%;\n\tleft:".to_string()+
+				&cont.left_precent.to_string()+
+				&"%;\n\twidth:".to_string()+
+				&cont.width_precent.to_string()+
+				&"%;\n}\n".to_string()
 			);
 		}
 		for idea in self.ideas {
@@ -768,10 +806,24 @@ impl Chapter {
 			).save(cout, image::PNG);
 		}
 		out += include_str!("template_fragments/chapter/index.html2");
+		gencss =
+			"\tpadding-bottom:".to_string()+
+			&self.height_precent.to_string()+
+			&"%;\n".to_string()+
+			&gencss
+		;
+		gencss = String::from(
+			include_str!("template_fragments/chapter/gen.css0")
+		) + &gencss;
 		let ref mut file = File::create(
 			ch_path.join("index.html")
 		).unwrap();
 		writeln!(file, "{}", out)
+			.expect("Chapter output: error creating index");
+		let ref mut file_gencss = File::create(
+			ch_path.join("gen.css")
+		).unwrap();
+		writeln!(file_gencss, "{}", gencss)
 			.expect("Chapter output: error creating index");
 		let ref mut file_scss = File::create(
 			ch_path.join("static.css")
