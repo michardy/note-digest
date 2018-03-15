@@ -715,7 +715,7 @@ impl Chapter {
 			&(self.heading.subject.left_precent*100).to_string()+
 			&"%;\n\twidth:".to_string()+
 			&(self.heading.subject.width_precent*100).to_string()+
-			&"%;\n}\n".to_string()
+			&"%;\nposition:absolute;\n}\n".to_string()
 		);
 		out += include_str!("template_fragments/chapter/index.html1");
 		let _ = image::ImageLumaA8(
@@ -749,7 +749,7 @@ impl Chapter {
 				&(head.subject.left_precent*100).to_string()+
 				&"%;\n\twidth:".to_string()+
 				&(head.subject.width_precent*100).to_string()+
-				&"%;\n}\n".to_string()
+				&"%;\nposition:absolute;\n}\n".to_string()
 			);
 		}
 		for cont in self.content {
@@ -780,7 +780,7 @@ impl Chapter {
 				&(cont.left_precent*100).to_string()+
 				&"%;\n\twidth:".to_string()+
 				&(cont.width_precent*100).to_string()+
-				&"%;\n}\n".to_string()
+				&"%;\nposition:absolute;\n}\n".to_string()
 			);
 		}
 		for idea in self.ideas {

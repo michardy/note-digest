@@ -1,6 +1,7 @@
 main {
 	background-color: white;
 	width: 100%;
+	position:relative;
 	/*Padding percent for page length*/
 {{ BREAK }}
 }
