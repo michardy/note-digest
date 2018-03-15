@@ -710,11 +710,11 @@ impl Chapter {
 			"#t".to_string()+
 			&self.heading.id.simple().to_string()+
 			&"{\n\ttop:".to_string()+
-			&self.heading.subject.top_precent.to_string()+
+			&(self.heading.subject.top_precent*100).to_string()+
 			&"%;\n\tleft:".to_string()+
-			&self.heading.subject.left_precent.to_string()+
+			&(self.heading.subject.left_precent*100).to_string()+
 			&"%;\n\twidth:".to_string()+
-			&self.heading.subject.width_precent.to_string()+
+			&(self.heading.subject.width_precent*100).to_string()+
 			&"%;\n}\n".to_string()
 		);
 		out += include_str!("template_fragments/chapter/index.html1");
@@ -744,11 +744,11 @@ impl Chapter {
 				"#h".to_string()+
 				&head.id.simple().to_string()+
 				&"{\n\ttop:".to_string()+
-				&head.subject.top_precent.to_string()+
+				&(head.subject.top_precent*100).to_string()+
 				&"%;\n\tleft:".to_string()+
-				&head.subject.left_precent.to_string()+
+				&(head.subject.left_precent*100).to_string()+
 				&"%;\n\twidth:".to_string()+
-				&head.subject.width_precent.to_string()+
+				&(head.subject.width_precent*100).to_string()+
 				&"%;\n}\n".to_string()
 			);
 		}
@@ -775,11 +775,11 @@ impl Chapter {
 				"#c".to_string()+
 				&cont.id.simple().to_string()+
 				&"{\n\ttop:".to_string()+
-				&cont.top_precent.to_string()+
+				&(cont.top_precent*100).to_string()+
 				&"%;\n\tleft:".to_string()+
-				&cont.left_precent.to_string()+
+				&(cont.left_precent*100).to_string()+
 				&"%;\n\twidth:".to_string()+
-				&cont.width_precent.to_string()+
+				&(cont.width_precent*100).to_string()+
 				&"%;\n}\n".to_string()
 			);
 		}
@@ -808,7 +808,7 @@ impl Chapter {
 		out += include_str!("template_fragments/chapter/index.html2");
 		gencss =
 			"\tpadding-bottom:".to_string()+
-			&self.height_precent.to_string()+
+			&(self.height_precent*100).to_string()+
 			&"%;\n".to_string()+
 			&gencss
 		;
