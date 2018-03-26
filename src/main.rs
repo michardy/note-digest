@@ -794,6 +794,25 @@ impl Chapter {
 			let _ = image::ImageLumaA8(
 				idea.subject.to_image()
 			).save(hout, image::PNG);
+			out += &(
+				"<img class=\"defi h2\" id=\"dh".to_string()+
+				&idea.id.simple().to_string()+
+				&"\"".to_string()+
+				&"src=\"img/dh".to_string()+
+				&idea.id.simple().to_string()+
+				&".png\"></img>".to_string()
+			);
+			gencss += &(
+				"#dh".to_string()+
+				&idea.id.simple().to_string()+
+				&"{\n\ttop:".to_string()+
+				&(idea.subject.top_precent*(100 as f64)).to_string()+
+				&"%;\n\tleft:".to_string()+
+				&(idea.subject.left_precent*(100 as f64)).to_string()+
+				&"%;\n\twidth:".to_string()+
+				&(idea.subject.width_precent*(100 as f64)).to_string()+
+				&"%;\nposition:absolute;\n}\n".to_string()
+			);
 			let ref mut cout = File::create(
 				ch_path.join(
 					"img/dc".to_string()+
@@ -804,6 +823,25 @@ impl Chapter {
 			let _ = image::ImageLumaA8(
 				idea.extension.to_image()
 			).save(cout, image::PNG);
+			out += &(
+				"<img class=\"defi\" id=\"dc".to_string()+
+				&idea.id.simple().to_string()+
+				&"\"".to_string()+
+				&"src=\"img/dc".to_string()+
+				&idea.id.simple().to_string()+
+				&".png\"></img>".to_string()
+			);
+			gencss += &(
+				"#dc".to_string()+
+				&idea.id.simple().to_string()+
+				&"{\n\ttop:".to_string()+
+				&(idea.extension.top_precent*(100 as f64)).to_string()+
+				&"%;\n\tleft:".to_string()+
+				&(idea.extension.left_precent*(100 as f64)).to_string()+
+				&"%;\n\twidth:".to_string()+
+				&(idea.extension.width_precent*(100 as f64)).to_string()+
+				&"%;\nposition:absolute;\n}\n".to_string()
+			);
 		}
 		out += include_str!("template_fragments/chapter/index.html2");
 		gencss =
