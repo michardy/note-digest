@@ -141,14 +141,10 @@ impl ImgBlob {
 					}
 					claim[tempy][tempx] = true;
 					if tempy > top {
-						queue.push([tempy-1, tempx-1]);
 						queue.push([tempy-1, tempx]);
-						queue.push([tempy-1, tempx+1]);
 					}
 					queue.push([tempy, tempx-1]);
-					queue.push([tempy+1, tempx-1]);
 					queue.push([tempy+1, tempx]);
-					queue.push([tempy+1, tempx+1]);
 					queue.push([tempy, tempx+1]);
 				}
 			}
