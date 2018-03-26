@@ -29,7 +29,7 @@ const MIN_THRESH: u8 = 120;
 const MAX_THRESH: u8 = 126;
 
 /// Minimum width to heigth ratio for object to be considered a line
-const LINE_RATIO: f32 = 0.07;
+const LINE_RATIO: f32 = 3.0;
 
 /// Defines red channel index
 const RED: u8 = 0;
@@ -1058,6 +1058,8 @@ fn add_heading(
 						(page.dimensions[0] as f64);
 					*started = true;
 					linemode = -1;
+				} else {
+					*destroyed += 1;
 				}
 			} else if linemode == 0 {
 				head.number = 2;
