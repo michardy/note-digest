@@ -29,7 +29,7 @@ const MIN_THRESH: u8 = 120;
 const MAX_THRESH: u8 = 126;
 
 /// Minimum width to heigth ratio for object to be considered a line
-const LINE_RATIO: f32 = 3.0;
+const LINE_RATIO: f32 = 4.0;
 
 /// Defines red channel index
 const RED: u8 = 0;
@@ -141,10 +141,14 @@ impl ImgBlob {
 					}
 					claim[tempy][tempx] = true;
 					if tempy > top {
+						queue.push([tempy-1, tempx-1]);
 						queue.push([tempy-1, tempx]);
+						queue.push([tempy-1, tempx+1]);
 					}
 					queue.push([tempy, tempx-1]);
+					queue.push([tempy+1, tempx-1]);
 					queue.push([tempy+1, tempx]);
+					queue.push([tempy+1, tempx+1]);
 					queue.push([tempy, tempx+1]);
 				}
 			}
