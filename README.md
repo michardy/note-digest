@@ -36,6 +36,6 @@ I am still learning rust. This code is probably a little questionable.
     - [ ] Adding definitions
       - [ ] Enable showing/hiding defintions
       - [ ] Enable expanding defintions
-  - [ ] Saving images
+  - [X] Saving images
   - [ ] Positioning Images
 - [ ] Organized code
