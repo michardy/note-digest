@@ -140,7 +140,7 @@ impl ImgBlob {
 						top = tempy;
 					}
 					claim[tempy][tempx] = true;
-					if queue[0][1] > top {
+					if tempy > top {
 						queue.push([tempy-1, tempx-1]);
 						queue.push([tempy-1, tempx]);
 						queue.push([tempy-1, tempx+1]);
@@ -326,7 +326,7 @@ impl Page {
 			}
 			for y in 0..thresh.len() {
 				for x in 0..thresh[0].len() {
-					if thresh[y][x] {
+					if thresh[y][x] && !claimed[y][x] {
 						match ImgBlob::from_top_left(x, y, claimed, &thresh){
 							Some(o) => blobs.push(o),
 							None => {},
