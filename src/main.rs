@@ -9,6 +9,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::io;
 use std::io::Write;
+use std::io::Read;
 use std::io::BufReader;
 use std::io::BufRead;
 use std::fs::File;
@@ -614,6 +615,34 @@ impl Chapter {
 		self.writeable = false;
 		self.height_precent = 0.0;
 	}
+	/// Adds heading to table of contents
+	fn add_to_toc(head: &Heading, parent: PathBuf, pid: Uuid) {
+		let mut f = File::open(parent.join("index.html"))
+			.expect( // This should never happen as we have already verified the file exists
+				"Output Generation: could not find created table of contents"
+			);
+		let mut contents = String::new();
+		f.read_to_string(&mut contents)
+			.expect("Output Generation: error reading created table of contents");
+		contents = contents.replace(
+			"<!-- NEXT CHAPTER -->",
+			&format!(
+				"<a href=\"{}/index.html\" class=\"head tc h1\"><img src=\"{}/img/t{}.png\"/></a>\n\t\t\t<!-- NEXT CHAPTER -->",
+				pid.simple().to_string(),
+				pid.simple().to_string(),
+				head.id.simple().to_string()
+			)
+		);
+		let mut file = File::create(parent.join("index.html"))
+			.expect(
+				"Output Generation: error recreating table of contents"
+			);
+		writeln!(file, "{}", contents)
+			.expect(
+				"Output Generation: error rewriting table of contents"
+			);
+	}
+	/// Writes a chapter object out
 	fn add_chapter(self) {
 		fn assemble_path() -> PathBuf {
 			let dir: PathBuf;
@@ -716,6 +745,11 @@ impl Chapter {
 			&"%;\n\twidth:".to_string()+
 			&(self.heading.subject.width_precent*(100 as f64)).to_string()+
 			&"%;\nposition:absolute;\n}\n".to_string()
+		);
+		Chapter::add_to_toc(
+			&self.heading,
+			comp_out,
+			self.id
 		);
 		out += include_str!("template_fragments/chapter/index.html1");
 		let _ = image::ImageLumaA8(
