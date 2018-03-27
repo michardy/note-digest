@@ -32,10 +32,10 @@ I am still learning rust. This code is probably a little questionable.
   - [x] Splitting chapters by occurences of heading 1
 - [ ] Exporting chapters
   - [ ] Adding to table of contents
-    - [ ] Adding chapter titles
+    - [X] Adding chapter titles
     - [ ] Adding definitions
       - [ ] Enable showing/hiding defintions
       - [ ] Enable expanding defintions
   - [X] Saving images
-  - [ ] Positioning Images
+  - [X] Positioning Images
 - [ ] Organized code
