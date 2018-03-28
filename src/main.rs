@@ -341,8 +341,8 @@ impl Page {
 		let mut rblobs: Vec <ImgBlob> = Vec::new();
 		let mut gblobs: Vec <ImgBlob> = Vec::new();
 		let mut bblobs: Vec <ImgBlob> = Vec::new();
-		let mut img = image::open(&Path::new(&path)).unwrap();
-		img = img.adjust_contrast(-22f32);
+		let img = image::open(&Path::new(&path)).unwrap();
+		//img = img.adjust_contrast(-22f32);
 		let mut row:Vec <bool> = Vec::new();
 		for _ in 0..img.width() {
 			row.push(false);
@@ -351,7 +351,8 @@ impl Page {
 			claimed.push(row.clone());
 			thresh.push(row.clone());
 		}
-		let rgbimg = img.to_rgb();
+		let mut rgbimg = img.to_rgb();
+		rgbimg.equalize();
 		thresh_and_blob(
 			&rgbimg,
 			RED,
@@ -627,7 +628,7 @@ impl Chapter {
 		contents = contents.replace(
 			"<!-- NEXT CHAPTER -->",
 			&format!(
-				"<a href=\"{}/index.html\" class=\"head tc h1\"><img src=\"{}/img/t{}.png\"/></a>\n\t\t\t<!-- NEXT CHAPTER -->",
+				"<a href=\"{}/index.html\" class=\"head tc h1\"><img src=\"{}/img/t{}.png\"/></a><br/>\n\t\t\t<!-- NEXT CHAPTER -->",
 				pid.simple().to_string(),
 				pid.simple().to_string(),
 				head.id.simple().to_string()
@@ -1088,6 +1089,36 @@ impl Sub for [usize; 2] {
 			[other[0]-self[0], self[1]-other[1]]
 		} else{
 			[other[0]-self[0], other[1]-self[1]]
+		}
+	}
+}
+
+trait Equalize {
+	fn equalize(&mut self);
+}
+
+impl Equalize for image::RgbImage {
+	fn equalize(&mut self) {
+		let (width,height) = self.dimensions();
+		let portion = (width as u64 * height as u64) / 256u64;
+		let mut count = [[0u64; 256]; 3]; // 2d array with each color's intensity counts
+		let mut mapping = [[0u8; 256]; 3]; // 2d array with each color's intensity counts
+		for (_, _, pixel) in self.enumerate_pixels() {
+			count[0][pixel[0] as usize] += 1; // Add one to the count for the given intensity in red
+			count[1][pixel[1] as usize] += 1; // Add one to the count for the given intensity in green
+			count[2][pixel[2] as usize] += 1; // Add one to the count for the given intensity in blue
+		}
+		for c in 0..3 {
+			let mut sum: u64 = 0;
+			for i in 0..255 {
+				sum += count[c][i];
+				mapping[c][i] = (sum / portion) as u8;
+			}
+		}
+		for (_, _, pixel) in self.enumerate_pixels_mut() {
+			pixel[0] = mapping[0][pixel[0] as usize]; // remap red pixel
+			pixel[1] = mapping[1][pixel[1] as usize]; // remap red pixel
+			pixel[2] = mapping[2][pixel[2] as usize]; // remap red pixel
 		}
 	}
 }
