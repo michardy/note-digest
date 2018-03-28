@@ -12,6 +12,10 @@ header {
 	background-color: lightgray;
 }
 
+header h1 {
+	padding-left:10px;
+}
+
 footer {
 	color:white;
 }
@@ -43,12 +47,15 @@ footer {
 }
 
 
-.tc .h1 {
+.h1 {
 	right:110;
 }
-.tc .h2 {
+.h1 img {
+	height:50px;
+}
+.h2 {
 	right:120;
 }
-.tc .h3 {
+.h3 {
 	right:130;
 }
