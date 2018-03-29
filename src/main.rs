@@ -1112,13 +1112,13 @@ impl Equalize for image::RgbImage {
 			let mut sum: u64 = 0;
 			for i in 0..255 {
 				sum += count[c][i];
-				mapping[c][i] = (sum / portion) as u8;
+				mapping[c][i] = ((sum / portion) - 1) as u8;
 			}
 		}
 		for (_, _, pixel) in self.enumerate_pixels_mut() {
 			pixel[0] = mapping[0][pixel[0] as usize]; // remap red pixel
-			pixel[1] = mapping[1][pixel[1] as usize]; // remap red pixel
-			pixel[2] = mapping[2][pixel[2] as usize]; // remap red pixel
+			pixel[1] = mapping[1][pixel[1] as usize]; // remap green pixel
+			pixel[2] = mapping[2][pixel[2] as usize]; // remap blue pixel
 		}
 	}
 }
