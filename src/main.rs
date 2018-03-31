@@ -30,7 +30,7 @@ const MIN_THRESH: u8 = 120;
 const MAX_THRESH: u8 = 126;
 
 /// Minimum width to heigth ratio for object to be considered a line
-const LINE_RATIO: f32 = 5.0;
+const LINE_RATIO: f32 = 7.0;
 
 /// Defines red channel index
 const RED: u8 = 0;
@@ -156,8 +156,8 @@ impl ImgBlob {
 			queue.remove(0);
 		}
 		if (
-			bitmap[0].len() + bitmap.len() > 2) &&
-			(bitmap.len() > 1) && (bitmap[0].len() > 1
+			bitmap[0].len() + bitmap.len() > 8) &&
+			(bitmap.len() > 4) && (bitmap[0].len() > 4
 		) {
 			Some(ImgBlob {
 				blob_type:
@@ -352,7 +352,7 @@ impl Page {
 			thresh.push(row.clone());
 		}
 		let mut rgbimg = img.to_rgb();
-		rgbimg.equalize();
+		rgbimg.filter();
 		thresh_and_blob(
 			&rgbimg,
 			RED,
@@ -1093,32 +1093,51 @@ impl Sub for [usize; 2] {
 	}
 }
 
-trait Equalize {
-	fn equalize(&mut self);
+trait Filter {
+	fn filter(&mut self);
 }
 
-impl Equalize for image::RgbImage {
-	fn equalize(&mut self) {
-		let (width,height) = self.dimensions();
-		let portion = (width as u64 * height as u64) / 256u64;
-		let mut count = [[0u64; 256]; 3]; // 2d array with each color's intensity counts
-		let mut mapping = [[0u8; 256]; 3]; // 2d array with each color's intensity counts
-		for (_, _, pixel) in self.enumerate_pixels() {
-			count[0][pixel[0] as usize] += 1; // Add one to the count for the given intensity in red
-			count[1][pixel[1] as usize] += 1; // Add one to the count for the given intensity in green
-			count[2][pixel[2] as usize] += 1; // Add one to the count for the given intensity in blue
-		}
-		for c in 0..3 {
-			let mut sum: u64 = 0;
-			for i in 0..255 {
-				sum += count[c][i];
-				mapping[c][i] = ((sum / portion) - 1) as u8;
-			}
-		}
+impl Filter for image::RgbImage {
+	fn filter(&mut self) {
 		for (_, _, pixel) in self.enumerate_pixels_mut() {
-			pixel[0] = mapping[0][pixel[0] as usize]; // remap red pixel
-			pixel[1] = mapping[1][pixel[1] as usize]; // remap green pixel
-			pixel[2] = mapping[2][pixel[2] as usize]; // remap blue pixel
+			if pixel[0] > pixel[1] && pixel[0] > pixel[2] {
+				let avg = ((pixel[1] as u16+pixel[2] as u16)/2u16) as u8;
+				if pixel[0] - avg > 60 {
+					pixel[0] = 255u8;
+					pixel[1] = 0u8;
+					pixel[2] = 0u8;
+				} else {
+					pixel[0] = 255u8;
+					pixel[1] = 255u8;
+					pixel[2] = 255u8;
+				}
+			} else if pixel[1] > pixel[0] && pixel[1] > pixel[2] {
+				let avg = ((pixel[0] as u16+pixel[2] as u16)/2u16) as u8;
+				if pixel[1] - avg > 60 {
+					pixel[0] = 0u8;
+					pixel[1] = 255u8;
+					pixel[2] = 0u8;
+				} else {
+					pixel[0] = 255u8;
+					pixel[1] = 255u8;
+					pixel[2] = 255u8;
+				}
+			} else if pixel[2] > pixel[0] && pixel[2] > pixel[1] {
+				let avg = ((pixel[0] as u16+pixel[1] as u16)/2u16) as u8;
+				if pixel[2] - avg > 60 {
+					pixel[0] = 0u8;
+					pixel[1] = 0u8;
+					pixel[2] = 255u8;
+				} else {
+					pixel[0] = 255u8;
+					pixel[1] = 255u8;
+					pixel[2] = 255u8;
+				}
+			} else {
+				pixel[0] = 255u8;
+				pixel[1] = 255u8;
+				pixel[2] = 255u8;
+			}
 		}
 	}
 }
