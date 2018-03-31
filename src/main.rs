@@ -967,7 +967,7 @@ fn get_images() -> Vec <String> {
 					.map(|x| x.to_string()).collect();
 				let start = numbers[0].parse::<usize>().unwrap();
 				let end = numbers[1].parse::<usize>().unwrap();
-				for i in start..end {
+				for i in start..(end+1) {
 					selected.push(mpaths[i].clone());
 				}
 			} else {
