@@ -480,6 +480,7 @@ impl Idea {
 struct Content {
 	id: Uuid,
 	top_pix: u32,
+	top_total_pix: u32, // workaround to fix index out of bounds error caused when writing image out
 	top_precent: f64,
 	left_pix: u32,
 	left_precent: f64,
@@ -491,8 +492,8 @@ struct Content {
 }
 
 impl Content {
-	fn update_size_pos(&mut self, dim: [u32; 2]) {
-		let mut top: u32 = <u32>::max_value();
+	fn update_size_pos(&mut self, dim: [u32; 2], cur_height: i64) {
+		let mut top: i64 = (<u32>::max_value()) as i64;
 		let mut left: u32 = <u32>::max_value();
 		let mut bottom: u32 = 0;
 		let mut right: u32 = 0;
@@ -502,7 +503,7 @@ impl Content {
 		);
 		for b in &self.blobs {
 			if b.top_left[1] < top as usize {
-				top = b.top_left[1] as u32;
+				top = b.top_left[1] as i64;
 			}
 			if b.top_left[0] < left as usize {
 				left = b.top_left[0] as u32;
@@ -514,19 +515,26 @@ impl Content {
 				right = b.bottom_right[0] as u32;
 			}
 		}
-		self.top_pix = top;
-		self.top_precent = (top as f64) / (dim[1] as f64);
+		self.top_pix = top as u32;
+		self.top_total_pix = (top + cur_height) as u32;
+		// The height percents should not be final and should probably not be set here
+		self.top_precent = (self.top_total_pix as f64) / ((dim[1] as i64 + cur_height) as f64);
 		self.left_pix = left;
 		self.left_precent = (left as f64) / (dim[0] as f64);
 		self.width_pix = right - left;
-		self.width_precent = (self.width_pix as f64) / (dim[1] as f64);
-		self.height_pix = bottom - top;
-		self.height_precent = (self.left_pix as f64) / (dim[0] as f64);
+		self.width_precent = (self.width_pix as f64) / (dim[0] as f64);
+		self.height_pix = (bottom as i64 - top) as u32;
+		self.height_precent = (self.height_pix as f64) / ((dim[1] as i64 + cur_height) as f64);
 	}
-	fn new(blobs: Vec <ImgBlob>, dim: [u32; 2]) -> Content {
+	fn update_top(&mut self, cur_height: &i64) {
+		self.top_precent = (self.top_total_pix as f64) / (*cur_height as f64);
+		self.height_precent = (self.height_pix as f64) / (*cur_height as f64);
+	}
+	fn new(blobs: Vec <ImgBlob>, dim: [u32; 2], cur_height: i64) -> Content {
 		let mut out = Content {
 			id: Uuid::new_v4(),
 			top_pix: 0u32,
+			top_total_pix: 0u32,
 			top_precent: 0f64,
 			left_pix: 0u32,
 			left_precent: 0f64,
@@ -536,13 +544,14 @@ impl Content {
 			height_precent: 0f64,
 			blobs: blobs.clone()
 		};
-		out.update_size_pos(dim);
+		out.update_size_pos(dim, cur_height);
 		out
 	}
 	fn empty() -> Content {
 		Content {
 			id: Uuid::new_v4(),
 			top_pix: 0u32,
+			top_total_pix: 0u32,
 			top_precent: 0f64,
 			left_pix: 0u32,
 			left_precent: 0f64,
@@ -589,7 +598,8 @@ struct Chapter {
 	ideas: Vec <Idea>,
 	content: Vec <Content>,
 	writeable: bool,
-	height_precent: f64
+	height_precent: f64,
+	cur_height: i64 // use of i64 rather than u64 allows future negative starting value to componsate against mid page start
 }
 
 impl Chapter {
@@ -602,7 +612,8 @@ impl Chapter {
 			ideas: Vec::new(),
 			content: Vec::new(),
 			writeable: false,
-			height_precent: 0.0
+			height_precent: 0.0,
+			cur_height: 0
 		}
 	}
 	/// Blanks a `Chapter` object.
@@ -644,7 +655,7 @@ impl Chapter {
 			);
 	}
 	/// Writes a chapter object out
-	fn add_chapter(self) {
+	fn add_chapter(&mut self) {
 		fn assemble_path() -> PathBuf {
 			let dir: PathBuf;
 			match env::home_dir() {
@@ -736,6 +747,7 @@ impl Chapter {
 			&self.heading.id.simple().to_string()+
 			&".png\"></img>".to_string()
 		);
+		self.heading.subject.update_top(&self.cur_height);
 		gencss += &(
 			"#t".to_string()+
 			&self.heading.id.simple().to_string()+
@@ -756,7 +768,7 @@ impl Chapter {
 		let _ = image::ImageLumaA8(
 			self.heading.subject.to_image()
 		).save(fout, image::PNG);
-		for head in self.sub_headings {
+		for mut head in &mut self.sub_headings {
 			let ref mut fout = File::create(
 				ch_path.join(
 					"img/h".to_string()+
@@ -775,6 +787,7 @@ impl Chapter {
 				&head.id.simple().to_string()+
 				&".png\"></img>".to_string()
 			);
+			head.subject.update_top(&self.cur_height);
 			gencss += &(
 				"#h".to_string()+
 				&head.id.simple().to_string()+
@@ -787,7 +800,7 @@ impl Chapter {
 				&"%;\nposition:absolute;\n}\n".to_string()
 			);
 		}
-		for cont in self.content {
+		for mut cont in &mut self.content {
 			let ref mut fout = File::create(
 				ch_path.join(
 					"img/c".to_string()+
@@ -806,6 +819,7 @@ impl Chapter {
 				&cont.id.simple().to_string()+
 				&".png\"></img>".to_string()
 			);
+			cont.update_top(&self.cur_height);
 			gencss += &(
 				"#c".to_string()+
 				&cont.id.simple().to_string()+
@@ -818,7 +832,7 @@ impl Chapter {
 				&"%;\nposition:absolute;\n}\n".to_string()
 			);
 		}
-		for idea in self.ideas {
+		for mut idea in &mut self.ideas {
 			let ref mut hout = File::create(
 				ch_path.join(
 					"img/dh".to_string()+
@@ -837,6 +851,7 @@ impl Chapter {
 				&idea.id.simple().to_string()+
 				&".png\"></img>".to_string()
 			);
+			idea.subject.update_top(&self.cur_height);
 			gencss += &(
 				"#dh".to_string()+
 				&idea.id.simple().to_string()+
@@ -866,6 +881,7 @@ impl Chapter {
 				&idea.id.simple().to_string()+
 				&".png\"></img>".to_string()
 			);
+			idea.extension.update_top(&self.cur_height);
 			gencss += &(
 				"#dc".to_string()+
 				&idea.id.simple().to_string()+
@@ -1026,7 +1042,7 @@ fn add_content(
 	started: bool
 ) {
 	if started {
-		chapter.content.push(Content::new(clump.blobs, page.dimensions));
+		chapter.content.push(Content::new(clump.blobs, page.dimensions, chapter.cur_height));
 	} else {
 		*destroyed += clump.blobs.len();
 	}
@@ -1065,8 +1081,8 @@ fn add_definition(
 			}
 		}
 		let mut idea = Idea::new();
-		idea.subject = Content::new(name, page.dimensions);
-		idea.extension = Content::new(cont, page.dimensions);
+		idea.subject = Content::new(name, page.dimensions, chapter.cur_height);
+		idea.extension = Content::new(cont, page.dimensions, chapter.cur_height);
 		idea.update_size_pos(page.dimensions);
 		chapter.ideas.push(idea);
 	} else {
@@ -1167,12 +1183,13 @@ fn add_heading(
 					(diff[1] as f32) < 1f32/20f32*(page.dimensions[1] as f32)
 				{
 					if *started {
+						chapter.cur_height += page.dimensions[1] as i64;
 						(chapter.clone()).add_chapter();
 						*created += 1;
 					}
 					chapter.blank();
 					head.number = 1;
-					head.subject.update_size_pos(page.dimensions);
+					head.subject.update_size_pos(page.dimensions, chapter.cur_height);
 					chapter.heading = head.clone();
 					head = Heading::new();
 					chapter.height_precent +=
@@ -1203,7 +1220,7 @@ fn add_heading(
 					head.number
 				);
 				if *started {
-					head.subject.update_size_pos(page.dimensions);
+					head.subject.update_size_pos(page.dimensions, chapter.cur_height);
 					chapter.sub_headings.push(head.clone());
 					linemode = 0;
 					head = Heading::new();
@@ -1221,7 +1238,7 @@ fn add_heading(
 			"Found heading.number of 1. Expected 2 or 3"
 		);
 		if *started {
-			head.subject.update_size_pos(page.dimensions);
+			head.subject.update_size_pos(page.dimensions, chapter.cur_height);
 			chapter.sub_headings.push(head);
 		} else {
 			*destroyed += head.subject.blobs.len();
@@ -1287,6 +1304,7 @@ fn main() {
 			};
 			i += 1;
 		}
+		chapter.cur_height += p.dimensions[1] as i64;
 	}
 	if chapter.heading.subject.blobs.len() > 0 {
 		chapter.add_chapter();
