@@ -203,12 +203,16 @@ impl Clump {
 			if t == clumps[clen-1].ctype {
 				clumps[clen-1].blobs.push(blob);
 			} else {
-				clumps.push(
-					Clump {
-						ctype: t,
-						blobs: vec![blob]
-					}
-				);
+				if (blob.top_left[0] - blob.bottom_right[0]) +
+					(blob.top_left[1] - blob.bottom_right[1]) > 8
+				{
+					clumps.push(
+						Clump {
+							ctype: t,
+							blobs: vec![blob]
+						}
+					);
+				}
 			}
 		} else {
 			clumps.push(
@@ -271,9 +275,9 @@ impl Page {
 				bpos = <usize>::max_value();
 			}
 			match Page::get_highest(rpos, gpos, bpos) {
-				0 => Clump::clump_update(rblobs.remove(0), 0, &mut clumps),
-				1 => Clump::clump_update(gblobs.remove(0), 1, &mut clumps),
-				2 => Clump::clump_update(bblobs.remove(0), 2, &mut clumps),
+				RED   => Clump::clump_update(rblobs.remove(0), 0, &mut clumps),
+				GREEN => Clump::clump_update(gblobs.remove(0), 1, &mut clumps),
+				BLUE  => Clump::clump_update(bblobs.remove(0), 2, &mut clumps),
 				_ => panic!("Invalid clump type(>2)"),
 			};
 		}
