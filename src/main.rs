@@ -1072,6 +1072,10 @@ fn add_definition(
 				break;
 			}
 		}
+		if line.bottom_right[1] == 0 {
+			*destroyed += clump.blobs.len();
+			return;
+		}
 		for i in 0..clump.blobs.len() {
 			if clump.blobs[i] != line {
 				if is_underlined(clump.blobs[i].clone(), &line) {
@@ -1082,9 +1086,15 @@ fn add_definition(
 			}
 		}
 		let mut idea = Idea::new();
+		if name.len() == 0 {
+			*destroyed += clump.blobs.len();
+			return;
+		}
 		idea.subject = Content::new(name, page.dimensions, chapter.cur_height);
-		idea.extension = Content::new(cont, page.dimensions, chapter.cur_height);
-		idea.update_size_pos(page.dimensions);
+		if cont.len() > 0 {
+			idea.extension = Content::new(cont, page.dimensions, chapter.cur_height);
+			idea.update_size_pos(page.dimensions); // probably unused
+		}
 		chapter.ideas.push(idea);
 	} else {
 		*destroyed += clump.blobs.len();
