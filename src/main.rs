@@ -626,6 +626,7 @@ impl Chapter {
 		self.content = Vec::new();
 		self.writeable = false;
 		self.height_precent = 0.0;
+		self.cur_height = 0;
 	}
 	/// Adds heading to table of contents
 	fn add_to_toc(head: &Heading, parent: PathBuf, pid: Uuid) {
