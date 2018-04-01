@@ -204,7 +204,7 @@ impl Clump {
 				clumps[clen-1].blobs.push(blob);
 			} else {
 				if (blob.top_left[0] - blob.bottom_right[0]) +
-					(blob.top_left[1] - blob.bottom_right[1]) > 8
+					(blob.top_left[1] - blob.bottom_right[1]) > 16
 				{
 					clumps.push(
 						Clump {
