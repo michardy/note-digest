@@ -197,21 +197,38 @@ impl Clump {
 	/// Add an `ImgBlob` object to an array of clumps.
 	/// If the blob is not of the same type as the current clump create a new clump.
 	/// Otherwise add it to the current clump.
-	fn clump_update(blob:ImgBlob, t: u8, clumps: &mut Vec <Clump>){
+	fn clump_update(blob:ImgBlob, t: u8, tn: u8, clumps: &mut Vec <Clump>){
 		let clen = clumps.len();
 		if clen > 0 {
 			if t == clumps[clen-1].ctype {
 				clumps[clen-1].blobs.push(blob);
 			} else {
-				if (blob.top_left[0] - blob.bottom_right[0]) +
-					(blob.top_left[1] - blob.bottom_right[1]) > 50
-				{
-					clumps.push(
+				match t {
+					RED   => if ((blob.top_left[0] - blob.bottom_right[0]) +
+						(blob.top_left[1] - blob.bottom_right[1]) > 50) &&
+						tn == RED
+					{
+						clumps.push(
+							Clump {
+								ctype: t,
+								blobs: vec![blob]
+							}
+						);
+					},
+					GREEN => if tn == GREEN {
+						clumps.push(
+							Clump {
+								ctype: t,
+								blobs: vec![blob]
+							}
+						);
+					},
+					_     => clumps.push(
 						Clump {
 							ctype: t,
 							blobs: vec![blob]
 						}
-					);
+					),
 				}
 			}
 		} else {
@@ -274,12 +291,20 @@ impl Page {
 			} else {
 				bpos = <usize>::max_value();
 			}
-			match Page::get_highest(rpos, gpos, bpos) {
-				RED   => Clump::clump_update(rblobs.remove(0), 0, &mut clumps),
-				GREEN => Clump::clump_update(gblobs.remove(0), 1, &mut clumps),
-				BLUE  => Clump::clump_update(bblobs.remove(0), 2, &mut clumps),
+			let high_color = Page::get_highest(rpos, gpos, bpos);
+			let blob = match high_color {
+				RED   => rblobs.remove(0),
+				GREEN => gblobs.remove(0),
+				BLUE  => bblobs.remove(0),
 				_ => panic!("Invalid clump type(>2)"),
 			};
+			let next_highest = Page::get_highest(rpos, gpos, bpos);
+			Clump::clump_update(
+				blob,
+				high_color,
+				next_highest,
+				&mut clumps
+			);
 		}
 		Page {
 			clumps: clumps,
@@ -1133,7 +1158,7 @@ impl Filter for image::RgbImage {
 		for (_, _, pixel) in self.enumerate_pixels_mut() {
 			if pixel[0] > pixel[1] && pixel[0] > pixel[2] {
 				let avg = ((pixel[1] as u16+pixel[2] as u16)/2u16) as u8;
-				if pixel[0] - avg > 60 {
+				if pixel[0] - avg > 70 {
 					pixel[0] = 255u8;
 					pixel[1] = 0u8;
 					pixel[2] = 0u8;
@@ -1144,7 +1169,7 @@ impl Filter for image::RgbImage {
 				}
 			} else if pixel[1] > pixel[0] && pixel[1] > pixel[2] {
 				let avg = ((pixel[0] as u16+pixel[2] as u16)/2u16) as u8;
-				if pixel[1] - avg > 60 {
+				if pixel[1] - avg > 20 {
 					pixel[0] = 0u8;
 					pixel[1] = 255u8;
 					pixel[2] = 0u8;
@@ -1155,7 +1180,8 @@ impl Filter for image::RgbImage {
 				}
 			} else if pixel[2] > pixel[0] && pixel[2] > pixel[1] {
 				let avg = ((pixel[0] as u16+pixel[1] as u16)/2u16) as u8;
-				if pixel[2] - avg > 60 {
+				let avg2 = ((pixel[0] as u16+pixel[1] as u16+pixel[2] as u16)/3u16) as u8;
+				if avg2 < 130 && pixel[2] - avg > 60 {
 					pixel[0] = 0u8;
 					pixel[1] = 0u8;
 					pixel[2] = 255u8;
