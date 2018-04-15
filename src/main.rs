@@ -156,8 +156,8 @@ impl ImgBlob {
 			queue.remove(0);
 		}
 		if (
-			bitmap[0].len() + bitmap.len() > 8) &&
-			(bitmap.len() > 4) && (bitmap[0].len() > 4
+			bitmap[0].len() + bitmap.len() > 16) &&
+			(bitmap.len() > 8) && (bitmap[0].len() > 8
 		) {
 			Some(ImgBlob {
 				blob_type:
@@ -658,7 +658,7 @@ impl Chapter {
 		self.cur_height = 0;
 	}
 	/// Adds heading to table of contents
-	fn add_to_toc(head: &Heading, parent: PathBuf, pid: Uuid) {
+	fn add_to_toc(head: &Heading, parent: &PathBuf, pid: Uuid) {
 		let mut f = File::open(parent.join("index.html"))
 			.expect( // This should never happen as we have already verified the file exists
 				"Output Generation: could not find created table of contents"
@@ -682,6 +682,35 @@ impl Chapter {
 		writeln!(file, "{}", contents)
 			.expect(
 				"Output Generation: error rewriting table of contents"
+			);
+	}
+	/// Adds definition to review
+	fn add_to_review(def: &Idea, parent: &PathBuf, pid: Uuid) {
+		let mut f = File::open(parent.join("review.html"))
+			.expect( // This should never happen as we have already verified the file exists
+				"Output Generation: could not find created review"
+			);
+		let mut contents = String::new();
+		f.read_to_string(&mut contents)
+			.expect("Output Generation: error reading created review");
+		contents = contents.replace(
+			"<!-- NEXT DEFINITION -->",
+			&format!(
+				"<div>\t\n<a href=\"{}/index.html\"><img class=\"defi\" src=\"{}/img/dh{}.png\"></img></a>\t\n<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\t\n<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"></img>\n</div>\n<!-- NEXT DEFINITION -->",
+				pid.simple().to_string(),
+				pid.simple().to_string(),
+				def.id.simple().to_string(),
+				pid.simple().to_string(),
+				def.id.simple().to_string()
+			)
+		);
+		let mut file = File::create(parent.join("review.html"))
+			.expect(
+				"Output Generation: error recreating review"
+			);
+		writeln!(file, "{}", contents)
+			.expect(
+				"Output Generation: error rewriting review"
 			);
 	}
 	/// Writes a chapter object out
@@ -708,6 +737,15 @@ impl Chapter {
 			writeln!(file, include_str!("templates/table/index.html"))
 				.expect(
 					"Output Generation: error writing to root index"
+				);
+			file = File::create(
+				comp_out.join("review.html")
+			).expect(
+				"Output Generation: error creating review"
+			);
+			writeln!(file, include_str!("templates/table/review.html"))
+				.expect(
+					"Output Generation: error writing to review"
 				);
 			file = File::create(
 				comp_out.join("static.css")
@@ -791,7 +829,7 @@ impl Chapter {
 		);
 		Chapter::add_to_toc(
 			&self.heading,
-			comp_out,
+			&comp_out,
 			self.id
 		);
 		out += include_str!("template_fragments/chapter/index.html1");
@@ -922,6 +960,11 @@ impl Chapter {
 				&"%;\n\twidth:".to_string()+
 				&(idea.extension.width_precent*(100 as f64)).to_string()+
 				&"%;\nposition:absolute;\n}\n".to_string()
+			);
+			Chapter::add_to_review(
+				&idea,
+				&comp_out,
+				self.id
 			);
 		}
 		out += include_str!("template_fragments/chapter/index.html2");

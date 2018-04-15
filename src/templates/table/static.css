@@ -44,6 +44,7 @@ footer {
 }
 .defi {
 	filter: url("hue.svg#green");
+	height:50px;
 }
 
 

@@ -16,6 +16,12 @@ function req_fullscreen() {
 		elem.webkitRequestFullscreen();
 	}
 }
-function show_sub(obj) {
-	
+function toggle_sub(obj) {
+	if (obj.parentElement.children[3].style.display == 'block') {
+		obj.parentElement.children[3].style.display = 'none';
+		obj.innerText = "◀";
+	} else {
+		obj.parentElement.children[3].style.display = 'block';
+		obj.innerText = "▼";
+	}
 }
