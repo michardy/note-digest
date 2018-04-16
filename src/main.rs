@@ -696,7 +696,7 @@ impl Chapter {
 		contents = contents.replace(
 			"<!-- NEXT DEFINITION -->",
 			&format!(
-				"<div class=\"def-parent\">\t\n<a href=\"{}/index.html\"><img class=\"defi\" src=\"{}/img/dh{}.png\"></img></a>\t\n<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\t\n<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"></img>\n</div>\n<!-- NEXT DEFINITION -->",
+				"<div class=\"def-parent\">\t\n<a href=\"{}/index.html\"><img class=\"defi expandable\" src=\"{}/img/dh{}.png\"></img></a>\t\n<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\t\n<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"></img>\n</div>\n<!-- NEXT DEFINITION -->",
 				pid.simple().to_string(),
 				pid.simple().to_string(),
 				def.id.simple().to_string(),
