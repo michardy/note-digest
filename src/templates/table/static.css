@@ -44,9 +44,18 @@ footer {
 }
 .defi {
 	filter: url("hue.svg#green");
-	height:50px;
+	max-width:75%;
 }
 
+.def-parent {
+	padding-bottom: 20px;
+	padding-left: 10px;
+}
+
+.def-parent button {
+	border:none;
+	background: none;
+}
 
 .h1 {
 	right:110;

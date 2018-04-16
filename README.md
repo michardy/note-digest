@@ -33,9 +33,9 @@ I am still learning rust. This code is probably a little questionable.
 - [ ] Exporting chapters
   - [ ] Adding to table of contents
     - [X] Adding chapter titles
-    - [ ] Adding definitions
-      - [ ] Enable showing/hiding defintions
-      - [ ] Enable expanding defintions
+    - [X] Adding definitions
+      - [X] Enable showing/hiding defintions
+      - [X] Enable expanding defintions
   - [X] Saving images
   - [X] Positioning Images
 - [ ] Organized code
