@@ -4,3 +4,6 @@ release:
 
 doc:
 	cargo rustdoc -- --document-private-items
+
+install:
+	cp target/release/notedigest /bin/notedigest
