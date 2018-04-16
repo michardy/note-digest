@@ -1102,7 +1102,7 @@ fn get_images() -> Vec <String> {
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
 	let mut uin = String::new();
 	io::stdin().read_line(&mut uin).ok().expect("Error reading line");
-	uin.pop();
+	uin = uin.trim().to_string();
 	parse_input(uin, mpaths, &mut new)
 }
 
