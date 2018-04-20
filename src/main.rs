@@ -814,7 +814,7 @@ impl Chapter {
 			&self.heading.id.simple().to_string()+
 			&"\" src=\"img/t".to_string()+
 			&self.heading.id.simple().to_string()+
-			&".png\"></img>".to_string()
+			&".png\"/>".to_string()
 		);
 		self.heading.subject.update_top(&self.cur_height);
 		gencss += &(
@@ -858,7 +858,7 @@ impl Chapter {
 				&"\"".to_string()+
 				&" src=\"img/h".to_string()+
 				&head.id.simple().to_string()+
-				&".png\"></img>\n".to_string()
+				&".png\"/>\n".to_string()
 			);
 			head.subject.update_top(&self.cur_height);
 			gencss += &(
@@ -890,7 +890,7 @@ impl Chapter {
 				&"\"".to_string()+
 				&" src=\"img/c".to_string()+
 				&cont.id.simple().to_string()+
-				&".png\"></img>\n".to_string()
+				&".png\"/>\n".to_string()
 			);
 			cont.update_top(&self.cur_height);
 			gencss += &(
@@ -922,7 +922,7 @@ impl Chapter {
 				&"\"".to_string()+
 				&" src=\"img/dh".to_string()+
 				&idea.id.simple().to_string()+
-				&".png\"></img>\n".to_string()
+				&".png\"/>\n".to_string()
 			);
 			idea.subject.update_top(&self.cur_height);
 			gencss += &(
@@ -952,7 +952,7 @@ impl Chapter {
 				&"\"".to_string()+
 				&" src=\"img/dc".to_string()+
 				&idea.id.simple().to_string()+
-				&".png\"></img>\n".to_string()
+				&".png\"/>\n".to_string()
 			);
 			idea.extension.update_top(&self.cur_height);
 			gencss += &(
