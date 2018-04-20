@@ -696,8 +696,9 @@ impl Chapter {
 		contents = contents.replace(
 			"<!-- NEXT DEFINITION -->",
 			&format!(
-				"<div class=\"def-parent\">\n\t\t\t\t<a href=\"{}/index.html\">\n\t\t\t\t\t<img class=\"defi expandable\" src=\"{}/img/dh{}.png\"></img></a>\n\t\t\t\t<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\n\t\t\t\t<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"/>\n\t\t\t</div>\n\t\t\t<!-- NEXT DEFINITION -->",
+				"<div class=\"def-parent\">\n\t\t\t\t<a href=\"{}/index.html#dh{}\">\n\t\t\t\t\t<img class=\"defi expandable\" src=\"{}/img/dh{}.png\"></img></a>\n\t\t\t\t<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\n\t\t\t\t<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"/>\n\t\t\t</div>\n\t\t\t<!-- NEXT DEFINITION -->",
 				pid.simple().to_string(),
+				def.id.simple().to_string(),
 				pid.simple().to_string(),
 				def.id.simple().to_string(),
 				pid.simple().to_string(),
