@@ -424,7 +424,7 @@ impl Heading {
 	fn new() -> Heading {
 		Heading {
 			id: Uuid::new_v4(),
-			number:0,
+			number:3,
 			subject: Content::empty()
 		}
 	}
@@ -669,7 +669,7 @@ impl Chapter {
 		contents = contents.replace(
 			"<!-- NEXT CHAPTER -->",
 			&format!(
-				"<a href=\"{}/index.html\" class=\"head tc h1\"><img src=\"{}/img/t{}.png\"/></a><br/>\n\t\t\t<!-- NEXT CHAPTER -->",
+				"<a href=\"{}/index.html\" class=\"head tc h1\">\n\t\t\t\t<img src=\"{}/img/t{}.png\"/>\n\t\t\t</a><br/>\n\t\t\t<!-- NEXT CHAPTER -->",
 				pid.simple().to_string(),
 				pid.simple().to_string(),
 				head.id.simple().to_string()
@@ -696,7 +696,7 @@ impl Chapter {
 		contents = contents.replace(
 			"<!-- NEXT DEFINITION -->",
 			&format!(
-				"<div class=\"def-parent\">\t\n<a href=\"{}/index.html\"><img class=\"defi expandable\" src=\"{}/img/dh{}.png\"></img></a>\t\n<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\t\n<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"></img>\n</div>\n<!-- NEXT DEFINITION -->",
+				"<div class=\"def-parent\">\n\t\t\t\t<a href=\"{}/index.html\">\n\t\t\t\t\t<img class=\"defi expandable\" src=\"{}/img/dh{}.png\"></img></a>\n\t\t\t\t<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\n\t\t\t\t<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"/>\n\t\t\t</div>\n\t\t\t<!-- NEXT DEFINITION -->",
 				pid.simple().to_string(),
 				pid.simple().to_string(),
 				def.id.simple().to_string(),
@@ -848,12 +848,16 @@ impl Chapter {
 				head.subject.to_image()
 			).save(fout, image::PNG);
 			out += &(
-				"<img class=\"head\" id=\"h".to_string()+
+				if head.number == 2 {
+					"\t\t\t<img class=\"head h2\" id=\"h"
+				} else {
+					"\t\t\t<img class=\"head h3\" id=\"h"
+				}.to_string()+
 				&head.id.simple().to_string()+
 				&"\"".to_string()+
-				&"src=\"img/h".to_string()+
+				&" src=\"img/h".to_string()+
 				&head.id.simple().to_string()+
-				&".png\"></img>".to_string()
+				&".png\"></img>\n".to_string()
 			);
 			head.subject.update_top(&self.cur_height);
 			gencss += &(
@@ -880,12 +884,12 @@ impl Chapter {
 				cont.to_image()
 			).save(fout, image::PNG);
 			out += &(
-				"<img class=\"cont\" id=\"c".to_string()+
+				"\t\t\t<img class=\"cont\" id=\"c".to_string()+
 				&cont.id.simple().to_string()+
 				&"\"".to_string()+
-				&"src=\"img/c".to_string()+
+				&" src=\"img/c".to_string()+
 				&cont.id.simple().to_string()+
-				&".png\"></img>".to_string()
+				&".png\"></img>\n".to_string()
 			);
 			cont.update_top(&self.cur_height);
 			gencss += &(
@@ -912,12 +916,12 @@ impl Chapter {
 				idea.subject.to_image()
 			).save(hout, image::PNG);
 			out += &(
-				"<img class=\"defi h2\" id=\"dh".to_string()+
+				"\t\t\t<img class=\"defi h2\" id=\"dh".to_string()+
 				&idea.id.simple().to_string()+
 				&"\"".to_string()+
-				&"src=\"img/dh".to_string()+
+				&" src=\"img/dh".to_string()+
 				&idea.id.simple().to_string()+
-				&".png\"></img>".to_string()
+				&".png\"></img>\n".to_string()
 			);
 			idea.subject.update_top(&self.cur_height);
 			gencss += &(
@@ -942,12 +946,12 @@ impl Chapter {
 				idea.extension.to_image()
 			).save(cout, image::PNG);
 			out += &(
-				"<img class=\"defi\" id=\"dc".to_string()+
+				"\t\t\t<img class=\"defi\" id=\"dc".to_string()+
 				&idea.id.simple().to_string()+
 				&"\"".to_string()+
-				&"src=\"img/dc".to_string()+
+				&" src=\"img/dc".to_string()+
 				&idea.id.simple().to_string()+
-				&".png\"></img>".to_string()
+				&".png\"></img>\n".to_string()
 			);
 			idea.extension.update_top(&self.cur_height);
 			gencss += &(
