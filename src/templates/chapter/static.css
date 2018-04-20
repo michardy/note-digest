@@ -24,8 +24,11 @@ footer {
 	display: inline-block;
 }
 
-#home {
+.fake_heading{
 	font-size:20pt;
+}
+
+#home {
 	color:black;
 	text-decoration:none;
 	font-weight:bold;
