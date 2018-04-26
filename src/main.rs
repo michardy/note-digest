@@ -1229,7 +1229,7 @@ impl Filter for image::RgbImage {
 			} else if pixel[2] > pixel[0] && pixel[2] > pixel[1] {
 				let avg = ((pixel[0] as u16+pixel[1] as u16)/2u16) as u8;
 				let avg2 = ((pixel[0] as u16+pixel[1] as u16+pixel[2] as u16)/3u16) as u8;
-				if avg2 < 130 && pixel[2] - avg > 60 {
+				if avg2 < 155 && pixel[2] - avg > 60 {
 					pixel[0] = 0u8;
 					pixel[1] = 0u8;
 					pixel[2] = 255u8;
