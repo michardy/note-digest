@@ -6,7 +6,7 @@ function adjust_size(cont) {
 	view.style.transform = "translate("+trans+"%, "+trans+"%) scale("+scale+")";
 }
 function color(box) {
-	if (box.checked) {
+	if (!box.checked) {
 		var heads = document.getElementsByClassName('head');
 		while (heads.length > 0) {
 			heads[0].classList.add('hiddenred');
