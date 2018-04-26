@@ -59,16 +59,20 @@ footer {
 }
 
 .h1 {
-	right:110;
+	left:50px;
+	position:relative;
 }
 .h1 img {
-	height:50px;
+	max-width:75%;
+	max-height:10vh;
 }
 .h2 {
-	right:120;
+	left:60px;
+	position:relative;
 }
 .h3 {
-	right:130;
+	left:70px;
+	position:relative;
 }
 
 .expandable {
