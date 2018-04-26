@@ -156,7 +156,7 @@ impl ImgBlob {
 			queue.remove(0);
 		}
 		if (
-			bitmap[0].len() + bitmap.len() > 16) &&
+			bitmap[0].len() + bitmap.len() > 16) ||
 			(bitmap.len() > 8) && (bitmap[0].len() > 8
 		) {
 			Some(ImgBlob {
@@ -204,8 +204,8 @@ impl Clump {
 				clumps[clen-1].blobs.push(blob);
 			} else {
 				match t {
-					RED   => if ((blob.top_left[0] - blob.bottom_right[0]) +
-						(blob.top_left[1] - blob.bottom_right[1]) > 50) &&
+					RED   => if ((blob.bottom_right[0] - blob.top_left[0]) +
+						(blob.bottom_right[1] - blob.top_left[1]) > 50) &&
 						tn == RED
 					{
 						clumps.push(
