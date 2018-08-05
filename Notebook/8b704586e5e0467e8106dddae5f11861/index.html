@@ -1,0 +1,78 @@
+<!--
+Produced with Notedigest
+Which is distributed under the MIT license.  For more information see this page:
+https://github.com/michardy/note-digest/blob/master/LICENSE
+
+Downloads can be found here:
+https://github.com/michardy/note-digest/releases
+
+Code is freely available on github:
+https://github.com/michardy/note-digest
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Notes</title>
+		<link rel="stylesheet" href="static.css"/>
+		<link rel="stylesheet" href="gen.css"/>
+		<script src="util.js"></script>
+		<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0">
+		<!--Please wait while I sacrafice a newborn goat to IE/Edge. (Edit: It still does not work)-->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="description" content="Notes organized and digitized with notedigest (https://github.com/michardy/note-digest)">
+	</head>
+	<body>
+		<header>
+			<span class="fake_heading"><a id="home" title="Table of Contents" href="../index.html">📖</a></span>
+			<span class="fake_heading">&nbsp;|</span>
+			<span id="himg"><img class="head h1" id="f0a94a9cc9ca4a32b51d5bf9d95fb40f" src="img/tf0a94a9cc9ca4a32b51d5bf9d95fb40f.png"/></span>
+			<span class="hcontrol">
+				Size:&nbsp;<select onchange="adjust_size(this);">
+					<option>200%</option>
+					<option>150%</option>
+					<option selected="selected">100%</option>
+					<option>75%</option>
+					<option>50%</option>
+					<option>25%</option>
+				</select>&nbsp;
+				<input id="color" type="checkbox" onclick="color(this);" checked/>Color&nbsp;
+				<button id="fscreen" onclick="req_fullscreen();"><img id="fscreen-icon" src="fullscreen-op.svg"/></button>&nbsp;
+			</span>
+		</header>
+		<main>
+			<!-- Start document -->
+			<img class="head h2" id="h4e8701f2a6b345099412ec0b648ea83d" src="img/h4e8701f2a6b345099412ec0b648ea83d.png"/>
+			<img class="head h2" id="hf3e2f76514e44b35a868e60461699bb1" src="img/hf3e2f76514e44b35a868e60461699bb1.png"/>
+			<img class="head h2" id="hdfc4fc1f33554c8387815b13438ebce9" src="img/hdfc4fc1f33554c8387815b13438ebce9.png"/>
+			<img class="head h2" id="h45e3cf5e4bcf40358881bc5511197fd2" src="img/h45e3cf5e4bcf40358881bc5511197fd2.png"/>
+			<img class="head h2" id="h76e6f6fffaf64679b7223583baf4caf9" src="img/h76e6f6fffaf64679b7223583baf4caf9.png"/>
+			<img class="cont" id="c0fd18a83c11e426bb86e26c9954de82c" src="img/c0fd18a83c11e426bb86e26c9954de82c.png"/>
+			<img class="cont" id="c0069bfa55541495c9013674bde795a6c" src="img/c0069bfa55541495c9013674bde795a6c.png"/>
+			<img class="cont" id="cd36fca897d564801a11e4eb1216871cf" src="img/cd36fca897d564801a11e4eb1216871cf.png"/>
+			<img class="cont" id="ca74d56b265f746f8ae7e8ad99c3dc761" src="img/ca74d56b265f746f8ae7e8ad99c3dc761.png"/>
+			<img class="cont" id="c5058e9ee341d4f7c8e27b3049a87f133" src="img/c5058e9ee341d4f7c8e27b3049a87f133.png"/>
+			<img class="cont" id="cd001d1eff1454fb3b1cec2414649e4e6" src="img/cd001d1eff1454fb3b1cec2414649e4e6.png"/>
+			<img class="cont" id="c709c68d345e144deb599dd6eb9b1185c" src="img/c709c68d345e144deb599dd6eb9b1185c.png"/>
+			<img class="cont" id="cf15c1f3c7ed44487993ee7e8deb20f81" src="img/cf15c1f3c7ed44487993ee7e8deb20f81.png"/>
+			<img class="cont" id="c025b2078ff694e3dab328bebb8787abe" src="img/c025b2078ff694e3dab328bebb8787abe.png"/>
+			<img class="defi h2" id="dh3af249e9ba3043a5924e00e40a42d118" src="img/dh3af249e9ba3043a5924e00e40a42d118.png"/>
+			<img class="defi" id="dc3af249e9ba3043a5924e00e40a42d118" src="img/dc3af249e9ba3043a5924e00e40a42d118.png"/>
+			<img class="defi h2" id="dha27ebbb0b5f349c19917a97dabe8fcb7" src="img/dha27ebbb0b5f349c19917a97dabe8fcb7.png"/>
+			<img class="defi" id="dca27ebbb0b5f349c19917a97dabe8fcb7" src="img/dca27ebbb0b5f349c19917a97dabe8fcb7.png"/>
+			<img class="defi h2" id="dh3ded277e7aee4f818af795627f878167" src="img/dh3ded277e7aee4f818af795627f878167.png"/>
+			<img class="defi" id="dc3ded277e7aee4f818af795627f878167" src="img/dc3ded277e7aee4f818af795627f878167.png"/>
+			<img class="defi h2" id="dh0331271c722d4e96812d38937305e97e" src="img/dh0331271c722d4e96812d38937305e97e.png"/>
+			<img class="defi" id="dc0331271c722d4e96812d38937305e97e" src="img/dc0331271c722d4e96812d38937305e97e.png"/>
+			<img class="defi h2" id="dhb7f696fe537340a2b42b1bc7f454ec4c" src="img/dhb7f696fe537340a2b42b1bc7f454ec4c.png"/>
+			<img class="defi" id="dcb7f696fe537340a2b42b1bc7f454ec4c" src="img/dcb7f696fe537340a2b42b1bc7f454ec4c.png"/>
+			<img class="defi h2" id="dh3208e2522bf04e3cb42855f0332d9ea5" src="img/dh3208e2522bf04e3cb42855f0332d9ea5.png"/>
+			<img class="defi" id="dc3208e2522bf04e3cb42855f0332d9ea5" src="img/dc3208e2522bf04e3cb42855f0332d9ea5.png"/>
+
+		</main>
+		<footer>
+			These notes were digitized by <a href="https://github.com/michardy/note-digest">notedigest</a> which is distributed under the <a href="https://github.com/michardy/note-digest/blob/master/LICENSE">MIT License</a>.
+		</footer>
+	</body>
+</html>
+

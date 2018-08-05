@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<!--If you feel that this looks awful or is a personal affront to you please suggest changes.  My artisic abilities are somewhat lacking.  -->
+	<head>
+		<meta charset="utf-8"/>
+		<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />
+		<link rel="stylesheet" href="main.css"/>
+		<!--Please wait while I sacrafice a newborn goat to IE/Edge. (Edit: It still does not work)-->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+		<!--All hail Facebook glory be their name.-->
+		<meta property="og:title" content="Note Digest"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:url" content="https://michardy.github.io/note-digest/"/>
+		<meta property="og:description" content="An open source software project to take handwritten notes and digitally organize them."/>
+		<!--Birdseed (Seems a little repetative doesn't it.)-->
+		<meta name="twitter:title" content="Note Digest"/>
+		<meta name="twitter:card" content="summary"/>
+		<meta name="twitter:url" content="https://michardy.github.io/note-digest/"/>
+		<meta name="twitter:description" content="An open source software project to take handwritten notes and digitally organize them."/>
+		<!--Google.  Meta tags are for normal companies.-->
+		<script type="application/ld+json">
+			{
+				"@context": "http://schema.org",
+				"@type": "WebSite",
+				"name": "Note Digest",
+				"url": "https://michardy.github.com/note-digest/"
+			}
+		</script>
+		<meta name="google-site-verification" content="gIHQtM45_n6R22KdZf2S9Ech18XHwLsJwbYuPoFbo1Q" />
+		<!--And now for the actual standard that everyone seems to need their own version of (Facebook, Twitter, Google):-->
+		<title>Account Hijacking Prevention</title>
+		<meta name="description" content="An open source software project to take handwritten notes and digitally organize them."/>
+		<!--Question: Where is the URL property?  Open Graph Protocol has it.  
+		Answer: How are you looking at this page without the URL?
+		-->
+	</head>
+	<body>
+		<header>
+			<h1><a href="/note-digest">Note Digest</a></h1>
+			<a class="navbar" href="https://github.com/michardy/note-digest">Repository</a>&nbsp;
+			<a class="navbar" href="https://github.com/michardy/note-digest/issues">Issues</a>&nbsp;
+			<a class="navbar" href="https://michardy.github.io/note-digest/LICENSE.txt">License</a>&nbsp;
+		</header>
+		<main>
+			<article id="intro">
+				<p>
+					This is a peice of software I created to help me orgainze my notes and review for tests.
+					This software aims to understand the intent of the document writer not its meaning.
+					It does this through a simple set of rules:
+				</p>
+				<ol>
+					<li>Headings are in red
+						<ol>
+							<li>Chapter headings are underlined twice</li>
+							<li>Sub headings are underlined once</li>
+							<li>The lowest level heading is not underlined</li>
+						</ol>
+					</li>
+					<li>Definitions are in green
+						<ol>
+							<li>The defined term is underlined</li>
+							<li>The defintion content goes below the term</li>
+						</ol>
+					</li>
+					<li>Everything else is in blue</li>
+				</ol>
+			</article>
+			<article id="about">
+				<h2>Example</h2>
+				<p>An example of the output of this software can be found <a href="Notebook">here</a></p>
+			</article>
+		</main>
+		<footer>
+			<div>
+				&copy; 2018 Michael Hardy
+			</div>
+		</footer>
+	</body>
+</html>

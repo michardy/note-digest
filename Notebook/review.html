@@ -1,0 +1,708 @@
+<!--
+Produced with Notedigest
+Which is distributed under the MIT license.  For more information see this page:
+https://github.com/michardy/note-digest/blob/master/LICENSE
+
+Downloads can be found here:
+https://github.com/michardy/note-digest/releases
+
+Code is freely available on github:
+https://github.com/michardy/note-digest
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Review: Notes</title>
+		<link rel="stylesheet" href="static.css"/>
+		<script src="util.js"></script>
+		<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0">
+		<!--Please wait while I sacrafice a newborn goat to IE/Edge. (Edit: It still does not work)-->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="description" content="Notes organized and digitized with notedigest (https://github.com/michardy/note-digest)">
+	</head>
+	<body>
+		<header>
+			<span class="fake_heading"><a id="mode" title="Table of Contents" href="index.html">📖</a></span>
+			<span class="fake_heading">&nbsp;|</span>
+			<h1>Review</h1>
+			<div class="hcontrol">
+				Size:&nbsp;<select onchange="adjust_size(this);">
+					<option>200%</option>
+					<option>150%</option>
+					<option selected="selected">100%</option>
+					<option>75%</option>
+					<option>50%</option>
+					<option>25%</option>
+				</select>&nbsp;
+				<input id="color" type="checkbox" onclick="color(this);" checked/>Color&nbsp;
+				<button id="fscreen" onclick="req_fullscreen();"><img id="fscreen-icon" src="fullscreen-op.svg"/></button>&nbsp;
+			</div>
+		</header>
+		<main>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh8f5eb35eda764856a6a78779fc2088f6">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh8f5eb35eda764856a6a78779fc2088f6.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc8f5eb35eda764856a6a78779fc2088f6.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh1f4971a6032a440c98541eb9113ae094">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh1f4971a6032a440c98541eb9113ae094.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc1f4971a6032a440c98541eb9113ae094.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh449caf7b648c4fc1b93bd55fc289fc67">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh449caf7b648c4fc1b93bd55fc289fc67.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc449caf7b648c4fc1b93bd55fc289fc67.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh14806b8bbe59464aa24b0aa82bea97d1">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh14806b8bbe59464aa24b0aa82bea97d1.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc14806b8bbe59464aa24b0aa82bea97d1.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh59b7e26fc5de449b839e00d6912c6555">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh59b7e26fc5de449b839e00d6912c6555.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc59b7e26fc5de449b839e00d6912c6555.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh96319e735fe34b20809214af8fd145a4">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh96319e735fe34b20809214af8fd145a4.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc96319e735fe34b20809214af8fd145a4.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e30843866c254ac797d8331b3830e4b8/index.html#dh0865a369d6cd40c3a76c456e1b2b338c">
+					<img class="defi expandable" src="e30843866c254ac797d8331b3830e4b8/img/dh0865a369d6cd40c3a76c456e1b2b338c.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e30843866c254ac797d8331b3830e4b8/img/dc0865a369d6cd40c3a76c456e1b2b338c.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="978d7f11bb814a9e962aff69618f0409/index.html#dh49cb5b98b1fd44649a6b8f556e57581e">
+					<img class="defi expandable" src="978d7f11bb814a9e962aff69618f0409/img/dh49cb5b98b1fd44649a6b8f556e57581e.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="978d7f11bb814a9e962aff69618f0409/img/dc49cb5b98b1fd44649a6b8f556e57581e.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="978d7f11bb814a9e962aff69618f0409/index.html#dh3cc43b9965de4f2c9cd63b0042785b4e">
+					<img class="defi expandable" src="978d7f11bb814a9e962aff69618f0409/img/dh3cc43b9965de4f2c9cd63b0042785b4e.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="978d7f11bb814a9e962aff69618f0409/img/dc3cc43b9965de4f2c9cd63b0042785b4e.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="978d7f11bb814a9e962aff69618f0409/index.html#dhd92986c4627b40d5a4c7fead2f99fe3f">
+					<img class="defi expandable" src="978d7f11bb814a9e962aff69618f0409/img/dhd92986c4627b40d5a4c7fead2f99fe3f.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="978d7f11bb814a9e962aff69618f0409/img/dcd92986c4627b40d5a4c7fead2f99fe3f.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="978d7f11bb814a9e962aff69618f0409/index.html#dh6351514c894c4960922c6a7ec3c172f1">
+					<img class="defi expandable" src="978d7f11bb814a9e962aff69618f0409/img/dh6351514c894c4960922c6a7ec3c172f1.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="978d7f11bb814a9e962aff69618f0409/img/dc6351514c894c4960922c6a7ec3c172f1.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dh0f61c3c417f04d47ab3bc783df863654">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dh0f61c3c417f04d47ab3bc783df863654.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dc0f61c3c417f04d47ab3bc783df863654.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dh8825dccde39042bf828059e2d72f996a">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dh8825dccde39042bf828059e2d72f996a.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dc8825dccde39042bf828059e2d72f996a.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dhd50d58df23dd4e73b45487c14f5be403">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dhd50d58df23dd4e73b45487c14f5be403.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dcd50d58df23dd4e73b45487c14f5be403.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dha94fd51ad70347a2b7c04730c0e43c81">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dha94fd51ad70347a2b7c04730c0e43c81.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dca94fd51ad70347a2b7c04730c0e43c81.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dh0299302f23b74d0381b191b6c2f9f7fa">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dh0299302f23b74d0381b191b6c2f9f7fa.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dc0299302f23b74d0381b191b6c2f9f7fa.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dh52bff1ca3ba74ea691ab04943f4df241">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dh52bff1ca3ba74ea691ab04943f4df241.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dc52bff1ca3ba74ea691ab04943f4df241.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dhccb208529bbb44248922f67f276e45a3">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dhccb208529bbb44248922f67f276e45a3.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dcccb208529bbb44248922f67f276e45a3.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dhcb134edd00f04ca6b6a338cade903602">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dhcb134edd00f04ca6b6a338cade903602.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dccb134edd00f04ca6b6a338cade903602.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dh4b069685f7c24ded9f8ebc4b8d27be17">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dh4b069685f7c24ded9f8ebc4b8d27be17.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dc4b069685f7c24ded9f8ebc4b8d27be17.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="2647755765b44240b1dae1ccd1af596c/index.html#dh7f4d0950ab82416ca59be12f39bf041f">
+					<img class="defi expandable" src="2647755765b44240b1dae1ccd1af596c/img/dh7f4d0950ab82416ca59be12f39bf041f.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="2647755765b44240b1dae1ccd1af596c/img/dc7f4d0950ab82416ca59be12f39bf041f.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="00d9b7c26de847ed858886a09bf75aa4/index.html#dh74185020bd3a43fea2b92f942c092391">
+					<img class="defi expandable" src="00d9b7c26de847ed858886a09bf75aa4/img/dh74185020bd3a43fea2b92f942c092391.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="00d9b7c26de847ed858886a09bf75aa4/img/dc74185020bd3a43fea2b92f942c092391.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="00d9b7c26de847ed858886a09bf75aa4/index.html#dh9f7200f518fa4c128aef4b344588809c">
+					<img class="defi expandable" src="00d9b7c26de847ed858886a09bf75aa4/img/dh9f7200f518fa4c128aef4b344588809c.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="00d9b7c26de847ed858886a09bf75aa4/img/dc9f7200f518fa4c128aef4b344588809c.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="00d9b7c26de847ed858886a09bf75aa4/index.html#dh63adbbc5b2e54f08931e341353c74c1d">
+					<img class="defi expandable" src="00d9b7c26de847ed858886a09bf75aa4/img/dh63adbbc5b2e54f08931e341353c74c1d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="00d9b7c26de847ed858886a09bf75aa4/img/dc63adbbc5b2e54f08931e341353c74c1d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="00d9b7c26de847ed858886a09bf75aa4/index.html#dh002436bfed2f4e379dd74b6e158d1808">
+					<img class="defi expandable" src="00d9b7c26de847ed858886a09bf75aa4/img/dh002436bfed2f4e379dd74b6e158d1808.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="00d9b7c26de847ed858886a09bf75aa4/img/dc002436bfed2f4e379dd74b6e158d1808.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="00d9b7c26de847ed858886a09bf75aa4/index.html#dh5172c2bbc5fa4bfa9ad01a677250e28d">
+					<img class="defi expandable" src="00d9b7c26de847ed858886a09bf75aa4/img/dh5172c2bbc5fa4bfa9ad01a677250e28d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="00d9b7c26de847ed858886a09bf75aa4/img/dc5172c2bbc5fa4bfa9ad01a677250e28d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="00d9b7c26de847ed858886a09bf75aa4/index.html#dh2b14d2934d42432598d1132818ed4fa7">
+					<img class="defi expandable" src="00d9b7c26de847ed858886a09bf75aa4/img/dh2b14d2934d42432598d1132818ed4fa7.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="00d9b7c26de847ed858886a09bf75aa4/img/dc2b14d2934d42432598d1132818ed4fa7.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="3aa0dcc46a4f406889d36ad1ad5df657/index.html#dhc32d2046e56c47c8a2bf91d5cf5cd8bb">
+					<img class="defi expandable" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dhc32d2046e56c47c8a2bf91d5cf5cd8bb.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dcc32d2046e56c47c8a2bf91d5cf5cd8bb.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="3aa0dcc46a4f406889d36ad1ad5df657/index.html#dhada80e3cf6e2476086911106e09d52ec">
+					<img class="defi expandable" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dhada80e3cf6e2476086911106e09d52ec.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dcada80e3cf6e2476086911106e09d52ec.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="3aa0dcc46a4f406889d36ad1ad5df657/index.html#dheece8fed73de481c928b90a55f1ca8ff">
+					<img class="defi expandable" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dheece8fed73de481c928b90a55f1ca8ff.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dceece8fed73de481c928b90a55f1ca8ff.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="3aa0dcc46a4f406889d36ad1ad5df657/index.html#dh8c3a53a6a9ca4f99903f8a4e00e9bcc6">
+					<img class="defi expandable" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dh8c3a53a6a9ca4f99903f8a4e00e9bcc6.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dc8c3a53a6a9ca4f99903f8a4e00e9bcc6.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="3aa0dcc46a4f406889d36ad1ad5df657/index.html#dh9b0e5464d6c6475a84bb7aab6a434b2b">
+					<img class="defi expandable" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dh9b0e5464d6c6475a84bb7aab6a434b2b.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="3aa0dcc46a4f406889d36ad1ad5df657/img/dc9b0e5464d6c6475a84bb7aab6a434b2b.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhb82b9b79be6a48b5997c81df4956032d">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhb82b9b79be6a48b5997c81df4956032d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcb82b9b79be6a48b5997c81df4956032d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dh65db48b93da7491e988f119e43f330c5">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dh65db48b93da7491e988f119e43f330c5.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dc65db48b93da7491e988f119e43f330c5.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhd99d7ba8a01d4a3a819c247bd7a93ad9">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhd99d7ba8a01d4a3a819c247bd7a93ad9.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcd99d7ba8a01d4a3a819c247bd7a93ad9.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhe3159e66479e41e3853c939b6e87a216">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhe3159e66479e41e3853c939b6e87a216.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dce3159e66479e41e3853c939b6e87a216.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhc51890c5f7ea45beb4a13386f997263b">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhc51890c5f7ea45beb4a13386f997263b.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcc51890c5f7ea45beb4a13386f997263b.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dh61eafe8851394254bd38e1de5e55b66d">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dh61eafe8851394254bd38e1de5e55b66d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dc61eafe8851394254bd38e1de5e55b66d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhbf736223c95c49f3ba80200e0226c07a">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhbf736223c95c49f3ba80200e0226c07a.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcbf736223c95c49f3ba80200e0226c07a.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dh9f34dd074b3f4fd5bae7cdf65c2f6efc">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dh9f34dd074b3f4fd5bae7cdf65c2f6efc.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dc9f34dd074b3f4fd5bae7cdf65c2f6efc.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dh2ca5775bee4445a9b24a1112f5f4e99a">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dh2ca5775bee4445a9b24a1112f5f4e99a.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dc2ca5775bee4445a9b24a1112f5f4e99a.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhb9bd11a003354c6284df547113394a60">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhb9bd11a003354c6284df547113394a60.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcb9bd11a003354c6284df547113394a60.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhb5116c498a0a433784683114178d2019">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhb5116c498a0a433784683114178d2019.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcb5116c498a0a433784683114178d2019.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dhc250f8dde21e4ce5aecd648b1518c473">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dhc250f8dde21e4ce5aecd648b1518c473.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dcc250f8dde21e4ce5aecd648b1518c473.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dh9c249daf856e4b69aa02f1ed138bf0a1">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dh9c249daf856e4b69aa02f1ed138bf0a1.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dc9c249daf856e4b69aa02f1ed138bf0a1.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dha8a2c4b9b0a94073ab74bb76876c2b57">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dha8a2c4b9b0a94073ab74bb76876c2b57.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dca8a2c4b9b0a94073ab74bb76876c2b57.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="b99fd02980964903b1a24956839ce517/index.html#dh162d61075eeb4a108a2982867be374d0">
+					<img class="defi expandable" src="b99fd02980964903b1a24956839ce517/img/dh162d61075eeb4a108a2982867be374d0.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="b99fd02980964903b1a24956839ce517/img/dc162d61075eeb4a108a2982867be374d0.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="a06c6d3a9a2e489e8c4789b03f05e5e0/index.html#dhbb9948868b3d4eeda8fc5514d5bd1bec">
+					<img class="defi expandable" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dhbb9948868b3d4eeda8fc5514d5bd1bec.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dcbb9948868b3d4eeda8fc5514d5bd1bec.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="a06c6d3a9a2e489e8c4789b03f05e5e0/index.html#dh52878f0e43864870ab582e26897f63d0">
+					<img class="defi expandable" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dh52878f0e43864870ab582e26897f63d0.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dc52878f0e43864870ab582e26897f63d0.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="a06c6d3a9a2e489e8c4789b03f05e5e0/index.html#dh5b28e08d13764cb8a00b351b64c609ed">
+					<img class="defi expandable" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dh5b28e08d13764cb8a00b351b64c609ed.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dc5b28e08d13764cb8a00b351b64c609ed.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="a06c6d3a9a2e489e8c4789b03f05e5e0/index.html#dh141ace1835e34e7b9a89ae40c5b1d44f">
+					<img class="defi expandable" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dh141ace1835e34e7b9a89ae40c5b1d44f.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dc141ace1835e34e7b9a89ae40c5b1d44f.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="a06c6d3a9a2e489e8c4789b03f05e5e0/index.html#dha59b26b048e64054ae3cf1a266132702">
+					<img class="defi expandable" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dha59b26b048e64054ae3cf1a266132702.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dca59b26b048e64054ae3cf1a266132702.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="a06c6d3a9a2e489e8c4789b03f05e5e0/index.html#dh77111ac7226e49e7940df27908b5f29b">
+					<img class="defi expandable" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dh77111ac7226e49e7940df27908b5f29b.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="a06c6d3a9a2e489e8c4789b03f05e5e0/img/dc77111ac7226e49e7940df27908b5f29b.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="8b704586e5e0467e8106dddae5f11861/index.html#dh3af249e9ba3043a5924e00e40a42d118">
+					<img class="defi expandable" src="8b704586e5e0467e8106dddae5f11861/img/dh3af249e9ba3043a5924e00e40a42d118.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="8b704586e5e0467e8106dddae5f11861/img/dc3af249e9ba3043a5924e00e40a42d118.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="8b704586e5e0467e8106dddae5f11861/index.html#dha27ebbb0b5f349c19917a97dabe8fcb7">
+					<img class="defi expandable" src="8b704586e5e0467e8106dddae5f11861/img/dha27ebbb0b5f349c19917a97dabe8fcb7.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="8b704586e5e0467e8106dddae5f11861/img/dca27ebbb0b5f349c19917a97dabe8fcb7.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="8b704586e5e0467e8106dddae5f11861/index.html#dh3ded277e7aee4f818af795627f878167">
+					<img class="defi expandable" src="8b704586e5e0467e8106dddae5f11861/img/dh3ded277e7aee4f818af795627f878167.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="8b704586e5e0467e8106dddae5f11861/img/dc3ded277e7aee4f818af795627f878167.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="8b704586e5e0467e8106dddae5f11861/index.html#dh0331271c722d4e96812d38937305e97e">
+					<img class="defi expandable" src="8b704586e5e0467e8106dddae5f11861/img/dh0331271c722d4e96812d38937305e97e.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="8b704586e5e0467e8106dddae5f11861/img/dc0331271c722d4e96812d38937305e97e.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="8b704586e5e0467e8106dddae5f11861/index.html#dhb7f696fe537340a2b42b1bc7f454ec4c">
+					<img class="defi expandable" src="8b704586e5e0467e8106dddae5f11861/img/dhb7f696fe537340a2b42b1bc7f454ec4c.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="8b704586e5e0467e8106dddae5f11861/img/dcb7f696fe537340a2b42b1bc7f454ec4c.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="8b704586e5e0467e8106dddae5f11861/index.html#dh3208e2522bf04e3cb42855f0332d9ea5">
+					<img class="defi expandable" src="8b704586e5e0467e8106dddae5f11861/img/dh3208e2522bf04e3cb42855f0332d9ea5.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="8b704586e5e0467e8106dddae5f11861/img/dc3208e2522bf04e3cb42855f0332d9ea5.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dhcfee2db5a2c7436aa733fe11312f015f">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dhcfee2db5a2c7436aa733fe11312f015f.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dccfee2db5a2c7436aa733fe11312f015f.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dhb83b12d9248440fca0b7f52ef5766758">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dhb83b12d9248440fca0b7f52ef5766758.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dcb83b12d9248440fca0b7f52ef5766758.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dh5eaca5c6e93a440cbe8e6724d55f8722">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dh5eaca5c6e93a440cbe8e6724d55f8722.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dc5eaca5c6e93a440cbe8e6724d55f8722.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dhd17b008c79da4cbc9ceb124923f8c0b6">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dhd17b008c79da4cbc9ceb124923f8c0b6.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dcd17b008c79da4cbc9ceb124923f8c0b6.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dh2355d5258bbf463e83f2b1013e94280b">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dh2355d5258bbf463e83f2b1013e94280b.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dc2355d5258bbf463e83f2b1013e94280b.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dh68c599c743d34d0fa7dc81662e4c710e">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dh68c599c743d34d0fa7dc81662e4c710e.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dc68c599c743d34d0fa7dc81662e4c710e.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dh832be7ac00e64bc792b0521a0278d093">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dh832be7ac00e64bc792b0521a0278d093.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dc832be7ac00e64bc792b0521a0278d093.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e1273ce6188a4dfcb77a3e7628a38afd/index.html#dhdc8ec743511649889b6222bdd43d9eb4">
+					<img class="defi expandable" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dhdc8ec743511649889b6222bdd43d9eb4.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e1273ce6188a4dfcb77a3e7628a38afd/img/dcdc8ec743511649889b6222bdd43d9eb4.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="9a355863f4a444c2acdcf6a9c9ca4267/index.html#dhd711a72292e146d5a5ca33db24643768">
+					<img class="defi expandable" src="9a355863f4a444c2acdcf6a9c9ca4267/img/dhd711a72292e146d5a5ca33db24643768.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="9a355863f4a444c2acdcf6a9c9ca4267/img/dcd711a72292e146d5a5ca33db24643768.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="83a05af57a19414ab04ec7de1d6c3eb3/index.html#dhb59eecfb950f44c195ee16f2dbdc9d69">
+					<img class="defi expandable" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dhb59eecfb950f44c195ee16f2dbdc9d69.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dcb59eecfb950f44c195ee16f2dbdc9d69.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="83a05af57a19414ab04ec7de1d6c3eb3/index.html#dh1d7942b2d756473faaf0df767464287a">
+					<img class="defi expandable" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dh1d7942b2d756473faaf0df767464287a.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dc1d7942b2d756473faaf0df767464287a.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="83a05af57a19414ab04ec7de1d6c3eb3/index.html#dh166599ebf3184777a223416ee2060a79">
+					<img class="defi expandable" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dh166599ebf3184777a223416ee2060a79.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dc166599ebf3184777a223416ee2060a79.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="83a05af57a19414ab04ec7de1d6c3eb3/index.html#dhebd473ccc1244a73a0803992dfd2c1aa">
+					<img class="defi expandable" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dhebd473ccc1244a73a0803992dfd2c1aa.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dcebd473ccc1244a73a0803992dfd2c1aa.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="83a05af57a19414ab04ec7de1d6c3eb3/index.html#dh8c3928a9d30149b68981674b954307d2">
+					<img class="defi expandable" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dh8c3928a9d30149b68981674b954307d2.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dc8c3928a9d30149b68981674b954307d2.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="83a05af57a19414ab04ec7de1d6c3eb3/index.html#dh7c0bd7fc230c41b98f7af226543f358f">
+					<img class="defi expandable" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dh7c0bd7fc230c41b98f7af226543f358f.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="83a05af57a19414ab04ec7de1d6c3eb3/img/dc7c0bd7fc230c41b98f7af226543f358f.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e81f277660e34510b89ef90ab2c6870b/index.html#dh47ee52f4dbe347b0877c6b1edb95cc18">
+					<img class="defi expandable" src="e81f277660e34510b89ef90ab2c6870b/img/dh47ee52f4dbe347b0877c6b1edb95cc18.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e81f277660e34510b89ef90ab2c6870b/img/dc47ee52f4dbe347b0877c6b1edb95cc18.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e81f277660e34510b89ef90ab2c6870b/index.html#dh4445051f64474c7e8379c24c74ce8282">
+					<img class="defi expandable" src="e81f277660e34510b89ef90ab2c6870b/img/dh4445051f64474c7e8379c24c74ce8282.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e81f277660e34510b89ef90ab2c6870b/img/dc4445051f64474c7e8379c24c74ce8282.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="e81f277660e34510b89ef90ab2c6870b/index.html#dh707761fedb3a40d485b28cccedef1b6e">
+					<img class="defi expandable" src="e81f277660e34510b89ef90ab2c6870b/img/dh707761fedb3a40d485b28cccedef1b6e.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="e81f277660e34510b89ef90ab2c6870b/img/dc707761fedb3a40d485b28cccedef1b6e.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="80cc3a8bb7a748b8bd0398a6e5a01ce0/index.html#dhb29974aafe91441b9535de9f7f0510c6">
+					<img class="defi expandable" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dhb29974aafe91441b9535de9f7f0510c6.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dcb29974aafe91441b9535de9f7f0510c6.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="80cc3a8bb7a748b8bd0398a6e5a01ce0/index.html#dh0b70ac2bccb24c39b7e7531755bc0f03">
+					<img class="defi expandable" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dh0b70ac2bccb24c39b7e7531755bc0f03.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dc0b70ac2bccb24c39b7e7531755bc0f03.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="80cc3a8bb7a748b8bd0398a6e5a01ce0/index.html#dhb6681509082b4d019cb68e9f202c032d">
+					<img class="defi expandable" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dhb6681509082b4d019cb68e9f202c032d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dcb6681509082b4d019cb68e9f202c032d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="80cc3a8bb7a748b8bd0398a6e5a01ce0/index.html#dhaff458bd2b1448c7b950bf2c8fe4ef1b">
+					<img class="defi expandable" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dhaff458bd2b1448c7b950bf2c8fe4ef1b.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dcaff458bd2b1448c7b950bf2c8fe4ef1b.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="80cc3a8bb7a748b8bd0398a6e5a01ce0/index.html#dhb8227c131e704c77a8ccbe87b7d783e0">
+					<img class="defi expandable" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dhb8227c131e704c77a8ccbe87b7d783e0.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dcb8227c131e704c77a8ccbe87b7d783e0.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="80cc3a8bb7a748b8bd0398a6e5a01ce0/index.html#dh4c2294c310064832b35284dcbbd5e96d">
+					<img class="defi expandable" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dh4c2294c310064832b35284dcbbd5e96d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="80cc3a8bb7a748b8bd0398a6e5a01ce0/img/dc4c2294c310064832b35284dcbbd5e96d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="21198c03c8864390b71495ebedebdf1b/index.html#dhd1105f20ebb34e518fadf65235eb33f4">
+					<img class="defi expandable" src="21198c03c8864390b71495ebedebdf1b/img/dhd1105f20ebb34e518fadf65235eb33f4.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="21198c03c8864390b71495ebedebdf1b/img/dcd1105f20ebb34e518fadf65235eb33f4.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="21198c03c8864390b71495ebedebdf1b/index.html#dh9705b1dc26aa41eab171fda0b23194fe">
+					<img class="defi expandable" src="21198c03c8864390b71495ebedebdf1b/img/dh9705b1dc26aa41eab171fda0b23194fe.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="21198c03c8864390b71495ebedebdf1b/img/dc9705b1dc26aa41eab171fda0b23194fe.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="21198c03c8864390b71495ebedebdf1b/index.html#dhe2c2966986b64295a7fc916b014014ec">
+					<img class="defi expandable" src="21198c03c8864390b71495ebedebdf1b/img/dhe2c2966986b64295a7fc916b014014ec.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="21198c03c8864390b71495ebedebdf1b/img/dce2c2966986b64295a7fc916b014014ec.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="21198c03c8864390b71495ebedebdf1b/index.html#dh0b714079b16645ef86e1ef83fef2e3bd">
+					<img class="defi expandable" src="21198c03c8864390b71495ebedebdf1b/img/dh0b714079b16645ef86e1ef83fef2e3bd.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="21198c03c8864390b71495ebedebdf1b/img/dc0b714079b16645ef86e1ef83fef2e3bd.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="21198c03c8864390b71495ebedebdf1b/index.html#dh8a1e48a9c50e487b8d910c2a4add694d">
+					<img class="defi expandable" src="21198c03c8864390b71495ebedebdf1b/img/dh8a1e48a9c50e487b8d910c2a4add694d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="21198c03c8864390b71495ebedebdf1b/img/dc8a1e48a9c50e487b8d910c2a4add694d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="1c9ea16efe28456f9200f335b9f8a290/index.html#dhabfb54da7f0d4474a473d47a5b39f230">
+					<img class="defi expandable" src="1c9ea16efe28456f9200f335b9f8a290/img/dhabfb54da7f0d4474a473d47a5b39f230.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="1c9ea16efe28456f9200f335b9f8a290/img/dcabfb54da7f0d4474a473d47a5b39f230.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="1c9ea16efe28456f9200f335b9f8a290/index.html#dh332445b1070744bc8834a1e630027831">
+					<img class="defi expandable" src="1c9ea16efe28456f9200f335b9f8a290/img/dh332445b1070744bc8834a1e630027831.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="1c9ea16efe28456f9200f335b9f8a290/img/dc332445b1070744bc8834a1e630027831.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="1c9ea16efe28456f9200f335b9f8a290/index.html#dh5a2579dfc73f4443a94cd0b63abd596d">
+					<img class="defi expandable" src="1c9ea16efe28456f9200f335b9f8a290/img/dh5a2579dfc73f4443a94cd0b63abd596d.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="1c9ea16efe28456f9200f335b9f8a290/img/dc5a2579dfc73f4443a94cd0b63abd596d.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="1c9ea16efe28456f9200f335b9f8a290/index.html#dh2975c6e963904293b90b9cecb3a7621b">
+					<img class="defi expandable" src="1c9ea16efe28456f9200f335b9f8a290/img/dh2975c6e963904293b90b9cecb3a7621b.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="1c9ea16efe28456f9200f335b9f8a290/img/dc2975c6e963904293b90b9cecb3a7621b.png" style="display:none;"/>
+			</div>
+			<div class="def-parent">
+				<a href="1c9ea16efe28456f9200f335b9f8a290/index.html#dh9d8cb54f2aa34911b110aaa9afad521a">
+					<img class="defi expandable" src="1c9ea16efe28456f9200f335b9f8a290/img/dh9d8cb54f2aa34911b110aaa9afad521a.png"></img></a>
+				<button class="expander" onclick="toggle_sub(this)">◀</button><br/>
+				<img class="defi" src="1c9ea16efe28456f9200f335b9f8a290/img/dc9d8cb54f2aa34911b110aaa9afad521a.png" style="display:none;"/>
+			</div>
+			<!-- NEXT DEFINITION -->
+			<!--
+			⇑ DO NOT REMOVE ABOVE ⇑
+			Used by notedigest to place the next definition in the review table.
+			Removal will reneder file readonly.
+
+			Yes, I know this is a kluge.
+			-->
+		</main>
+		<footer>
+			These notes were digitized by <a href="https://github.com/michardy/note-digest">notedigest</a> which is distributed under the <a href="https://github.com/michardy/note-digest/blob/master/LICENSE">MIT License</a>.
+		</footer>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
