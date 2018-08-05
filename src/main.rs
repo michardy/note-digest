@@ -802,13 +802,6 @@ impl Chapter {
 		let mut gencss = String::from(
 			include_str!("template_fragments/chapter/gen.css1")
 		);
-		let ref mut fout = File::create(
-			ch_path.join(
-				"img/t".to_string()+
-				&self.heading.id.simple().to_string()+
-				&".png".to_string()
-			)
-		).unwrap();
 		out += &(
 			"<img class=\"head h1\" id=\"".to_string()+
 			&self.heading.id.simple().to_string()+
@@ -836,18 +829,23 @@ impl Chapter {
 		out += include_str!("template_fragments/chapter/index.html1");
 		let _ = image::ImageLumaA8(
 			self.heading.subject.to_image()
-		).save(fout, image::PNG);
+		).save(
+			ch_path.join(
+				"img/t".to_string()+
+				&self.heading.id.simple().to_string()+
+				&".png".to_string()
+			)
+		);
 		for mut head in &mut self.sub_headings {
-			let ref mut fout = File::create(
+			let _ = image::ImageLumaA8(
+				head.subject.to_image()
+			).save(
 				ch_path.join(
 					"img/h".to_string()+
 					&head.id.simple().to_string()+
 					&".png".to_string()
 				)
-			).unwrap();
-			let _ = image::ImageLumaA8(
-				head.subject.to_image()
-			).save(fout, image::PNG);
+			);
 			out += &(
 				if head.number == 2 {
 					"\t\t\t<img class=\"head h2\" id=\"h"
@@ -874,16 +872,15 @@ impl Chapter {
 			);
 		}
 		for mut cont in &mut self.content {
-			let ref mut fout = File::create(
+			let _ = image::ImageLumaA8(
+				cont.to_image()
+			).save(
 				ch_path.join(
 					"img/c".to_string()+
 					&cont.id.simple().to_string()+
 					&".png".to_string()
 				)
-			).unwrap();
-			let _ = image::ImageLumaA8(
-				cont.to_image()
-			).save(fout, image::PNG);
+			);
 			out += &(
 				"\t\t\t<img class=\"cont\" id=\"c".to_string()+
 				&cont.id.simple().to_string()+
@@ -906,16 +903,15 @@ impl Chapter {
 			);
 		}
 		for mut idea in &mut self.ideas {
-			let ref mut hout = File::create(
+			let _ = image::ImageLumaA8(
+				idea.subject.to_image()
+			).save(
 				ch_path.join(
 					"img/dh".to_string()+
 					&idea.id.simple().to_string()+
 					&".png".to_string()
 				)
-			).unwrap();
-			let _ = image::ImageLumaA8(
-				idea.subject.to_image()
-			).save(hout, image::PNG);
+			);
 			out += &(
 				"\t\t\t<img class=\"defi h2\" id=\"dh".to_string()+
 				&idea.id.simple().to_string()+
@@ -936,16 +932,15 @@ impl Chapter {
 				&(idea.subject.width_precent*(100 as f64)).to_string()+
 				&"%;\nposition:absolute;\n}\n".to_string()
 			);
-			let ref mut cout = File::create(
+			let _ = image::ImageLumaA8(
+				idea.extension.to_image()
+			).save(
 				ch_path.join(
 					"img/dc".to_string()+
 					&idea.id.simple().to_string()+
 					&".png".to_string()
 				)
-			).unwrap();
-			let _ = image::ImageLumaA8(
-				idea.extension.to_image()
-			).save(cout, image::PNG);
+			);
 			out += &(
 				"\t\t\t<img class=\"defi\" id=\"dc".to_string()+
 				&idea.id.simple().to_string()+
