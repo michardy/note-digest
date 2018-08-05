@@ -2,9 +2,9 @@
 /// Application that converts handwritten notes into organized html pages.
 
 extern crate image;
+extern crate dirs;
 extern crate uuid;
 
-use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::io;
@@ -718,7 +718,7 @@ impl Chapter {
 	fn add_chapter(&mut self) {
 		fn assemble_path() -> PathBuf {
 			let dir: PathBuf;
-			match env::home_dir() {
+			match dirs::home_dir() {
 				Some(path) => dir = path,
 				None => panic!(
 					"Output Generation: system lacks valid home directory"
