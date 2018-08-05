@@ -1348,7 +1348,10 @@ fn main() {
 			.append(true)
 			.open(IMPORTED)
 			.unwrap();
-		let _ = writeln!(file, "{}", img); // TODO: Warn the user about errors here
+		match writeln!(file, "{}", img) {
+			Ok(_) => (),
+			Err(_) => println!("Warning: could not create .imported file")
+		}
 	}
 	print!("\r◑: Dividing by chapter");
 	std::io::stdout().flush().ok().expect("Could not flush STDOUT!");
