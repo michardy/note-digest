@@ -670,9 +670,9 @@ impl Chapter {
 			"<!-- NEXT CHAPTER -->",
 			&format!(
 				"<a href=\"{}/index.html\" class=\"head tc h1\">\n\t\t\t\t<img src=\"{}/img/t{}.png\"/>\n\t\t\t</a><br/>\n\t\t\t<!-- NEXT CHAPTER -->",
-				pid.simple().to_string(),
-				pid.simple().to_string(),
-				head.id.simple().to_string()
+				pid.to_simple().to_string(),
+				pid.to_simple().to_string(),
+				head.id.to_simple().to_string()
 			)
 		);
 		let mut file = File::create(parent.join("index.html"))
@@ -697,12 +697,12 @@ impl Chapter {
 			"<!-- NEXT DEFINITION -->",
 			&format!(
 				"<div class=\"def-parent\">\n\t\t\t\t<a href=\"{}/index.html#dh{}\">\n\t\t\t\t\t<img class=\"defi expandable\" src=\"{}/img/dh{}.png\"></img></a>\n\t\t\t\t<button class=\"expander\" onclick=\"toggle_sub(this)\">◀</button><br/>\n\t\t\t\t<img class=\"defi\" src=\"{}/img/dc{}.png\" style=\"display:none;\"/>\n\t\t\t</div>\n\t\t\t<!-- NEXT DEFINITION -->",
-				pid.simple().to_string(),
-				def.id.simple().to_string(),
-				pid.simple().to_string(),
-				def.id.simple().to_string(),
-				pid.simple().to_string(),
-				def.id.simple().to_string()
+				pid.to_simple().to_string(),
+				def.id.to_simple().to_string(),
+				pid.to_simple().to_string(),
+				def.id.to_simple().to_string(),
+				pid.to_simple().to_string(),
+				def.id.to_simple().to_string()
 			)
 		);
 		let mut file = File::create(parent.join("review.html"))
@@ -790,7 +790,7 @@ impl Chapter {
 		)).exists() {
 			setup_dirs(&comp_out);
 		}
-		let ch_path = comp_out.join(&self.id.simple().to_string());
+		let ch_path = comp_out.join(&self.id.to_simple().to_string());
 		fs::create_dir(&ch_path)
 			.expect("Output Generation: error creating chapter path");
 		fs::create_dir(
@@ -804,15 +804,15 @@ impl Chapter {
 		);
 		out += &(
 			"<img class=\"head h1\" id=\"".to_string()+
-			&self.heading.id.simple().to_string()+
+			&self.heading.id.to_simple().to_string()+
 			&"\" src=\"img/t".to_string()+
-			&self.heading.id.simple().to_string()+
+			&self.heading.id.to_simple().to_string()+
 			&".png\"/>".to_string()
 		);
 		self.heading.subject.update_top(&self.cur_height);
 		gencss += &(
 			"#t".to_string()+
-			&self.heading.id.simple().to_string()+
+			&self.heading.id.to_simple().to_string()+
 			&"{\n\ttop:".to_string()+
 			&(self.heading.subject.top_precent*(100 as f64)).to_string()+
 			&"%;\n\tleft:".to_string()+
@@ -832,7 +832,7 @@ impl Chapter {
 		).save(
 			ch_path.join(
 				"img/t".to_string()+
-				&self.heading.id.simple().to_string()+
+				&self.heading.id.to_simple().to_string()+
 				&".png".to_string()
 			)
 		);
@@ -842,7 +842,7 @@ impl Chapter {
 			).save(
 				ch_path.join(
 					"img/h".to_string()+
-					&head.id.simple().to_string()+
+					&head.id.to_simple().to_string()+
 					&".png".to_string()
 				)
 			);
@@ -852,16 +852,16 @@ impl Chapter {
 				} else {
 					"\t\t\t<img class=\"head h3\" id=\"h"
 				}.to_string()+
-				&head.id.simple().to_string()+
+				&head.id.to_simple().to_string()+
 				&"\"".to_string()+
 				&" src=\"img/h".to_string()+
-				&head.id.simple().to_string()+
+				&head.id.to_simple().to_string()+
 				&".png\"/>\n".to_string()
 			);
 			head.subject.update_top(&self.cur_height);
 			gencss += &(
 				"#h".to_string()+
-				&head.id.simple().to_string()+
+				&head.id.to_simple().to_string()+
 				&"{\n\ttop:".to_string()+
 				&(head.subject.top_precent*(100 as f64)).to_string()+
 				&"%;\n\tleft:".to_string()+
@@ -877,22 +877,22 @@ impl Chapter {
 			).save(
 				ch_path.join(
 					"img/c".to_string()+
-					&cont.id.simple().to_string()+
+					&cont.id.to_simple().to_string()+
 					&".png".to_string()
 				)
 			);
 			out += &(
 				"\t\t\t<img class=\"cont\" id=\"c".to_string()+
-				&cont.id.simple().to_string()+
+				&cont.id.to_simple().to_string()+
 				&"\"".to_string()+
 				&" src=\"img/c".to_string()+
-				&cont.id.simple().to_string()+
+				&cont.id.to_simple().to_string()+
 				&".png\"/>\n".to_string()
 			);
 			cont.update_top(&self.cur_height);
 			gencss += &(
 				"#c".to_string()+
-				&cont.id.simple().to_string()+
+				&cont.id.to_simple().to_string()+
 				&"{\n\ttop:".to_string()+
 				&(cont.top_precent*(100 as f64)).to_string()+
 				&"%;\n\tleft:".to_string()+
@@ -908,22 +908,22 @@ impl Chapter {
 			).save(
 				ch_path.join(
 					"img/dh".to_string()+
-					&idea.id.simple().to_string()+
+					&idea.id.to_simple().to_string()+
 					&".png".to_string()
 				)
 			);
 			out += &(
 				"\t\t\t<img class=\"defi h2\" id=\"dh".to_string()+
-				&idea.id.simple().to_string()+
+				&idea.id.to_simple().to_string()+
 				&"\"".to_string()+
 				&" src=\"img/dh".to_string()+
-				&idea.id.simple().to_string()+
+				&idea.id.to_simple().to_string()+
 				&".png\"/>\n".to_string()
 			);
 			idea.subject.update_top(&self.cur_height);
 			gencss += &(
 				"#dh".to_string()+
-				&idea.id.simple().to_string()+
+				&idea.id.to_simple().to_string()+
 				&"{\n\ttop:".to_string()+
 				&(idea.subject.top_precent*(100 as f64)).to_string()+
 				&"%;\n\tleft:".to_string()+
@@ -937,22 +937,22 @@ impl Chapter {
 			).save(
 				ch_path.join(
 					"img/dc".to_string()+
-					&idea.id.simple().to_string()+
+					&idea.id.to_simple().to_string()+
 					&".png".to_string()
 				)
 			);
 			out += &(
 				"\t\t\t<img class=\"defi\" id=\"dc".to_string()+
-				&idea.id.simple().to_string()+
+				&idea.id.to_simple().to_string()+
 				&"\"".to_string()+
 				&" src=\"img/dc".to_string()+
-				&idea.id.simple().to_string()+
+				&idea.id.to_simple().to_string()+
 				&".png\"/>\n".to_string()
 			);
 			idea.extension.update_top(&self.cur_height);
 			gencss += &(
 				"#dc".to_string()+
-				&idea.id.simple().to_string()+
+				&idea.id.to_simple().to_string()+
 				&"{\n\ttop:".to_string()+
 				&(idea.extension.top_precent*(100 as f64)).to_string()+
 				&"%;\n\tleft:".to_string()+
