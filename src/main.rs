@@ -14,7 +14,7 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::fs::File;
 use std::fs::OpenOptions;
-use image::GenericImage;
+use image::GenericImageView;
 use uuid::Uuid;
 
 /// The location where a list of already imported files may be found
