@@ -15,6 +15,7 @@ use std::io::BufRead;
 use std::fs::File;
 use std::fs::OpenOptions;
 use image::GenericImageView;
+use image::DynamicImage::ImageLumaA8;
 use uuid::Uuid;
 
 /// The location where a list of already imported files may be found
@@ -380,7 +381,7 @@ impl Page {
 			claimed.push(row.clone());
 			thresh.push(row.clone());
 		}
-		let mut rgbimg = img.to_rgb();
+		let mut rgbimg = img.to_rgb8();
 		rgbimg.filter();
 		thresh_and_blob(
 			&rgbimg,
@@ -827,7 +828,7 @@ impl Chapter {
 			self.id
 		);
 		out += include_str!("template_fragments/chapter/index.html1");
-		let _ = image::ImageLumaA8(
+		let _ = ImageLumaA8(
 			self.heading.subject.to_image()
 		).save(
 			ch_path.join(
@@ -836,8 +837,8 @@ impl Chapter {
 				&".png".to_string()
 			)
 		);
-		for mut head in &mut self.sub_headings {
-			let _ = image::ImageLumaA8(
+		for head in &mut self.sub_headings {
+			let _ = ImageLumaA8(
 				head.subject.to_image()
 			).save(
 				ch_path.join(
@@ -871,8 +872,8 @@ impl Chapter {
 				&"%;\nposition:absolute;\n}\n".to_string()
 			);
 		}
-		for mut cont in &mut self.content {
-			let _ = image::ImageLumaA8(
+		for cont in &mut self.content {
+			let _ = ImageLumaA8(
 				cont.to_image()
 			).save(
 				ch_path.join(
@@ -902,8 +903,8 @@ impl Chapter {
 				&"%;\nposition:absolute;\n}\n".to_string()
 			);
 		}
-		for mut idea in &mut self.ideas {
-			let _ = image::ImageLumaA8(
+		for idea in &mut self.ideas {
+			let _ = ImageLumaA8(
 				idea.subject.to_image()
 			).save(
 				ch_path.join(
@@ -932,7 +933,7 @@ impl Chapter {
 				&(idea.subject.width_precent*(100 as f64)).to_string()+
 				&"%;\nposition:absolute;\n}\n".to_string()
 			);
-			let _ = image::ImageLumaA8(
+			let _ = ImageLumaA8(
 				idea.extension.to_image()
 			).save(
 				ch_path.join(
@@ -1359,7 +1360,7 @@ fn main() {
 	let mut started = false;
 	let mut created_chapters = 0;
 	let mut destroyed: usize = 0;
-	for mut p in pages {
+	for p in pages {
 		chapter.height_precent +=
 			(p.dimensions[1] as f64)/(p.dimensions[0] as f64);
 		let mut i: usize = 0;
