@@ -9,5 +9,5 @@ panic = 'abort'
 
 [dependencies]
 image = "0.23"
-dirs = "2.0"
+dirs-next = "2.0"
 uuid = { version = "0.8", features = ["v4"] }
